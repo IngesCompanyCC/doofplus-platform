@@ -1,17 +1,24 @@
+using System.Text.RegularExpressions;
+
 namespace IngesCompanyCCPlatform.API.Monitoring.Domain.Model.ValueObjects;
 
-public sealed recprd Facility
-{
-    public Facility(string value)
+public partial record FacilityId{
+    private const int MaxLength = 128;
+    private const string NotBlankMessageKey = "monitoring.device.error.id.notBlank";
+    private const string SizeMessageKey = "monitoring.device.error.id.size";
+    public string Value { get; }
+
+    public FacilityId(string value)
     {
-        if (string.IsNullOrWhiteSpace(value))
-        {
-            throw new ArgumentException("Facility cannot be null or empty.", nameof(value));
-        }
+        if (string.IsNullOrWhiteSpace(value)) { throw new ArgumentException(NotBlankMessageKey); }
+
+        if (value.Length > MaxLength) { throw new ArgumentException(SizeMessageKey); }
+
         Value = value;
     }
 
-    public string Value { get; }
+    [GeneratedRegex("^[a-z0-9]+(-[a-z0-9]+)*$")]
 
-    public override string ToString() => Value;
+    private static partial Regex AllowedPattern();
+
 }
