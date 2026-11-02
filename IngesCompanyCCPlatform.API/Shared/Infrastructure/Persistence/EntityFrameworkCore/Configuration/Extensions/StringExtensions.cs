@@ -1,6 +1,6 @@
-﻿using Humanizer;
+using Humanizer;
 
-namespace IngesCompanyCCPlatform.API.Shared.Infrastracture.Persistence.EntityFrameworkCore.Configuration.Extensions;
+namespace IngesCompanyCCPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 
 public static class StringExtensions
 {

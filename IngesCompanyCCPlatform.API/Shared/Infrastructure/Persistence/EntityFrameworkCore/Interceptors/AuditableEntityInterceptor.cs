@@ -1,8 +1,8 @@
-﻿using IngesCompanyCCPlatform.API.Shared.Domain.Model;
+using IngesCompanyCCPlatform.API.Shared.Domain.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
-namespace IngesCompanyCCPlatform.API.Shared.Infrastracture.Persistence.EntityFrameworkCore.Interceptors;
+namespace IngesCompanyCCPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.Interceptors;
 
 public sealed class AuditableEntityInterceptor : SaveChangesInterceptor
 {
