@@ -1,19 +1,27 @@
 namespace IngesCompanyCCPlatform.API.Monitoring.Domain.Model.ValueObjects;
 
-public sealed record CalibrationStatus
+public enum CalibrationStatus
 {
-    privvate const int MaxLength = 255;
+    Fit("Fit"),
+    Due("Due"),
+    Not-Fit("Not Fit");
 
-    public CalibrationStatus(string value)
-    {
-        if (string.IsNullOrWhiteSpace(value))
-        {
-            throw new ArgumentException("CalibrationStatus cannot be null or empty.", nameof(value));
-        }
-        Value = value;
+    private final String value;
+
+    CalibrationStatus(String value) {
+        this.value = value;
     }
 
-    public string Value { get; }
+    public String value() {
+        return value;
+    }
 
-    public override string ToString() => Value;
+    public static CalibrationStatus from(String value) {
+        if (value == null || value.isBlank()) { return FIT; }
+                for (CalibrationStatus status : values()) {
+                    if (status.value.equalsIgnoreCase(value.trim()) ||
+                            status.name().equalsIgnoreCase(value.trim()))
+                    {   return status;  }
+                } return FIT;
+    }
 }
