@@ -12,11 +12,11 @@ public partial record AlertCode{
 
     public AlertCode(string value)
     {
-        if (string.IsNullOrWhiteSpace(value)) { throw new ArgumentException("AlertCode cannot be null or empty.", nameof(value)); }
+        if (string.IsNullOrWhiteSpace(value)) { throw new ArgumentException(NotBlankMessageKey); }
 
-        if (value.Length > MaxLength) { throw new ArgumentException("AlertCode is too long.", nameof(value)); }
+        if (value.Length > MaxLength) { throw new ArgumentException(SizeMessageKey); }
 
-        if (!AllowedPattern().IsMatch(value)) { throw new ArgumentException("AlertCode has an invalid format.", nameof(value)); }
+        if (!AllowedPattern().IsMatch(value)) { throw new ArgumentException(PatternMessageKey); }
 
         Value = value;
     }
