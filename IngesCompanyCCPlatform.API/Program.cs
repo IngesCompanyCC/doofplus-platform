@@ -1,8 +1,14 @@
+using IngesCompanyCCPlatform.API.Shared.Infrastracture.Interfaces.Asp.Configuration;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddRouting(options => options.LowercaseUrls = true);
 
-builder.Services.AddControllers();
+// Configure Kebab-Case route naming convention for controllers
+builder.Services.AddControllers(options => 
+    options.Conventions.Add(new KebabCaseRouteNamingConvention()));
+
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
