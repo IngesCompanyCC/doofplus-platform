@@ -10,7 +10,7 @@ public partial record EquipmentCode{
 
     public string Value { get; }
 
-    public AlertCode(string value)
+    public EquipmentCode(string value)
     {
         if (string.IsNullOrWhiteSpace(value)) { throw new ArgumentException(NotBlankMessageKey); }
 
