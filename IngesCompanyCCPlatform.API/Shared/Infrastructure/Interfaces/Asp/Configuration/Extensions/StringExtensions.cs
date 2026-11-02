@@ -1,6 +1,6 @@
-﻿using System.Text.RegularExpressions;
+using System.Text.RegularExpressions;
 
-namespace IngesCompanyCCPlatform.API.Shared.Infrastracture.Interfaces.Asp.Configuration.Extensions;
+namespace IngesCompanyCCPlatform.API.Shared.Infrastructure.Interfaces.Asp.Configuration.Extensions;
 
 public static partial class StringExtensions
 {
@@ -11,6 +11,6 @@ public static partial class StringExtensions
     {
         return string.IsNullOrEmpty(text) 
             ? text 
-            : KebabCaseRegex().Replace(text, "-$1").Trim().ToLower();
+            : KebabCaseRegex().Replace(text, "$1-$2").Trim().ToLower();
     }
 }

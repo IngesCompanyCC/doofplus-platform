@@ -1,6 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
-namespace IngesCompanyCCPlatform.API.Shared.Infrastracture.Persistence.EntityFrameworkCore.Configuration.Extensions;
+namespace IngesCompanyCCPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 
 public static class ModelBuilderExtensions
 {
@@ -32,7 +32,5 @@ public static class ModelBuilderExtensions
                 if (!string.IsNullOrEmpty(indexName)) index.SetDatabaseName(indexName.ToSnakeCase());
             }
         }
-        
-        
     }
 }

@@ -1,7 +1,7 @@
-﻿using IngesCompanyCCPlatform.API.Shared.Infrastracture.Interfaces.Asp.Configuration.Extensions;
+using IngesCompanyCCPlatform.API.Shared.Infrastructure.Interfaces.Asp.Configuration.Extensions;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 
-namespace IngesCompanyCCPlatform.API.Shared.Infrastracture.Interfaces.Asp.Configuration;
+namespace IngesCompanyCCPlatform.API.Shared.Infrastructure.Interfaces.Asp.Configuration;
 
 public class KebabCaseRouteNamingConvention : IControllerModelConvention
 {
