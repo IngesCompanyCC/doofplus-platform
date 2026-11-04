@@ -1,7 +1,7 @@
-﻿using IngesCompanyCCPlatform.API.Shared.Domain.Repositories;
-using IngesCompanyCCPlatform.API.Shared.Infrastracture.Persistence.EntityFrameworkCore.Configuration;
+using IngesCompanyCCPlatform.API.Shared.Domain.Repositories;
+using IngesCompanyCCPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
 
-namespace IngesCompanyCCPlatform.API.Shared.Infrastracture.Persistence.EntityFrameworkCore.Repositories;
+namespace IngesCompanyCCPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 
 public class UnitOfWork(AppDbContext context): IUnitOfWork
 {
