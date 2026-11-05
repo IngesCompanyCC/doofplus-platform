@@ -2,6 +2,12 @@ using IngesCompanyCCPlatform.API.Shared.Domain.Repositories;
 using IngesCompanyCCPlatform.API.Shared.Infrastructure.Interfaces.Asp.Configuration;
 using IngesCompanyCCPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
 using IngesCompanyCCPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using IngesCompanyCCPlatform.API.Organizations.Application.CommandServices;
+using IngesCompanyCCPlatform.API.Organizations.Application.Internal.CommandServices;
+using IngesCompanyCCPlatform.API.Organizations.Application.Internal.QueryServices;
+using IngesCompanyCCPlatform.API.Organizations.Application.QueryServices;
+using IngesCompanyCCPlatform.API.Organizations.Domain.Repositories;
+using IngesCompanyCCPlatform.API.Organizations.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 
@@ -39,6 +45,16 @@ builder.Services.AddDbContext<AppDbContext>((serviceProvider, options) =>
 });
 
 // Configure Dependency Injection
+
+// Organizations Bounded Context
+builder.Services.AddScoped<IOrganizationRepository, OrganizationRepository>();
+builder.Services.AddScoped<IUserProfileRepository, UserProfileRepository>();
+builder.Services.AddScoped<IFacilityRepository, FacilityRepository>();
+
+builder.Services.AddScoped<IOrganizationCommandService, OrganizationCommandService>();
+builder.Services.AddScoped<IUserProfileCommandService, UserProfileCommandService>();
+builder.Services.AddScoped<IOrganizationQueryService, OrganizationQueryService>();
+builder.Services.AddScoped<IUserProfileQueryService, UserProfileQueryService>();
 
 // Shared Bounded Context Injection Configuration
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
