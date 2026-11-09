@@ -1,3 +1,11 @@
+using IngesCompanyCCPlatform.API.Quality.Application.Acl;
+using IngesCompanyCCPlatform.API.Quality.Application.CommandServices;
+using IngesCompanyCCPlatform.API.Quality.Application.Internal.CommandServices;
+using IngesCompanyCCPlatform.API.Quality.Application.Internal.QueryServices;
+using IngesCompanyCCPlatform.API.Quality.Application.QueryServices;
+using IngesCompanyCCPlatform.API.Quality.Domain.Repositories;
+using IngesCompanyCCPlatform.API.Quality.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using IngesCompanyCCPlatform.API.Quality.Interfaces.Acl;
 using IngesCompanyCCPlatform.API.Shared.Domain.Repositories;
 using IngesCompanyCCPlatform.API.Shared.Infrastructure.Interfaces.Asp.Configuration;
 using IngesCompanyCCPlatform.API.Shared.Infrastructure.Interfaces.Asp.OpenApi;
@@ -75,6 +83,33 @@ builder.Services.AddSingleton<ProblemDetailsFactory>();
 // Shared Bounded Context Injection Configuration
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<DispatchDomainEventsInterceptor>();
+
+// Quality & Compliance Bounded Context Injection Configuration
+builder.Services.AddScoped<IQualityDocumentRepository, QualityDocumentRepository>();
+builder.Services.AddScoped<IMaterialApprovalRepository, MaterialApprovalRepository>();
+builder.Services.AddScoped<IAnalyticalResultRepository, AnalyticalResultRepository>();
+builder.Services.AddScoped<IBatchReviewRepository, BatchReviewRepository>();
+builder.Services.AddScoped<IDeviationRepository, DeviationRepository>();
+builder.Services.AddScoped<IAuditRepository, AuditRepository>();
+builder.Services.AddScoped<IAuditTrailEntryRepository, AuditTrailEntryRepository>();
+builder.Services.AddScoped<IRegulatoryReportRepository, RegulatoryReportRepository>();
+builder.Services.AddScoped<IQualityDocumentCommandService, QualityDocumentCommandService>();
+builder.Services.AddScoped<IMaterialApprovalCommandService, MaterialApprovalCommandService>();
+builder.Services.AddScoped<IAnalyticalResultCommandService, AnalyticalResultCommandService>();
+builder.Services.AddScoped<IBatchReviewCommandService, BatchReviewCommandService>();
+builder.Services.AddScoped<IDeviationCommandService, DeviationCommandService>();
+builder.Services.AddScoped<IAuditCommandService, AuditCommandService>();
+builder.Services.AddScoped<IAuditTrailEntryCommandService, AuditTrailEntryCommandService>();
+builder.Services.AddScoped<IRegulatoryReportCommandService, RegulatoryReportCommandService>();
+builder.Services.AddScoped<IQualityDocumentQueryService, QualityDocumentQueryService>();
+builder.Services.AddScoped<IMaterialApprovalQueryService, MaterialApprovalQueryService>();
+builder.Services.AddScoped<IAnalyticalResultQueryService, AnalyticalResultQueryService>();
+builder.Services.AddScoped<IBatchReviewQueryService, BatchReviewQueryService>();
+builder.Services.AddScoped<IDeviationQueryService, DeviationQueryService>();
+builder.Services.AddScoped<IAuditQueryService, AuditQueryService>();
+builder.Services.AddScoped<IAuditTrailEntryQueryService, AuditTrailEntryQueryService>();
+builder.Services.AddScoped<IRegulatoryReportQueryService, RegulatoryReportQueryService>();
+builder.Services.AddScoped<IQualityContextFacade, QualityContextFacade>();
 
 // Mediator Configuration
 builder.Services.AddScoped(typeof(ICommandPipelineBehavior<>), typeof(LoggingCommandBehavior<>));
