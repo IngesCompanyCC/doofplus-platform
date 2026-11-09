@@ -22,7 +22,7 @@ namespace IngesCompanyCCPlatform.API.Subscriptions.Domain.Model.Commands;
 /// </param>
 public record CreateSubscriptionCommand(
     OrganizationId OrganizationId,
-    int PlanId,
+    PlanId PlanId,
     EBillingCycle BillingCycle,
     PaymentCard PaymentCard,
     BillingEmail BillingEmail);
