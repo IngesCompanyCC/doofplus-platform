@@ -6,4 +6,46 @@
   <data name="OperationCancelled" xml:space="preserve">
     <value>La operación fue cancelada.</value>
   </data>
+  <data name="QualityError.None" xml:space="preserve">
+    <value>Error de calidad.</value>
+  </data>
+  <data name="QualityError.InvalidData" xml:space="preserve">
+    <value>Los datos no son válidos.</value>
+  </data>
+  <data name="QualityError.InvalidState" xml:space="preserve">
+    <value>La acción no está permitida en el estado actual.</value>
+  </data>
+  <data name="QualityError.QualityDocumentNotFound" xml:space="preserve">
+    <value>No se encontró el documento de calidad.</value>
+  </data>
+  <data name="QualityError.DuplicateQualityDocumentCode" xml:space="preserve">
+    <value>El código del documento de calidad ya existe.</value>
+  </data>
+  <data name="QualityError.MaterialApprovalNotFound" xml:space="preserve">
+    <value>No se encontró el dictamen del insumo.</value>
+  </data>
+  <data name="QualityError.MaterialApprovalAlreadyRequested" xml:space="preserve">
+    <value>El dictamen del insumo ya fue solicitado.</value>
+  </data>
+  <data name="QualityError.AnalyticalResultNotFound" xml:space="preserve">
+    <value>No se encontró el resultado analítico.</value>
+  </data>
+  <data name="QualityError.BatchReviewNotFound" xml:space="preserve">
+    <value>No se encontró la revisión del lote.</value>
+  </data>
+  <data name="QualityError.BatchReviewAlreadyStarted" xml:space="preserve">
+    <value>La revisión del lote ya fue iniciada.</value>
+  </data>
+  <data name="QualityError.DeviationNotFound" xml:space="preserve">
+    <value>No se encontró la desviación.</value>
+  </data>
+  <data name="QualityError.DuplicateDeviationCode" xml:space="preserve">
+    <value>El código de la desviación ya existe.</value>
+  </data>
+  <data name="QualityError.AuditNotFound" xml:space="preserve">
+    <value>No se encontró la auditoría.</value>
+  </data>
+  <data name="QualityError.RegulatoryReportNotFound" xml:space="preserve">
+    <value>No se encontró el reporte regulatorio.</value>
+  </data>
 </root>

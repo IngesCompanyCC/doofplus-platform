@@ -6,4 +6,46 @@
   <data name="OperationCancelled" xml:space="preserve">
     <value>The operation was cancelled.</value>
   </data>
+  <data name="QualityError.None" xml:space="preserve">
+    <value>Quality error.</value>
+  </data>
+  <data name="QualityError.InvalidData" xml:space="preserve">
+    <value>The data is not valid.</value>
+  </data>
+  <data name="QualityError.InvalidState" xml:space="preserve">
+    <value>The action is not allowed in the current status.</value>
+  </data>
+  <data name="QualityError.QualityDocumentNotFound" xml:space="preserve">
+    <value>Quality document not found.</value>
+  </data>
+  <data name="QualityError.DuplicateQualityDocumentCode" xml:space="preserve">
+    <value>Duplicate quality document code.</value>
+  </data>
+  <data name="QualityError.MaterialApprovalNotFound" xml:space="preserve">
+    <value>Material approval not found.</value>
+  </data>
+  <data name="QualityError.MaterialApprovalAlreadyRequested" xml:space="preserve">
+    <value>Material approval already requested.</value>
+  </data>
+  <data name="QualityError.AnalyticalResultNotFound" xml:space="preserve">
+    <value>Analytical result not found.</value>
+  </data>
+  <data name="QualityError.BatchReviewNotFound" xml:space="preserve">
+    <value>Batch review not found.</value>
+  </data>
+  <data name="QualityError.BatchReviewAlreadyStarted" xml:space="preserve">
+    <value>Batch review already started.</value>
+  </data>
+  <data name="QualityError.DeviationNotFound" xml:space="preserve">
+    <value>Deviation not found.</value>
+  </data>
+  <data name="QualityError.DuplicateDeviationCode" xml:space="preserve">
+    <value>Duplicate deviation code.</value>
+  </data>
+  <data name="QualityError.AuditNotFound" xml:space="preserve">
+    <value>Audit not found.</value>
+  </data>
+  <data name="QualityError.RegulatoryReportNotFound" xml:space="preserve">
+    <value>Regulatory report not found.</value>
+  </data>
 </root>
