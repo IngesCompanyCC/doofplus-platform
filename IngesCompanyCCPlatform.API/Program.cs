@@ -6,9 +6,17 @@ using IngesCompanyCCPlatform.API.Shared.Infrastructure.Persistence.EntityFramewo
 using IngesCompanyCCPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.Interceptors;
 using IngesCompanyCCPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using IngesCompanyCCPlatform.API.Shared.Infrastructure.Pipeline.Middleware.Components;
+using IngesCompanyCCPlatform.API.Subscriptions.Application.CommandServices;
+using IngesCompanyCCPlatform.API.Subscriptions.Application.Internal.CommandServices;
+using IngesCompanyCCPlatform.API.Subscriptions.Application.Internal.QueryServices;
+using IngesCompanyCCPlatform.API.Subscriptions.Application.QueryServices;
+using IngesCompanyCCPlatform.API.Subscriptions.Domain.Repositories;
+using IngesCompanyCCPlatform.API.Subscriptions.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using IngesCompanyCCPlatform.API.Subscriptions.Resources;
 using Cortex.Mediator.Commands;
 using Cortex.Mediator.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 using Scalar.AspNetCore;
 using ProblemDetailsFactory = IngesCompanyCCPlatform.API.Shared.Interfaces.Rest.ProblemDetails.ProblemDetailsFactory;
 
@@ -75,6 +83,15 @@ builder.Services.AddSingleton<ProblemDetailsFactory>();
 // Shared Bounded Context Injection Configuration
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<DispatchDomainEventsInterceptor>();
+
+// Subscriptions Bounded Context Injection Configuration
+builder.Services.AddScoped<IPlanRepository, PlanRepository>();
+builder.Services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
+builder.Services.AddScoped<IPlanCommandService, PlanCommandService>();
+builder.Services.AddScoped<IPlanQueryService, PlanQueryService>();
+builder.Services.AddScoped<ISubscriptionCommandService, SubscriptionCommandService>();
+builder.Services.AddScoped<ISubscriptionQueryService, SubscriptionQueryService>();
+builder.Services.AddSingleton<IStringLocalizer<SubscriptionsMessages>, StringLocalizer<SubscriptionsMessages>>();
 
 // Mediator Configuration
 builder.Services.AddScoped(typeof(ICommandPipelineBehavior<>), typeof(LoggingCommandBehavior<>));
