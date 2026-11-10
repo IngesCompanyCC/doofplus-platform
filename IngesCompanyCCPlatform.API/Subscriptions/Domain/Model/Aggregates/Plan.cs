@@ -12,6 +12,9 @@ namespace IngesCompanyCCPlatform.API.Subscriptions.Domain.Model.Aggregates;
 /// </remarks>
 public partial class Plan : AggregateRoot
 {
+    private const string NameNotBlankMessageKey = "plan.error.name.notBlank";
+    private const string LimitsInvalidMessageKey = "plan.error.limits.invalid";
+
     /// <summary>
     ///     Initializes a new instance of the <see cref="Plan" /> aggregate. Used by Entity Framework Core.
     /// </summary>
@@ -31,7 +34,8 @@ public partial class Plan : AggregateRoot
     /// </param>
     public Plan(CreatePlanCommand command) : this()
     {
-        ArgumentException.ThrowIfNullOrWhiteSpace(command.Name);
+        if (string.IsNullOrWhiteSpace(command.Name)) throw new ArgumentException(NameNotBlankMessageKey);
+        if (command.UserLimit <= 0 || command.IotDeviceLimit < 0) throw new ArgumentException(LimitsInvalidMessageKey);
         PlanKey = command.PlanKey;
         Name = command.Name;
         MonthlyPrice = command.MonthlyPrice;
