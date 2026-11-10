@@ -8,7 +8,9 @@ using IngesCompanyCCPlatform.API.Subscriptions.Domain.Model.Errors;
 using IngesCompanyCCPlatform.API.Subscriptions.Domain.Model.Queries;
 using IngesCompanyCCPlatform.API.Subscriptions.Interfaces.Rest.Resources;
 using IngesCompanyCCPlatform.API.Subscriptions.Interfaces.Rest.Transform;
+using IngesCompanyCCPlatform.API.Subscriptions.Resources;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 
 namespace IngesCompanyCCPlatform.API.Subscriptions.Interfaces.Rest;
 
@@ -22,6 +24,7 @@ namespace IngesCompanyCCPlatform.API.Subscriptions.Interfaces.Rest;
 public class SubscriptionsController(
     ISubscriptionCommandService subscriptionCommandService,
     ISubscriptionQueryService subscriptionQueryService,
+    IStringLocalizer<SubscriptionsMessages> messages,
     ProblemDetailsFactory problemDetailsFactory)
     : ControllerBase
 {
@@ -44,6 +47,7 @@ public class SubscriptionsController(
             return SubscriptionsActionResultAssembler.ToActionResultFromCommandResult(
                 this,
                 result,
+                messages,
                 problemDetailsFactory,
                 createdSubscription => CreatedAtAction(nameof(GetSubscriptionById),
                     new { subscriptionId = createdSubscription.Id.Value },
@@ -51,7 +55,7 @@ public class SubscriptionsController(
         }
         catch (ArgumentException exception)
         {
-            return SubscriptionsActionResultAssembler.ToActionResultFromInvalidArgument(this, exception,
+            return SubscriptionsActionResultAssembler.ToActionResultFromInvalidArgument(this, exception, messages,
                 problemDetailsFactory);
         }
     }
@@ -71,6 +75,7 @@ public class SubscriptionsController(
         return SubscriptionsActionResultAssembler.ToActionResultFromCommandResult(
             this,
             result,
+            messages,
             problemDetailsFactory,
             activatedSubscription =>
                 Ok(SubscriptionResourceFromEntityAssembler.ToResourceFromEntity(activatedSubscription)));
@@ -91,6 +96,7 @@ public class SubscriptionsController(
         return SubscriptionsActionResultAssembler.ToActionResultFromCommandResult(
             this,
             result,
+            messages,
             problemDetailsFactory,
             cancelledSubscription =>
                 Ok(SubscriptionResourceFromEntityAssembler.ToResourceFromEntity(cancelledSubscription)));
@@ -112,8 +118,10 @@ public class SubscriptionsController(
             subscription,
             SubscriptionErrors.NotFoundById(subscriptionId),
             SubscriptionsError.SubscriptionNotFound,
+            messages,
             problemDetailsFactory,
-            foundSubscription => Ok(SubscriptionResourceFromEntityAssembler.ToResourceFromEntity(foundSubscription)));
+            foundSubscription => Ok(SubscriptionResourceFromEntityAssembler.ToResourceFromEntity(foundSubscription)),
+            subscriptionId);
     }
 
     [HttpGet]
@@ -132,7 +140,7 @@ public class SubscriptionsController(
         }
         catch (ArgumentException exception)
         {
-            return SubscriptionsActionResultAssembler.ToActionResultFromInvalidArgument(this, exception,
+            return SubscriptionsActionResultAssembler.ToActionResultFromInvalidArgument(this, exception, messages,
                 problemDetailsFactory);
         }
     }

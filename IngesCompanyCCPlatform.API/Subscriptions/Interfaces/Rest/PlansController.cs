@@ -7,7 +7,9 @@ using IngesCompanyCCPlatform.API.Subscriptions.Domain.Model.Errors;
 using IngesCompanyCCPlatform.API.Subscriptions.Domain.Model.Queries;
 using IngesCompanyCCPlatform.API.Subscriptions.Interfaces.Rest.Resources;
 using IngesCompanyCCPlatform.API.Subscriptions.Interfaces.Rest.Transform;
+using IngesCompanyCCPlatform.API.Subscriptions.Resources;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 
 namespace IngesCompanyCCPlatform.API.Subscriptions.Interfaces.Rest;
 
@@ -21,6 +23,7 @@ namespace IngesCompanyCCPlatform.API.Subscriptions.Interfaces.Rest;
 public class PlansController(
     IPlanCommandService planCommandService,
     IPlanQueryService planQueryService,
+    IStringLocalizer<SubscriptionsMessages> messages,
     ProblemDetailsFactory problemDetailsFactory)
     : ControllerBase
 {
@@ -41,13 +44,14 @@ public class PlansController(
             return SubscriptionsActionResultAssembler.ToActionResultFromCommandResult(
                 this,
                 result,
+                messages,
                 problemDetailsFactory,
                 createdPlan => CreatedAtAction(nameof(GetPlanById), new { planId = createdPlan.Id.Value },
                     PlanResourceFromEntityAssembler.ToResourceFromEntity(createdPlan)));
         }
         catch (ArgumentException exception)
         {
-            return SubscriptionsActionResultAssembler.ToActionResultFromInvalidArgument(this, exception,
+            return SubscriptionsActionResultAssembler.ToActionResultFromInvalidArgument(this, exception, messages,
                 problemDetailsFactory);
         }
     }
@@ -77,7 +81,9 @@ public class PlansController(
             plan,
             PlanErrors.NotFoundById(planId),
             SubscriptionsError.PlanNotFound,
+            messages,
             problemDetailsFactory,
-            foundPlan => Ok(PlanResourceFromEntityAssembler.ToResourceFromEntity(foundPlan)));
+            foundPlan => Ok(PlanResourceFromEntityAssembler.ToResourceFromEntity(foundPlan)),
+            planId);
     }
 }

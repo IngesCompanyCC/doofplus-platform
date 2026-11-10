@@ -6,4 +6,19 @@
   <data name="OperationCancelled" xml:space="preserve">
     <value>The operation was cancelled.</value>
   </data>
+  <data name="SubscriptionsError.DuplicatePlanKey" xml:space="preserve">
+    <value>Duplicate plan key</value>
+  </data>
+  <data name="SubscriptionsError.PlanNotFound" xml:space="preserve">
+    <value>Plan not found</value>
+  </data>
+  <data name="SubscriptionsError.SubscriptionNotFound" xml:space="preserve">
+    <value>Subscription not found</value>
+  </data>
+  <data name="SubscriptionsError.AlreadySubscribed" xml:space="preserve">
+    <value>Organization already subscribed</value>
+  </data>
+  <data name="SubscriptionsError.InvalidSubscriptionState" xml:space="preserve">
+    <value>Invalid subscription state</value>
+  </data>
 </root>
