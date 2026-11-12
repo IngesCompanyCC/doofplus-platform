@@ -1,3 +1,6 @@
+﻿using IngesCompanyCCPlatform.API.Manufacturing.Domain.Model.Aggregates;
+using IngesCompanyCCPlatform.API.Manufacturing.Domain.Model.Entities;
+using IngesCompanyCCPlatform.API.Manufacturing.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using IngesCompanyCCPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using IngesCompanyCCPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.Interceptors;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +18,11 @@ namespace IngesCompanyCCPlatform.API.Shared.Infrastructure.Persistence.EntityFra
 /// <param name="options">The options for the database context.</param>
 public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
 {
+    public DbSet<ProductionBatch> ProductionBatches => Set<ProductionBatch>();
+    public DbSet<Incident> Incidents => Set<Incident>();
+    public DbSet<MaterialConsumption> MaterialConsumptions => Set<MaterialConsumption>();
+    public DbSet<BatchEvent> BatchEvents => Set<BatchEvent>();
+
     /// <inheritdoc />
     protected override void OnConfiguring(DbContextOptionsBuilder builder)
     {
@@ -30,6 +38,9 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
+
+        // Manufacturing Context
+        builder.ApplyManufacturingConfiguration();
 
         // General naming convention for the database objects
         builder.UseSnakeCaseNamingConvention();
