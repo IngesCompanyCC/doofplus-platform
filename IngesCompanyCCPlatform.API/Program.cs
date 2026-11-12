@@ -1,3 +1,9 @@
+﻿using IngesCompanyCCPlatform.API.Manufacturing.Application.CommandServices;
+using IngesCompanyCCPlatform.API.Manufacturing.Application.Internal.CommandServices;
+using IngesCompanyCCPlatform.API.Manufacturing.Application.Internal.QueryServices;
+using IngesCompanyCCPlatform.API.Manufacturing.Application.QueryServices;
+using IngesCompanyCCPlatform.API.Manufacturing.Domain.Repositories;
+using IngesCompanyCCPlatform.API.Manufacturing.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using IngesCompanyCCPlatform.API.Shared.Domain.Repositories;
 using IngesCompanyCCPlatform.API.Shared.Infrastructure.Interfaces.Asp.Configuration;
 using IngesCompanyCCPlatform.API.Shared.Infrastructure.Interfaces.Asp.OpenApi;
@@ -75,6 +81,11 @@ builder.Services.AddSingleton<ProblemDetailsFactory>();
 // Shared Bounded Context Injection Configuration
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<DispatchDomainEventsInterceptor>();
+
+// Manufacturing Bounded Context Injection Configuration
+builder.Services.AddScoped<IProductionBatchRepository, ProductionBatchRepository>();
+builder.Services.AddScoped<IProductionBatchCommandService, ProductionBatchCommandService>();
+builder.Services.AddScoped<IProductionBatchQueryService, ProductionBatchQueryService>();
 
 // Mediator Configuration
 builder.Services.AddScoped(typeof(ICommandPipelineBehavior<>), typeof(LoggingCommandBehavior<>));
