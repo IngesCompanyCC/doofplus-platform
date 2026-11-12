@@ -1,6 +1,15 @@
+﻿using IngesCompanyCCPlatform.API.Manufacturing.Application.CommandServices;
+using IngesCompanyCCPlatform.API.Manufacturing.Application.Internal.CommandServices;
+using IngesCompanyCCPlatform.API.Manufacturing.Application.Internal.QueryServices;
+using IngesCompanyCCPlatform.API.Manufacturing.Application.QueryServices;
+using IngesCompanyCCPlatform.API.Manufacturing.Domain.Repositories;
+using IngesCompanyCCPlatform.API.Manufacturing.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using IngesCompanyCCPlatform.API.Shared.Domain.Repositories;
 using IngesCompanyCCPlatform.API.Shared.Infrastructure.Interfaces.Asp.Configuration;
+using IngesCompanyCCPlatform.API.Shared.Infrastructure.Interfaces.Asp.OpenApi;
+using IngesCompanyCCPlatform.API.Shared.Infrastructure.Mediator.Cortex.Configuration;
 using IngesCompanyCCPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
+using IngesCompanyCCPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.Interceptors;
 using IngesCompanyCCPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using IngesCompanyCCPlatform.API.Organizations.Application.CommandServices;
 using IngesCompanyCCPlatform.API.Organizations.Application.Internal.CommandServices;
@@ -8,8 +17,12 @@ using IngesCompanyCCPlatform.API.Organizations.Application.Internal.QueryService
 using IngesCompanyCCPlatform.API.Organizations.Application.QueryServices;
 using IngesCompanyCCPlatform.API.Organizations.Domain.Repositories;
 using IngesCompanyCCPlatform.API.Organizations.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using IngesCompanyCCPlatform.API.Shared.Infrastructure.Pipeline.Middleware.Components;
+using Cortex.Mediator.Commands;
+using Cortex.Mediator.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
+using ProblemDetailsFactory = IngesCompanyCCPlatform.API.Shared.Interfaces.Rest.ProblemDetails.ProblemDetailsFactory;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,11 +32,28 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
 
 // Configure Kebab Case Route Naming Convention
-builder.Services.AddControllers(options => 
-    options.Conventions.Add(new KebabCaseRouteNamingConvention()));
+builder.Services.AddControllers(options =>
+        options.Conventions.Add(new KebabCaseRouteNamingConvention()))
+    .AddDataAnnotationsLocalization();
 
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+// Add ProblemDetails and the global exception handler
+builder.Services.AddProblemDetails();
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+
+// Add CORS Policy
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAllPolicy",
+        policy => policy.AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader());
+});
+
+// OpenAPI / Scalar documentation
+builder.Services.AddOpenApi(options =>
+{
+    options.AddDocumentTransformer<BearerSecuritySchemeTransformer>();
+});
 
 // Add Database Connection
 builder.Services.AddDbContext<AppDbContext>((serviceProvider, options) =>
@@ -38,11 +68,19 @@ builder.Services.AddDbContext<AppDbContext>((serviceProvider, options) =>
 
     options.UseMySQL(connectionString)
         .UseLoggerFactory(serviceProvider.GetRequiredService<ILoggerFactory>())
+        .AddInterceptors(serviceProvider.GetRequiredService<DispatchDomainEventsInterceptor>())
         .EnableDetailedErrors();
 
     if (builder.Environment.IsDevelopment())
         options.EnableSensitiveDataLogging();
 });
+
+// Localization: the resources (.resx) live next to their marker classes in Shared/Resources,
+// so no ResourcesPath is set; with ResourcesPath = "Resources" the messages are not found.
+builder.Services.AddLocalization();
+
+// Register the custom ProblemDetailsFactory
+builder.Services.AddSingleton<ProblemDetailsFactory>();
 
 // Configure Dependency Injection
 
@@ -58,6 +96,20 @@ builder.Services.AddScoped<IUserProfileQueryService, UserProfileQueryService>();
 
 // Shared Bounded Context Injection Configuration
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<DispatchDomainEventsInterceptor>();
+
+// Manufacturing Bounded Context Injection Configuration
+builder.Services.AddScoped<IProductionBatchRepository, ProductionBatchRepository>();
+builder.Services.AddScoped<IProductionBatchCommandService, ProductionBatchCommandService>();
+builder.Services.AddScoped<IProductionBatchQueryService, ProductionBatchQueryService>();
+
+// Mediator Configuration
+builder.Services.AddScoped(typeof(ICommandPipelineBehavior<>), typeof(LoggingCommandBehavior<>));
+builder.Services.AddScoped(typeof(ICommandPipelineBehavior<>), typeof(ExceptionHandlingCommandBehavior<>));
+builder.Services.AddScoped(typeof(ICommandPipelineBehavior<>), typeof(TransactionCommandBehavior<>));
+
+// Add Cortex Mediator for commands and domain event handling
+builder.Services.AddCortexMediator([typeof(Program)]);
 
 var app = builder.Build();
 
@@ -70,10 +122,25 @@ using (var scope = app.Services.CreateScope())
 }
 
 // Configure the HTTP request pipeline.
+
+// Request localization goes first, so the global exception handler answers in the request language.
+var supportedCultures = new[] { "en", "es" };
+var localizationOptions = new RequestLocalizationOptions()
+    .SetDefaultCulture(supportedCultures[0])
+    .AddSupportedCultures(supportedCultures)
+    .AddSupportedUICultures(supportedCultures);
+
+app.UseRequestLocalization(localizationOptions);
+
+app.UseExceptionHandler();
+
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
+
+// Apply CORS Policy
+app.UseCors("AllowAllPolicy");
 
 app.UseHttpsRedirection();
 

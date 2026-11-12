@@ -1,4 +1,4 @@
-using IngesCompanyCCPlatform.API.Shared.Domain.Model;
+using IngesCompanyCCPlatform.API.Shared.Domain.Model.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
