@@ -1,11 +1,25 @@
+﻿using IngesCompanyCCPlatform.API.Manufacturing.Application.CommandServices;
+using IngesCompanyCCPlatform.API.Manufacturing.Application.Internal.CommandServices;
+using IngesCompanyCCPlatform.API.Manufacturing.Application.Internal.QueryServices;
+using IngesCompanyCCPlatform.API.Manufacturing.Application.QueryServices;
+using IngesCompanyCCPlatform.API.Manufacturing.Domain.Repositories;
+using IngesCompanyCCPlatform.API.Manufacturing.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using IngesCompanyCCPlatform.API.Shared.Domain.Repositories;
 using IngesCompanyCCPlatform.API.Shared.Infrastructure.Interfaces.Asp.Configuration;
 using IngesCompanyCCPlatform.API.Shared.Infrastructure.Interfaces.Asp.OpenApi;
+using IngesCompanyCCPlatform.API.Shared.Infrastructure.Localization.Extensions;
 using IngesCompanyCCPlatform.API.Shared.Infrastructure.Mediator.Cortex.Configuration;
 using IngesCompanyCCPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
 using IngesCompanyCCPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.Interceptors;
 using IngesCompanyCCPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using IngesCompanyCCPlatform.API.Organizations.Application.CommandServices;
+using IngesCompanyCCPlatform.API.Organizations.Application.Internal.CommandServices;
+using IngesCompanyCCPlatform.API.Organizations.Application.Internal.QueryServices;
+using IngesCompanyCCPlatform.API.Organizations.Application.QueryServices;
+using IngesCompanyCCPlatform.API.Organizations.Domain.Repositories;
+using IngesCompanyCCPlatform.API.Organizations.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using IngesCompanyCCPlatform.API.Shared.Infrastructure.Pipeline.Middleware.Components;
+using IngesCompanyCCPlatform.API.Shared.Resources;
 using IngesCompanyCCPlatform.API.Subscriptions.Application.CommandServices;
 using IngesCompanyCCPlatform.API.Subscriptions.Application.Internal.CommandServices;
 using IngesCompanyCCPlatform.API.Subscriptions.Application.Internal.QueryServices;
@@ -80,6 +94,19 @@ builder.Services.AddSingleton<ProblemDetailsFactory>();
 
 // Configure Dependency Injection
 
+// Organizations Bounded Context
+builder.Services.AddScoped<IOrganizationRepository, OrganizationRepository>();
+builder.Services.AddScoped<IUserProfileRepository, UserProfileRepository>();
+builder.Services.AddScoped<IFacilityRepository, FacilityRepository>();
+builder.Services.AddScoped<IContactInquiryRepository, ContactInquiryRepository>();
+
+builder.Services.AddScoped<IOrganizationCommandService, OrganizationCommandService>();
+builder.Services.AddScoped<IUserProfileCommandService, UserProfileCommandService>();
+builder.Services.AddScoped<IContactInquiryCommandService, ContactInquiryCommandService>();
+builder.Services.AddScoped<IOrganizationQueryService, OrganizationQueryService>();
+builder.Services.AddScoped<IUserProfileQueryService, UserProfileQueryService>();
+builder.Services.AddScoped<IContactInquiryQueryService, ContactInquiryQueryService>();
+
 // Shared Bounded Context Injection Configuration
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<DispatchDomainEventsInterceptor>();
@@ -92,6 +119,16 @@ builder.Services.AddScoped<IPlanQueryService, PlanQueryService>();
 builder.Services.AddScoped<ISubscriptionCommandService, SubscriptionCommandService>();
 builder.Services.AddScoped<ISubscriptionQueryService, SubscriptionQueryService>();
 builder.Services.AddSingleton<IStringLocalizer<SubscriptionsMessages>, StringLocalizer<SubscriptionsMessages>>();
+
+// Localized messages of the bounded contexts. Each bounded context adds one line with its marker class;
+// the global exception handler uses them to translate the message keys of the value objects.
+// Example: builder.Services.AddBoundedContextMessages<SubscriptionsMessages>();
+builder.Services.AddBoundedContextMessages<CommonMessages>();
+
+// Manufacturing Bounded Context Injection Configuration
+builder.Services.AddScoped<IProductionBatchRepository, ProductionBatchRepository>();
+builder.Services.AddScoped<IProductionBatchCommandService, ProductionBatchCommandService>();
+builder.Services.AddScoped<IProductionBatchQueryService, ProductionBatchQueryService>();
 
 // Mediator Configuration
 builder.Services.AddScoped(typeof(ICommandPipelineBehavior<>), typeof(LoggingCommandBehavior<>));
