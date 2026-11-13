@@ -8,6 +8,8 @@
 /// </remarks>
 public enum ESamplingStatus
 {
+    /// <summary>Samples not requested yet.</summary>
+    Pending,
     /// <summary>Samples requested.</summary>
     Requested,
     /// <summary>Samples taken.</summary>

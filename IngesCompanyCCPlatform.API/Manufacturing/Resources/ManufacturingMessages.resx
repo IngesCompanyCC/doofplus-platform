@@ -43,7 +43,7 @@
     <value>The approver must not be blank.</value>
   </data>
   <data name="manufacturing.formula.error.notDraft" xml:space="preserve">
-    <value>Only a formula in Draft can be approved.</value>
+    <value>Only a formula in Draft or Pending can be approved.</value>
   </data>
   <data name="manufacturing.formula.error.notApproved" xml:space="preserve">
     <value>The master formula is not approved, so no production order can follow it.</value>
@@ -82,7 +82,7 @@
     <value>The progress must be between 0 and 100.</value>
   </data>
   <data name="manufacturing.order.error.status.invalid" xml:space="preserve">
-    <value>status must be InProgress, OnHold or Completed.</value>
+    <value>status must be Approved, InProgress, OnHold or Completed.</value>
   </data>
   <data name="manufacturing.order.error.operationStatus.invalid" xml:space="preserve">
     <value>status must be NotStarted, InProgress, OnHold or Complete.</value>
@@ -115,10 +115,10 @@
     <value>category must be Api, Excipient or Packaging.</value>
   </data>
   <data name="manufacturing.lot.error.samplingStatus.invalid" xml:space="preserve">
-    <value>samplingStatus must be Requested or Done.</value>
+    <value>samplingStatus must be Pending, Requested or Done.</value>
   </data>
   <data name="manufacturing.lot.error.notInInspection" xml:space="preserve">
-    <value>The lot is no longer in Inspection.</value>
+    <value>The lot was already approved or rejected.</value>
   </data>
   <data name="manufacturing.lot.error.inspectionIncomplete" xml:space="preserve">
     <value>The lot can be released only after its packaging and identity are verified and its samples are taken.</value>

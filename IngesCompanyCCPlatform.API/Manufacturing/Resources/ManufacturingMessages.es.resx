@@ -43,7 +43,7 @@
     <value>Quien aprueba no puede estar vacío.</value>
   </data>
   <data name="manufacturing.formula.error.notDraft" xml:space="preserve">
-    <value>Solo se puede aprobar una fórmula en Draft.</value>
+    <value>Solo se puede aprobar una fórmula en Draft o Pending.</value>
   </data>
   <data name="manufacturing.formula.error.notApproved" xml:space="preserve">
     <value>La fórmula maestra no está aprobada, así que ninguna orden de producción puede seguirla.</value>
@@ -82,7 +82,7 @@
     <value>El avance debe estar entre 0 y 100.</value>
   </data>
   <data name="manufacturing.order.error.status.invalid" xml:space="preserve">
-    <value>status debe ser InProgress, OnHold o Completed.</value>
+    <value>status debe ser Approved, InProgress, OnHold o Completed.</value>
   </data>
   <data name="manufacturing.order.error.operationStatus.invalid" xml:space="preserve">
     <value>status debe ser NotStarted, InProgress, OnHold o Complete.</value>
@@ -115,10 +115,10 @@
     <value>category debe ser Api, Excipient o Packaging.</value>
   </data>
   <data name="manufacturing.lot.error.samplingStatus.invalid" xml:space="preserve">
-    <value>samplingStatus debe ser Requested o Done.</value>
+    <value>samplingStatus debe ser Pending, Requested o Done.</value>
   </data>
   <data name="manufacturing.lot.error.notInInspection" xml:space="preserve">
-    <value>El lote ya no está en Inspection.</value>
+    <value>El lote ya fue aprobado o rechazado.</value>
   </data>
   <data name="manufacturing.lot.error.inspectionIncomplete" xml:space="preserve">
     <value>El lote solo se puede liberar cuando se verificaron su empaque y su identidad y se tomaron sus muestras.</value>

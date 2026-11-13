@@ -71,7 +71,7 @@ public class MasterFormulasController(
 
     [HttpPost("{masterFormulaId:int}/approval")]
     [EndpointSummary("Approve a master formula")]
-    [EndpointDescription("Approves a formula in Draft; the version approved before becomes Obsolete.")]
+    [EndpointDescription("Approves a formula in Draft; the version approved before becomes Locked.")]
     [ProducesResponseType(typeof(MasterFormulaResource), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

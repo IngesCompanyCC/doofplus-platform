@@ -8,12 +8,14 @@
 /// </remarks>
 public enum EProductionOrderStatus
 {
-    /// <summary>Scheduled, not started.</summary>
+    /// <summary>Scheduled, not approved yet.</summary>
     Planned,
+    /// <summary>Approved and ready to start.</summary>
+    Approved,
     /// <summary>Being executed.</summary>
     InProgress,
-    /// <summary>Stopped, for example by a deviation.</summary>
+    /// <summary>Stopped until the issue is resolved.</summary>
     OnHold,
-    /// <summary>All its operations are complete.</summary>
+    /// <summary>All operations are complete.</summary>
     Completed
 }
