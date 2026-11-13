@@ -5,7 +5,7 @@
 ///     IAM can listen to this event to create the administrator account.
 /// </summary>
 public record OrganizationRegisteredEvent(
-    Guid OrganizationId,
+    int OrganizationId,
     string LegalName,
     string Ruc,
     string AdministratorEmail,

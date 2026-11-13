@@ -1,7 +1,7 @@
 using IngesCompanyCCPlatform.API.Organizations.Domain.Model.Commands;
 using IngesCompanyCCPlatform.API.Organizations.Domain.Model.Events;
 using IngesCompanyCCPlatform.API.Organizations.Domain.Model.ValueObjects;
-using IngesCompanyCCPlatform.API.Shared.Domain.Model;
+using IngesCompanyCCPlatform.API.Shared.Domain.Model.Entities;
 
 namespace IngesCompanyCCPlatform.API.Organizations.Domain.Model.Aggregates;
 
@@ -12,9 +12,9 @@ namespace IngesCompanyCCPlatform.API.Organizations.Domain.Model.Aggregates;
 /// </summary>
 public class UserProfile : IAuditableEntity
 {
-    public Guid Id { get; private set; }
-    public Guid OrganizationId { get; private set; }
-    public Guid UserId { get; private set; }
+    public int Id { get; private set; }
+    public int OrganizationId { get; private set; }
+    public int UserId { get; private set; }
     public string FirstName { get; private set; } = string.Empty;
     public string LastName { get; private set; } = string.Empty;
     public string Email { get; private set; } = string.Empty;
@@ -37,7 +37,6 @@ public class UserProfile : IAuditableEntity
 
     public UserProfile(CreateUserProfileCommand command)
     {
-        Id = Guid.NewGuid();
         OrganizationId = command.OrganizationId;
         UserId = command.UserId;
         FirstName = command.FirstName.Trim();

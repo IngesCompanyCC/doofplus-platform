@@ -9,6 +9,6 @@ namespace IngesCompanyCCPlatform.API.Organizations.Domain.Repositories;
 public interface IFacilityRepository : IBaseRepository<Facility>
 {
     Task<IEnumerable<Facility>> FindByOrganizationIdAsync(
-        Guid organizationId,
+        int organizationId,
         CancellationToken cancellationToken = default);
 }

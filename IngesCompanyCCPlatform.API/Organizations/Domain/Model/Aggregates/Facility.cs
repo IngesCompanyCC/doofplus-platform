@@ -1,5 +1,5 @@
 using IngesCompanyCCPlatform.API.Organizations.Domain.Model.ValueObjects;
-using IngesCompanyCCPlatform.API.Shared.Domain.Model;
+using IngesCompanyCCPlatform.API.Shared.Domain.Model.Entities;
 
 namespace IngesCompanyCCPlatform.API.Organizations.Domain.Model.Aggregates;
 
@@ -9,8 +9,8 @@ namespace IngesCompanyCCPlatform.API.Organizations.Domain.Model.Aggregates;
 /// </summary>
 public class Facility : IAuditableEntity
 {
-    public Guid Id { get; private set; }
-    public Guid OrganizationId { get; private set; }
+    public int Id { get; private set; }
+    public int OrganizationId { get; private set; }
     public string Name { get; private set; } = string.Empty;
     public FacilityType Type { get; private set; }
     public string Timezone { get; private set; } = "UTC";
@@ -20,18 +20,18 @@ public class Facility : IAuditableEntity
     public DateTimeOffset? CreatedAt { get; set; }
     public DateTimeOffset? UpdatedAt { get; set; }
 
+
     private Facility()
     {
     }
 
     public Facility(
-        Guid organizationId,
+        int organizationId,
         string name,
         FacilityType type,
         string timezone,
         string ownerName)
     {
-        Id = Guid.NewGuid();
         OrganizationId = organizationId;
         Name = name.Trim();
         Type = type;

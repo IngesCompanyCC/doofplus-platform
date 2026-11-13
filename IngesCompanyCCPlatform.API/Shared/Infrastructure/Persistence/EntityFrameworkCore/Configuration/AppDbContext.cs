@@ -1,6 +1,12 @@
-﻿using IngesCompanyCCPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
+﻿using IngesCompanyCCPlatform.API.Manufacturing.Domain.Model.Aggregates;
+using IngesCompanyCCPlatform.API.Manufacturing.Domain.Model.Entities;
+using IngesCompanyCCPlatform.API.Manufacturing.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
+using IngesCompanyCCPlatform.API.Organizations.Domain.Model.Aggregates;
+using IngesCompanyCCPlatform.API.Organizations.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
+using IngesCompanyCCPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using IngesCompanyCCPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.Interceptors;
 using Microsoft.EntityFrameworkCore;
+
 
 namespace IngesCompanyCCPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
 

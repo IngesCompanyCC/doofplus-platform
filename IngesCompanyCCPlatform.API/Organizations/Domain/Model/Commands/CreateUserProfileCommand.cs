@@ -6,8 +6,8 @@ namespace IngesCompanyCCPlatform.API.Organizations.Domain.Model.Commands;
 ///     Command to create a user profile inside an organization.
 /// </summary>
 public record CreateUserProfileCommand(
-    Guid OrganizationId,
-    Guid UserId,
+    int OrganizationId,
+    int UserId,
     string FirstName,
     string LastName,
     string Email,

@@ -1,7 +1,7 @@
 using IngesCompanyCCPlatform.API.Organizations.Domain.Model.Commands;
 using IngesCompanyCCPlatform.API.Organizations.Domain.Model.Events;
 using IngesCompanyCCPlatform.API.Organizations.Domain.Model.ValueObjects;
-using IngesCompanyCCPlatform.API.Shared.Domain.Model;
+using IngesCompanyCCPlatform.API.Shared.Domain.Model.Entities;
 
 namespace IngesCompanyCCPlatform.API.Organizations.Domain.Model.Aggregates;
 
@@ -11,7 +11,7 @@ namespace IngesCompanyCCPlatform.API.Organizations.Domain.Model.Aggregates;
 /// </summary>
 public class Organization : IAuditableEntity
 {
-    public Guid Id { get; private set; }
+    public int Id { get; private set; }
     public string LegalName { get; private set; } = string.Empty;
     public string Ruc { get; private set; } = string.Empty;
     public string Region { get; private set; } = string.Empty;
@@ -27,7 +27,6 @@ public class Organization : IAuditableEntity
 
     public Organization(RegisterOrganizationCommand command)
     {
-        Id = Guid.NewGuid();
         LegalName = command.LegalName.Trim();
         Ruc = new Ruc(command.Ruc).Value;
         Region = string.Empty;
