@@ -430,18 +430,35 @@ namespace IngesCompanyCCPlatform.API.Migrations
                         .HasColumnType("int")
                         .HasColumnName("id");
 
+                    b.Property<decimal>("AnnualPriceAmount")
+                        .HasPrecision(10, 2)
+                        .HasColumnType("decimal(10,2)")
+                        .HasColumnName("annual_price");
+
                     b.Property<DateTimeOffset?>("CreatedAt")
                         .HasColumnType("datetime")
                         .HasColumnName("created_at");
+
+                    b.Property<string>("Currency")
+                        .IsRequired()
+                        .HasMaxLength(3)
+                        .HasColumnType("char(3)")
+                        .HasColumnName("currency")
+                        .IsFixedLength();
 
                     b.Property<int>("IotDeviceLimit")
                         .HasColumnType("int")
                         .HasColumnName("iot_device_limit");
 
+                    b.Property<decimal>("MonthlyPriceAmount")
+                        .HasPrecision(10, 2)
+                        .HasColumnType("decimal(10,2)")
+                        .HasColumnName("monthly_price");
+
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
                         .HasColumnName("name");
 
                     b.Property<string>("PlanKey")
@@ -457,38 +474,6 @@ namespace IngesCompanyCCPlatform.API.Migrations
                     b.Property<int>("UserLimit")
                         .HasColumnType("int")
                         .HasColumnName("user_limit");
-
-                    b.ComplexProperty(typeof(Dictionary<string, object>), "AnnualPrice", "IngesCompanyCCPlatform.API.Subscriptions.Domain.Model.Aggregates.Plan.AnnualPrice#Money", b1 =>
-                        {
-                            b1.IsRequired();
-
-                            b1.Property<decimal>("Amount")
-                                .HasPrecision(10, 2)
-                                .HasColumnType("decimal(10,2)")
-                                .HasColumnName("annual_price_amount");
-
-                            b1.Property<string>("Currency")
-                                .IsRequired()
-                                .HasMaxLength(3)
-                                .HasColumnType("varchar(3)")
-                                .HasColumnName("annual_price_currency");
-                        });
-
-                    b.ComplexProperty(typeof(Dictionary<string, object>), "MonthlyPrice", "IngesCompanyCCPlatform.API.Subscriptions.Domain.Model.Aggregates.Plan.MonthlyPrice#Money", b1 =>
-                        {
-                            b1.IsRequired();
-
-                            b1.Property<decimal>("Amount")
-                                .HasPrecision(10, 2)
-                                .HasColumnType("decimal(10,2)")
-                                .HasColumnName("monthly_price_amount");
-
-                            b1.Property<string>("Currency")
-                                .IsRequired()
-                                .HasMaxLength(3)
-                                .HasColumnType("varchar(3)")
-                                .HasColumnName("monthly_price_currency");
-                        });
 
                     b.HasKey("Id")
                         .HasName("p_k_plans");
@@ -513,8 +498,8 @@ namespace IngesCompanyCCPlatform.API.Migrations
 
                     b.Property<string>("BillingCycle")
                         .IsRequired()
-                        .HasMaxLength(16)
-                        .HasColumnType("varchar(16)")
+                        .HasMaxLength(10)
+                        .HasColumnType("varchar(10)")
                         .HasColumnName("billing_cycle");
 
                     b.Property<string>("BillingEmail")
@@ -531,6 +516,10 @@ namespace IngesCompanyCCPlatform.API.Migrations
                         .HasColumnType("date")
                         .HasColumnName("current_period_end");
 
+                    b.Property<DateOnly?>("CurrentPeriodStart")
+                        .HasColumnType("date")
+                        .HasColumnName("current_period_start");
+
                     b.Property<int>("OrganizationId")
                         .HasColumnType("int")
                         .HasColumnName("organization_id");
@@ -541,8 +530,8 @@ namespace IngesCompanyCCPlatform.API.Migrations
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasMaxLength(16)
-                        .HasColumnType("varchar(16)")
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)")
                         .HasColumnName("status");
 
                     b.Property<DateTimeOffset?>("UpdatedAt")
@@ -555,8 +544,8 @@ namespace IngesCompanyCCPlatform.API.Migrations
 
                             b1.Property<string>("Brand")
                                 .IsRequired()
-                                .HasMaxLength(30)
-                                .HasColumnType("varchar(30)")
+                                .HasMaxLength(20)
+                                .HasColumnType("varchar(20)")
                                 .HasColumnName("card_brand");
 
                             b1.Property<string>("Expiry")

@@ -16,7 +16,7 @@
     <value>name must not be null or blank.</value>
   </data>
   <data name="plan.error.limits.invalid" xml:space="preserve">
-    <value>userLimit must be greater than 0 and iotDeviceLimit must not be negative.</value>
+    <value>userLimit and iotDeviceLimit must not be negative; 0 means unlimited.</value>
   </data>
   <data name="plan.error.id.invalid" xml:space="preserve">
     <value>Plan id must be greater than 0.</value>
@@ -74,5 +74,11 @@
   </data>
   <data name="subscription.error.state.notActive" xml:space="preserve">
     <value>Only an active subscription can be renewed or cancelled.</value>
+  </data>
+  <data name="plan.error.currency.mismatch" xml:space="preserve">
+    <value>The monthly and the annual price must use the same currency.</value>
+  </data>
+  <data name="subscription.error.cardBrand.size" xml:space="preserve">
+    <value>The card brand must have at most 20 characters.</value>
   </data>
 </root>

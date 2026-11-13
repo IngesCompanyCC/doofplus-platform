@@ -27,17 +27,12 @@ public static class ModelBuilderExtensions
             .IsRequired()
             .HasMaxLength(64);
         builder.Entity<Plan>().HasIndex(p => p.PlanKey).IsUnique();
-        builder.Entity<Plan>().Property(p => p.Name).IsRequired().HasMaxLength(100);
-        builder.Entity<Plan>().ComplexProperty(p => p.MonthlyPrice, price =>
-        {
-            price.Property(m => m.Amount).HasColumnName("monthly_price_amount").HasPrecision(10, 2).IsRequired();
-            price.Property(m => m.Currency).HasColumnName("monthly_price_currency").HasMaxLength(3).IsRequired();
-        });
-        builder.Entity<Plan>().ComplexProperty(p => p.AnnualPrice, price =>
-        {
-            price.Property(m => m.Amount).HasColumnName("annual_price_amount").HasPrecision(10, 2).IsRequired();
-            price.Property(m => m.Currency).HasColumnName("annual_price_currency").HasMaxLength(3).IsRequired();
-        });
+        builder.Entity<Plan>().Property(p => p.Name).IsRequired().HasMaxLength(50);
+        builder.Entity<Plan>().Ignore(p => p.MonthlyPrice);
+        builder.Entity<Plan>().Ignore(p => p.AnnualPrice);
+        builder.Entity<Plan>().Property(p => p.MonthlyPriceAmount).HasColumnName("monthly_price").HasPrecision(10, 2).IsRequired();
+        builder.Entity<Plan>().Property(p => p.AnnualPriceAmount).HasColumnName("annual_price").HasPrecision(10, 2).IsRequired();
+        builder.Entity<Plan>().Property(p => p.Currency).IsRequired().HasMaxLength(3).IsFixedLength();
         builder.Entity<Plan>().Property(p => p.UserLimit).IsRequired();
         builder.Entity<Plan>().Property(p => p.IotDeviceLimit).IsRequired();
 
@@ -52,12 +47,12 @@ public static class ModelBuilderExtensions
         builder.Entity<Subscription>().Property(s => s.PlanId)
             .HasConversion(new StronglyTypedIdConverter<PlanId, int>(id => id.Value, value => new PlanId(value)))
             .IsRequired();
-        builder.Entity<Subscription>().Property(s => s.BillingCycle).HasConversion<string>().HasMaxLength(16).IsRequired();
-        builder.Entity<Subscription>().Property(s => s.Status).HasConversion<string>().HasMaxLength(16).IsRequired();
+        builder.Entity<Subscription>().Property(s => s.BillingCycle).HasConversion<string>().HasMaxLength(10).IsRequired();
+        builder.Entity<Subscription>().Property(s => s.Status).HasConversion<string>().HasMaxLength(20).IsRequired();
         builder.Entity<Subscription>().Property(s => s.AutoRenew).IsRequired();
         builder.Entity<Subscription>().ComplexProperty(s => s.PaymentCard, card =>
         {
-            card.Property(c => c.Brand).HasColumnName("card_brand").HasMaxLength(30).IsRequired();
+            card.Property(c => c.Brand).HasColumnName("card_brand").HasMaxLength(20).IsRequired();
             card.Property(c => c.Last4).HasColumnName("card_last4").HasMaxLength(4).IsRequired();
             card.Property(c => c.Expiry).HasColumnName("card_expiry").HasMaxLength(7).IsRequired();
         });
@@ -65,6 +60,7 @@ public static class ModelBuilderExtensions
             .HasConversion(email => email.Value, value => new BillingEmail(value))
             .IsRequired()
             .HasMaxLength(254);
+        builder.Entity<Subscription>().Property(s => s.CurrentPeriodStart);
         builder.Entity<Subscription>().Property(s => s.CurrentPeriodEnd);
         builder.Entity<Subscription>().HasIndex(s => s.OrganizationId);
     }

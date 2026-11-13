@@ -24,6 +24,7 @@ public static class SubscriptionResourceFromEntityAssembler
             entity.PaymentCard.Last4,
             entity.PaymentCard.Expiry,
             entity.BillingEmail.Value,
+            entity.CurrentPeriodStart,
             entity.CurrentPeriodEnd);
     }
 }
