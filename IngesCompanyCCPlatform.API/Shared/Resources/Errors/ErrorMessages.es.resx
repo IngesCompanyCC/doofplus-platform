@@ -9,6 +9,21 @@
   <data name="OperationCancelled" xml:space="preserve">
     <value>La operación fue cancelada.</value>
   </data>
+  <data name="SubscriptionsError.DuplicatePlanKey" xml:space="preserve">
+    <value>Clave de plan duplicada</value>
+  </data>
+  <data name="SubscriptionsError.PlanNotFound" xml:space="preserve">
+    <value>Plan no encontrado</value>
+  </data>
+  <data name="SubscriptionsError.SubscriptionNotFound" xml:space="preserve">
+    <value>Suscripción no encontrada</value>
+  </data>
+  <data name="SubscriptionsError.AlreadySubscribed" xml:space="preserve">
+    <value>Organización ya suscrita</value>
+  </data>
+  <data name="SubscriptionsError.InvalidSubscriptionState" xml:space="preserve">
+    <value>Estado de suscripción no válido</value>
+  </data>
   <data name="OrganizationsError.OrganizationNotFound" xml:space="preserve">
     <value>No se encontró la organización.</value>
   </data>

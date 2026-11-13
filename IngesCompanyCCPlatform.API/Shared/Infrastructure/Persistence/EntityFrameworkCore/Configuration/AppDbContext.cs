@@ -5,6 +5,7 @@ using IngesCompanyCCPlatform.API.Organizations.Domain.Model.Aggregates;
 using IngesCompanyCCPlatform.API.Organizations.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
 using IngesCompanyCCPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using IngesCompanyCCPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.Interceptors;
+using IngesCompanyCCPlatform.API.Subscriptions.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -45,6 +46,9 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
         // Manufacturing Context
         builder.ApplyManufacturingConfiguration();
+
+        // Subscriptions Context
+        builder.ApplySubscriptionsConfiguration();
 
         // General naming convention for the database objects
         builder.UseSnakeCaseNamingConvention();

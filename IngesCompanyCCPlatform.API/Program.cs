@@ -20,9 +20,17 @@ using IngesCompanyCCPlatform.API.Organizations.Domain.Repositories;
 using IngesCompanyCCPlatform.API.Organizations.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using IngesCompanyCCPlatform.API.Shared.Infrastructure.Pipeline.Middleware.Components;
 using IngesCompanyCCPlatform.API.Shared.Resources;
+using IngesCompanyCCPlatform.API.Subscriptions.Application.CommandServices;
+using IngesCompanyCCPlatform.API.Subscriptions.Application.Internal.CommandServices;
+using IngesCompanyCCPlatform.API.Subscriptions.Application.Internal.QueryServices;
+using IngesCompanyCCPlatform.API.Subscriptions.Application.QueryServices;
+using IngesCompanyCCPlatform.API.Subscriptions.Domain.Repositories;
+using IngesCompanyCCPlatform.API.Subscriptions.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using IngesCompanyCCPlatform.API.Subscriptions.Resources;
 using Cortex.Mediator.Commands;
 using Cortex.Mediator.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 using Scalar.AspNetCore;
 using ProblemDetailsFactory = IngesCompanyCCPlatform.API.Shared.Interfaces.Rest.ProblemDetails.ProblemDetailsFactory;
 
@@ -103,10 +111,20 @@ builder.Services.AddScoped<IContactInquiryQueryService, ContactInquiryQueryServi
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<DispatchDomainEventsInterceptor>();
 
+// Subscriptions Bounded Context Injection Configuration
+builder.Services.AddScoped<IPlanRepository, PlanRepository>();
+builder.Services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
+builder.Services.AddScoped<IPlanCommandService, PlanCommandService>();
+builder.Services.AddScoped<IPlanQueryService, PlanQueryService>();
+builder.Services.AddScoped<ISubscriptionCommandService, SubscriptionCommandService>();
+builder.Services.AddScoped<ISubscriptionQueryService, SubscriptionQueryService>();
+builder.Services.AddSingleton<IStringLocalizer<SubscriptionsMessages>, StringLocalizer<SubscriptionsMessages>>();
+
 // Localized messages of the bounded contexts. Each bounded context adds one line with its marker class;
 // the global exception handler uses them to translate the message keys of the value objects.
 // Example: builder.Services.AddBoundedContextMessages<SubscriptionsMessages>();
 builder.Services.AddBoundedContextMessages<CommonMessages>();
+builder.Services.AddBoundedContextMessages<SubscriptionsMessages>();
 
 // Manufacturing Bounded Context Injection Configuration
 builder.Services.AddScoped<IProductionBatchRepository, ProductionBatchRepository>();

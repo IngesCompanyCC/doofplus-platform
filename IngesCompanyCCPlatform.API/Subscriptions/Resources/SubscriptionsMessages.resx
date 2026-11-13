@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="plan.error.duplicate" xml:space="preserve">
+    <value>A plan with the same planKey already exists.</value>
+  </data>
+  <data name="plan.error.planKey.notBlank" xml:space="preserve">
+    <value>planKey must not be null or blank.</value>
+  </data>
+  <data name="plan.error.planKey.size" xml:space="preserve">
+    <value>planKey must not exceed 64 characters.</value>
+  </data>
+  <data name="plan.error.planKey.pattern" xml:space="preserve">
+    <value>planKey must be in kebab case, for example standard-lab.</value>
+  </data>
+  <data name="plan.error.name.notBlank" xml:space="preserve">
+    <value>name must not be null or blank.</value>
+  </data>
+  <data name="plan.error.limits.invalid" xml:space="preserve">
+    <value>userLimit must be greater than 0 and iotDeviceLimit must not be negative.</value>
+  </data>
+  <data name="plan.error.id.invalid" xml:space="preserve">
+    <value>Plan id must be greater than 0.</value>
+  </data>
+  <data name="plan.error.notFoundById" xml:space="preserve">
+    <value>Plan not found for id {0}.</value>
+  </data>
+  <data name="money.error.amount.invalid" xml:space="preserve">
+    <value>Price must not be null or negative.</value>
+  </data>
+  <data name="money.error.currency.pattern" xml:space="preserve">
+    <value>currency must be a three-letter ISO 4217 code, for example PEN.</value>
+  </data>
+  <data name="subscription.error.id.invalid" xml:space="preserve">
+    <value>Subscription id must be greater than 0.</value>
+  </data>
+  <data name="subscription.error.organizationId.invalid" xml:space="preserve">
+    <value>organizationId must be greater than 0.</value>
+  </data>
+  <data name="subscription.error.billingCycle.invalid" xml:space="preserve">
+    <value>billingCycle must be Monthly or Annual.</value>
+  </data>
+  <data name="subscription.error.billingEmail.notBlank" xml:space="preserve">
+    <value>billingEmail must not be null or blank.</value>
+  </data>
+  <data name="subscription.error.billingEmail.size" xml:space="preserve">
+    <value>billingEmail must not exceed 254 characters.</value>
+  </data>
+  <data name="subscription.error.billingEmail.pattern" xml:space="preserve">
+    <value>billingEmail must be a valid email address.</value>
+  </data>
+  <data name="subscription.error.cardBrand.notBlank" xml:space="preserve">
+    <value>cardBrand must not be null or blank.</value>
+  </data>
+  <data name="subscription.error.cardLast4.pattern" xml:space="preserve">
+    <value>cardLast4 must have exactly four digits.</value>
+  </data>
+  <data name="subscription.error.cardExpiry.pattern" xml:space="preserve">
+    <value>cardExpiry must use the MM/yyyy format.</value>
+  </data>
+  <data name="subscription.error.planNotFound" xml:space="preserve">
+    <value>The selected plan does not exist.</value>
+  </data>
+  <data name="subscription.error.alreadySubscribed" xml:space="preserve">
+    <value>The organization already has a pending or active subscription.</value>
+  </data>
+  <data name="subscription.error.notFound" xml:space="preserve">
+    <value>Subscription not found.</value>
+  </data>
+  <data name="subscription.error.notFoundById" xml:space="preserve">
+    <value>Subscription not found for id {0}.</value>
+  </data>
+  <data name="subscription.error.state.notPending" xml:space="preserve">
+    <value>Only a pending subscription can be activated.</value>
+  </data>
+  <data name="subscription.error.state.notActive" xml:space="preserve">
+    <value>Only an active subscription can be renewed or cancelled.</value>
+  </data>
+</root>
