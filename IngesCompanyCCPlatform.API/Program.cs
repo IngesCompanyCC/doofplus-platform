@@ -88,11 +88,14 @@ builder.Services.AddSingleton<ProblemDetailsFactory>();
 builder.Services.AddScoped<IOrganizationRepository, OrganizationRepository>();
 builder.Services.AddScoped<IUserProfileRepository, UserProfileRepository>();
 builder.Services.AddScoped<IFacilityRepository, FacilityRepository>();
+builder.Services.AddScoped<IContactInquiryRepository, ContactInquiryRepository>();
 
 builder.Services.AddScoped<IOrganizationCommandService, OrganizationCommandService>();
 builder.Services.AddScoped<IUserProfileCommandService, UserProfileCommandService>();
+builder.Services.AddScoped<IContactInquiryCommandService, ContactInquiryCommandService>();
 builder.Services.AddScoped<IOrganizationQueryService, OrganizationQueryService>();
 builder.Services.AddScoped<IUserProfileQueryService, UserProfileQueryService>();
+builder.Services.AddScoped<IContactInquiryQueryService, ContactInquiryQueryService>();
 
 // Shared Bounded Context Injection Configuration
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
