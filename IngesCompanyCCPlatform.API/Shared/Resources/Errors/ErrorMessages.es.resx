@@ -6,4 +6,34 @@
   <data name="OperationCancelled" xml:space="preserve">
     <value>La operación fue cancelada.</value>
   </data>
+  <data name="OrganizationsError.OrganizationNotFound" xml:space="preserve">
+    <value>No se encontró la organización.</value>
+  </data>
+  <data name="OrganizationsError.DuplicateRuc" xml:space="preserve">
+    <value>Ya existe una organización registrada con este RUC.</value>
+  </data>
+  <data name="OrganizationsError.OrganizationAlreadyActive" xml:space="preserve">
+    <value>La organización ya se encuentra activa.</value>
+  </data>
+  <data name="OrganizationsError.OrganizationSuspended" xml:space="preserve">
+    <value>La organización se encuentra suspendida.</value>
+  </data>
+  <data name="OrganizationsError.UserProfileNotFound" xml:space="preserve">
+    <value>No se encontró el perfil de usuario.</value>
+  </data>
+  <data name="OrganizationsError.DuplicateUserEmail" xml:space="preserve">
+    <value>Ya existe un perfil de usuario con este correo electrónico.</value>
+  </data>
+  <data name="OrganizationsError.FacilityNotFound" xml:space="preserve">
+    <value>No se encontró la sede o instalación.</value>
+  </data>
+  <data name="OrganizationsError.InvalidOperation" xml:space="preserve">
+    <value>Operación no válida en Organizaciones.</value>
+  </data>
+  <data name="OrganizationsError.DatabaseError" xml:space="preserve">
+    <value>Ocurrió un error de base de datos al procesar la solicitud.</value>
+  </data>
+  <data name="OrganizationsError.InternalServerError" xml:space="preserve">
+    <value>Ocurrió un error interno inesperado.</value>
+  </data>
 </root>
