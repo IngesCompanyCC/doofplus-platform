@@ -15,6 +15,9 @@ public static class ProductionBatchResourceFromEntityAssembler
             entity.Status.ToString(),
             entity.PlannedQuantity.Value,
             entity.PlannedQuantity.Unit,
+            entity.Line,
+            entity.Owner,
+            entity.Progress,
             entity.ManufacturedQuantity?.Value,
             entity.ManufacturedQuantity?.Unit,
             entity.StartedAt,
@@ -53,6 +56,7 @@ public static class ProductionBatchResourceFromEntityAssembler
             entity.ProductionBatchId,
             entity.Type,
             entity.Description,
+            entity.Tone.ToString(),
             entity.PerformedBy,
             entity.OccurredAt);
     }

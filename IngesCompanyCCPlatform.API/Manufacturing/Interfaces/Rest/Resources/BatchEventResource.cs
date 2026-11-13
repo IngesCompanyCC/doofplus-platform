@@ -8,5 +8,6 @@ public record BatchEventResource(
     int ProductionBatchId,
     string Type,
     string Description,
+    string Tone,
     long? PerformedBy,
     DateTime OccurredAt);

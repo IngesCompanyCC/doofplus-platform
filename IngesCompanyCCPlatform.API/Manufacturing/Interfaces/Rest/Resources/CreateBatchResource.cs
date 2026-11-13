@@ -7,4 +7,6 @@ public record CreateBatchResource(
     string BatchNumber,
     int ProductionOrderId,
     decimal PlannedQuantityValue,
-    string PlannedQuantityUnit);
+    string PlannedQuantityUnit,
+    string? Line = null,
+    string? Owner = null);

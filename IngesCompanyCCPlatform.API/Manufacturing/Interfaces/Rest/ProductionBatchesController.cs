@@ -2,6 +2,7 @@
 using IngesCompanyCCPlatform.API.Manufacturing.Application.CommandServices;
 using IngesCompanyCCPlatform.API.Manufacturing.Application.QueryServices;
 using IngesCompanyCCPlatform.API.Manufacturing.Domain.Model;
+using IngesCompanyCCPlatform.API.Manufacturing.Domain.Model.Commands;
 using IngesCompanyCCPlatform.API.Manufacturing.Domain.Model.Queries;
 using IngesCompanyCCPlatform.API.Manufacturing.Domain.Model.ValueObjects;
 using IngesCompanyCCPlatform.API.Manufacturing.Interfaces.Rest.Resources;
@@ -109,6 +110,26 @@ public class ProductionBatchesController(
                 $"Production batch with number '{batchNumber}' was not found.");
 
         return Ok(ProductionBatchResourceFromEntityAssembler.ToResourceFromEntity(batch));
+    }
+
+    [HttpPatch("{id:int}/progress")]
+    [EndpointSummary("Record the progress of a production batch")]
+    [EndpointDescription("Records the progress, from 0 to 100, that the Web App shows for the batch.")]
+    [ProducesResponseType(typeof(ProductionBatchResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UpdateBatchProgress(
+        [FromRoute] int id,
+        [FromBody] UpdateBatchProgressResource resource,
+        CancellationToken cancellationToken)
+    {
+        var result = await commandService.Handle(new UpdateBatchProgressCommand(id, resource.Progress), cancellationToken);
+
+        return ManufacturingActionResultAssembler.ToActionResult(
+            this,
+            result,
+            problemDetailsFactory,
+            batch => Ok(ProductionBatchResourceFromEntityAssembler.ToResourceFromEntity(batch)));
     }
 
     [HttpPost("{id:int}/close")]
