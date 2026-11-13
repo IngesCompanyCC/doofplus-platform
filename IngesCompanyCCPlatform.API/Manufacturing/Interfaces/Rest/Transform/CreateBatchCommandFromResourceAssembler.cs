@@ -11,6 +11,8 @@ public static class CreateBatchCommandFromResourceAssembler
             resource.BatchNumber,
             resource.ProductionOrderId,
             resource.PlannedQuantityValue,
-            resource.PlannedQuantityUnit);
+            resource.PlannedQuantityUnit,
+            resource.Line,
+            resource.Owner);
     }
 }

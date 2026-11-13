@@ -35,9 +35,23 @@ namespace IngesCompanyCCPlatform.API.Migrations
                         .HasColumnType("datetime(6)")
                         .HasColumnName("finished_at");
 
+                    b.Property<string>("Line")
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(30)")
+                        .HasColumnName("line");
+
+                    b.Property<string>("Owner")
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("owner");
+
                     b.Property<int>("ProductionOrderId")
                         .HasColumnType("int")
                         .HasColumnName("production_order_id");
+
+                    b.Property<int>("Progress")
+                        .HasColumnType("int")
+                        .HasColumnName("progress");
 
                     b.Property<DateTime?>("StartedAt")
                         .HasColumnType("datetime(6)")
@@ -83,6 +97,12 @@ namespace IngesCompanyCCPlatform.API.Migrations
                     b.Property<int>("ProductionBatchId")
                         .HasColumnType("int")
                         .HasColumnName("production_batch_id");
+
+                    b.Property<string>("Tone")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("varchar(10)")
+                        .HasColumnName("tone");
 
                     b.Property<string>("Type")
                         .IsRequired()
