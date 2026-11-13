@@ -124,6 +124,7 @@ builder.Services.AddSingleton<IStringLocalizer<SubscriptionsMessages>, StringLoc
 // the global exception handler uses them to translate the message keys of the value objects.
 // Example: builder.Services.AddBoundedContextMessages<SubscriptionsMessages>();
 builder.Services.AddBoundedContextMessages<CommonMessages>();
+builder.Services.AddBoundedContextMessages<SubscriptionsMessages>();
 
 // Manufacturing Bounded Context Injection Configuration
 builder.Services.AddScoped<IProductionBatchRepository, ProductionBatchRepository>();
