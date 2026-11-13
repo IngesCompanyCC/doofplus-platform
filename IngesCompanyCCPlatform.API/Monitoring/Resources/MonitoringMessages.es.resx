@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="monitoring.equipment.error.code.notBlank" xml:space="preserve">
+    <value>El código del equipo no puede estar vacío.</value>
+  </data>
+  <data name="monitoring.equipment.error.code.size" xml:space="preserve">
+    <value>El código del equipo debe tener como máximo 30 caracteres.</value>
+  </data>
+  <data name="monitoring.equipment.error.code.pattern" xml:space="preserve">
+    <value>El código del equipo solo puede tener letras, dígitos y guiones entre ellos, por ejemplo EQ-MIX-02.</value>
+  </data>
+  <data name="monitoring.equipment.error.name.notBlank" xml:space="preserve">
+    <value>El nombre del equipo no puede estar vacío.</value>
+  </data>
+  <data name="monitoring.equipment.error.calibrationStatus.invalid" xml:space="preserve">
+    <value>calibrationStatus debe ser Fit, Due o NotFit.</value>
+  </data>
+  <data name="monitoring.equipment.error.duplicate" xml:space="preserve">
+    <value>Ya existe un equipo con el mismo código.</value>
+  </data>
+  <data name="monitoring.equipment.error.inUse" xml:space="preserve">
+    <value>No se puede eliminar el equipo: uno de sus sensores está monitoreando un lote de producción.</value>
+  </data>
+  <data name="monitoring.equipment.error.notFoundById" xml:space="preserve">
+    <value>No se encontró el equipo con id {0}.</value>
+  </data>
+  <data name="monitoring.equipment.error.notFoundByCode" xml:space="preserve">
+    <value>No se encontró el equipo con código {0}.</value>
+  </data>
+  <data name="monitoring.sensor.error.code.notBlank" xml:space="preserve">
+    <value>El código del sensor no puede estar vacío.</value>
+  </data>
+  <data name="monitoring.sensor.error.code.size" xml:space="preserve">
+    <value>El código del sensor debe tener como máximo 30 caracteres.</value>
+  </data>
+  <data name="monitoring.sensor.error.code.pattern" xml:space="preserve">
+    <value>El código del sensor solo puede tener letras, dígitos y guiones entre ellos, por ejemplo T-204.</value>
+  </data>
+  <data name="monitoring.sensor.error.deviceId.notBlank" xml:space="preserve">
+    <value>El id del dispositivo no puede estar vacío.</value>
+  </data>
+  <data name="monitoring.sensor.error.deviceId.size" xml:space="preserve">
+    <value>El id del dispositivo debe tener como máximo 100 caracteres.</value>
+  </data>
+  <data name="monitoring.sensor.error.deviceId.pattern" xml:space="preserve">
+    <value>El id del dispositivo solo puede tener letras, dígitos y guiones entre ellos.</value>
+  </data>
+  <data name="monitoring.sensor.error.limits.invalid" xml:space="preserve">
+    <value>El límite inferior debe ser menor que el límite superior.</value>
+  </data>
+  <data name="monitoring.sensor.error.type.invalid" xml:space="preserve">
+    <value>type debe ser Temperature, Humidity o Pressure.</value>
+  </data>
+  <data name="monitoring.sensor.error.status.invalid" xml:space="preserve">
+    <value>status debe ser Active u Offline.</value>
+  </data>
+  <data name="monitoring.sensor.error.duplicate" xml:space="preserve">
+    <value>Ya existe un sensor con el mismo código.</value>
+  </data>
+  <data name="monitoring.sensor.error.deviceId.duplicate" xml:space="preserve">
+    <value>Otro sensor ya está vinculado al dispositivo.</value>
+  </data>
+  <data name="monitoring.sensor.error.notFoundById" xml:space="preserve">
+    <value>No se encontró el sensor con id {0}.</value>
+  </data>
+  <data name="monitoring.sensor.error.notFoundByCode" xml:space="preserve">
+    <value>No se encontró el sensor con código {0}.</value>
+  </data>
+  <data name="monitoring.sensor.error.notFoundByDeviceId" xml:space="preserve">
+    <value>Ningún sensor está vinculado al dispositivo {0}.</value>
+  </data>
+  <data name="monitoring.reading.error.notFoundById" xml:space="preserve">
+    <value>No se encontró la lectura con id {0}.</value>
+  </data>
+  <data name="monitoring.alert.error.code.notBlank" xml:space="preserve">
+    <value>El código de la alerta no puede estar vacío.</value>
+  </data>
+  <data name="monitoring.alert.error.code.size" xml:space="preserve">
+    <value>El código de la alerta debe tener como máximo 50 caracteres.</value>
+  </data>
+  <data name="monitoring.alert.error.code.pattern" xml:space="preserve">
+    <value>El código de la alerta solo puede tener letras, dígitos y guiones entre ellos, por ejemplo ALT-26031.</value>
+  </data>
+  <data name="monitoring.alert.error.title.notBlank" xml:space="preserve">
+    <value>El título de la alerta no puede estar vacío.</value>
+  </data>
+  <data name="monitoring.alert.error.severity.invalid" xml:space="preserve">
+    <value>severity debe ser Warning o Critical.</value>
+  </data>
+  <data name="monitoring.alert.error.status.invalid" xml:space="preserve">
+    <value>status debe ser Open, Acknowledged o UnderInvestigation.</value>
+  </data>
+  <data name="monitoring.alert.error.duplicate" xml:space="preserve">
+    <value>Ya existe una alerta con el mismo código.</value>
+  </data>
+  <data name="monitoring.alert.error.notFoundById" xml:space="preserve">
+    <value>No se encontró la alerta con id {0}.</value>
+  </data>
+  <data name="monitoring.telemetry.error.apiKey.invalid" xml:space="preserve">
+    <value>La API key de ThingsBoard falta o no es válida.</value>
+  </data>
+</root>
