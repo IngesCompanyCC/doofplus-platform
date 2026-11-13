@@ -1,23 +1,21 @@
 ﻿using IngesCompanyCCPlatform.API.Manufacturing.Domain.Model.Aggregates;
 using IngesCompanyCCPlatform.API.Manufacturing.Domain.Model.Entities;
 using IngesCompanyCCPlatform.API.Manufacturing.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
+using IngesCompanyCCPlatform.API.Organizations.Domain.Model.Aggregates;
+using IngesCompanyCCPlatform.API.Organizations.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
 using IngesCompanyCCPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using IngesCompanyCCPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.Interceptors;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace IngesCompanyCCPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
 
-/// <summary>
-///     Application database context for the DoofPlus platform.
-/// </summary>
-/// <remarks>
-///     The audit timestamps are applied here. The domain events are published by
-///     <see cref="DispatchDomainEventsInterceptor" />, which needs the mediator and is therefore
-///     added from the dependency injection container in <c>Program.cs</c>.
-/// </remarks>
-/// <param name="options">The options for the database context.</param>
 public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
 {
+    public DbSet<Organization> Organizations => Set<Organization>();
+    public DbSet<UserProfile> UserProfiles => Set<UserProfile>();
+    public DbSet<Facility> Facilities => Set<Facility>();
+    public DbSet<ContactInquiry> ContactInquiries => Set<ContactInquiry>();
     public DbSet<ProductionBatch> ProductionBatches => Set<ProductionBatch>();
     public DbSet<Incident> Incidents => Set<Incident>();
     public DbSet<MaterialConsumption> MaterialConsumptions => Set<MaterialConsumption>();
@@ -38,6 +36,12 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
+        
+        builder.ApplyConfiguration(new OrganizationEntityTypeConfiguration());
+        builder.ApplyConfiguration(new UserProfileEntityTypeConfiguration());
+        builder.ApplyConfiguration(new FacilityEntityTypeConfiguration());
+        builder.ApplyConfiguration(new ContactInquiryEntityTypeConfiguration());
+        
 
         // Manufacturing Context
         builder.ApplyManufacturingConfiguration();
