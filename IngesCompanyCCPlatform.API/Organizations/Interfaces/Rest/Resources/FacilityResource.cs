@@ -1,8 +1,8 @@
 namespace IngesCompanyCCPlatform.API.Organizations.Interfaces.Rest.Resources;
 
 public record FacilityResource(
-    Guid Id,
-    Guid OrganizationId,
+    int Id,
+    int OrganizationId,
     string Name,
     string Type,
     string Timezone,

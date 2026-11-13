@@ -1,7 +1,7 @@
 namespace IngesCompanyCCPlatform.API.Organizations.Interfaces.Rest.Resources;
 
 public record OrganizationResource(
-    Guid Id,
+    int Id,
     string LegalName,
     string Ruc,
     string Region,

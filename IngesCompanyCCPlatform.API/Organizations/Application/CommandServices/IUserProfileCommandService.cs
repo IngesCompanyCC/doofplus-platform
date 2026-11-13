@@ -1,6 +1,6 @@
 using IngesCompanyCCPlatform.API.Organizations.Domain.Model.Aggregates;
 using IngesCompanyCCPlatform.API.Organizations.Domain.Model.Commands;
-using IngesCompanyCCPlatform.API.Shared.Application.Patterns;
+using IngesCompanyCCPlatform.API.Shared.Application.Model;
 
 namespace IngesCompanyCCPlatform.API.Organizations.Application.CommandServices;
 
@@ -12,7 +12,7 @@ public interface IUserProfileCommandService
     /// <summary>
     ///     Creates a user profile inside an organization (US55).
     /// </summary>
-    Task<Result<UserProfile, string>> Handle(
+    Task<Result<UserProfile>> Handle(
         CreateUserProfileCommand command,
         CancellationToken cancellationToken = default);
 }

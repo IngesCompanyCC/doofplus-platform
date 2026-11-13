@@ -1,10 +1,11 @@
 using System.Net.Mime;
 using IngesCompanyCCPlatform.API.Organizations.Application.CommandServices;
 using IngesCompanyCCPlatform.API.Organizations.Application.QueryServices;
+using IngesCompanyCCPlatform.API.Organizations.Domain.Model;
 using IngesCompanyCCPlatform.API.Organizations.Domain.Model.Queries;
 using IngesCompanyCCPlatform.API.Organizations.Interfaces.Rest.Resources;
 using IngesCompanyCCPlatform.API.Organizations.Interfaces.Rest.Transform;
-using IngesCompanyCCPlatform.API.Shared.Application.Patterns;
+using IngesCompanyCCPlatform.API.Shared.Interfaces.Rest.ProblemDetails;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IngesCompanyCCPlatform.API.Organizations.Interfaces.Rest;
@@ -15,12 +16,15 @@ namespace IngesCompanyCCPlatform.API.Organizations.Interfaces.Rest;
 [Tags("User Profiles")]
 public class UserProfilesController(
     IUserProfileCommandService userProfileCommandService,
-    IUserProfileQueryService userProfileQueryService) : ControllerBase
+    IUserProfileQueryService userProfileQueryService,
+    ProblemDetailsFactory problemDetailsFactory) : ControllerBase
 {
     [HttpPost]
     [EndpointSummary("Create user profile")]
     [ProducesResponseType(typeof(UserProfileResource), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<IActionResult> CreateUserProfile(
         [FromBody] CreateUserProfileResource resource,
         CancellationToken cancellationToken)
@@ -28,34 +32,33 @@ public class UserProfilesController(
         var command = CreateUserProfileCommandFromResourceAssembler.ToCommandFromResource(resource);
         var result = await userProfileCommandService.Handle(command, cancellationToken);
 
-        return result switch
-        {
-            Result<Domain.Model.Aggregates.UserProfile, string>.Success success =>
-                CreatedAtAction(
-                    nameof(GetUserProfileById),
-                    new { profileId = success.Value.Id },
-                    UserProfileResourceFromEntityAssembler.ToResourceFromEntity(success.Value)),
-
-            Result<Domain.Model.Aggregates.UserProfile, string>.Failure failure =>
-                BadRequest(new { message = failure.Error }),
-
-            _ => StatusCode(StatusCodes.Status500InternalServerError)
-        };
+        return OrganizationsActionResultAssembler.ToActionResult(
+            this,
+            result,
+            problemDetailsFactory,
+            profile => CreatedAtAction(
+                nameof(GetUserProfileById),
+                new { profileId = profile.Id },
+                UserProfileResourceFromEntityAssembler.ToResourceFromEntity(profile)));
     }
 
-    [HttpGet("{profileId:guid}")]
+    [HttpGet("{profileId:int}")]
     [EndpointSummary("Get user profile by id")]
     [ProducesResponseType(typeof(UserProfileResource), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetUserProfileById(
-        Guid profileId,
+        int profileId,
         CancellationToken cancellationToken)
     {
         var query = new GetUserProfileByIdQuery(profileId);
         var profile = await userProfileQueryService.Handle(query, cancellationToken);
 
         if (profile is null)
-            return NotFound(new { message = "User profile was not found." });
+            return problemDetailsFactory.CreateProblemDetails(
+                this,
+                StatusCodes.Status404NotFound,
+                OrganizationsError.UserProfileNotFound,
+                $"User profile with ID {profileId} was not found.");
 
         return Ok(UserProfileResourceFromEntityAssembler.ToResourceFromEntity(profile));
     }
@@ -64,7 +67,7 @@ public class UserProfilesController(
     [EndpointSummary("Get user profiles by organization id")]
     [ProducesResponseType(typeof(IEnumerable<UserProfileResource>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetUserProfilesByOrganizationId(
-        [FromQuery] Guid organizationId,
+        [FromQuery] int organizationId,
         CancellationToken cancellationToken)
     {
         var query = new GetUserProfilesByOrganizationIdQuery(organizationId);

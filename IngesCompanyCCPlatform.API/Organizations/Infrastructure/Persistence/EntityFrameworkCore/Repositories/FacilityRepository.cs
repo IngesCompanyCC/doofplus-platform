@@ -10,7 +10,7 @@ public class FacilityRepository(AppDbContext context)
     : BaseRepository<Facility>(context), IFacilityRepository
 {
     public async Task<IEnumerable<Facility>> FindByOrganizationIdAsync(
-        Guid organizationId,
+        int organizationId,
         CancellationToken cancellationToken = default)
     {
         return await Context.Set<Facility>()

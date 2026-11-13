@@ -1,9 +1,10 @@
 using IngesCompanyCCPlatform.API.Organizations.Application.CommandServices;
+using IngesCompanyCCPlatform.API.Organizations.Domain.Model;
 using IngesCompanyCCPlatform.API.Organizations.Domain.Model.Aggregates;
 using IngesCompanyCCPlatform.API.Organizations.Domain.Model.Commands;
 using IngesCompanyCCPlatform.API.Organizations.Domain.Model.ValueObjects;
 using IngesCompanyCCPlatform.API.Organizations.Domain.Repositories;
-using IngesCompanyCCPlatform.API.Shared.Application.Patterns;
+using IngesCompanyCCPlatform.API.Shared.Application.Model;
 using IngesCompanyCCPlatform.API.Shared.Domain.Repositories;
 
 namespace IngesCompanyCCPlatform.API.Organizations.Application.Internal.CommandServices;
@@ -16,24 +17,24 @@ public class OrganizationCommandService(
     IFacilityRepository facilityRepository,
     IUnitOfWork unitOfWork) : IOrganizationCommandService
 {
-    public async Task<Result<Organization, string>> Handle(
+    public async Task<Result<Organization>> Handle(
         RegisterOrganizationCommand command,
         CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(command.LegalName))
-            return new Result<Organization, string>.Failure("Legal name is required.");
+            return Result<Organization>.Failure(OrganizationsError.InvalidOperation, "Legal name is required.");
 
         if (string.IsNullOrWhiteSpace(command.Ruc))
-            return new Result<Organization, string>.Failure("RUC is required.");
+            return Result<Organization>.Failure(OrganizationsError.InvalidOperation, "RUC is required.");
 
         if (string.IsNullOrWhiteSpace(command.AdministratorName))
-            return new Result<Organization, string>.Failure("Administrator name is required.");
+            return Result<Organization>.Failure(OrganizationsError.InvalidOperation, "Administrator name is required.");
 
         if (string.IsNullOrWhiteSpace(command.AdministratorEmail))
-            return new Result<Organization, string>.Failure("Administrator email is required.");
+            return Result<Organization>.Failure(OrganizationsError.InvalidOperation, "Administrator email is required.");
 
         if (string.IsNullOrWhiteSpace(command.Password))
-            return new Result<Organization, string>.Failure("Password is required.");
+            return Result<Organization>.Failure(OrganizationsError.InvalidOperation, "Password is required.");
 
         Ruc ruc;
         try
@@ -42,15 +43,16 @@ public class OrganizationCommandService(
         }
         catch (ArgumentException ex)
         {
-            return new Result<Organization, string>.Failure(ex.Message);
+            return Result<Organization>.Failure(OrganizationsError.InvalidOperation, ex.Message);
         }
 
         if (await organizationRepository.ExistsByRucAsync(ruc.Value, cancellationToken))
-            return new Result<Organization, string>.Failure("An organization with this RUC already exists.");
+            return Result<Organization>.Failure(OrganizationsError.DuplicateRuc, "An organization with this RUC already exists.");
 
         var organization = new Organization(command);
 
         await organizationRepository.AddAsync(organization, cancellationToken);
+        await unitOfWork.CompleteAsync(cancellationToken);
 
         if (!string.IsNullOrWhiteSpace(command.FacilityName))
         {
@@ -62,13 +64,9 @@ public class OrganizationCommandService(
                 command.AdministratorName);
 
             await facilityRepository.AddAsync(facility, cancellationToken);
+            await unitOfWork.CompleteAsync(cancellationToken);
         }
 
-        await unitOfWork.CompleteAsync(cancellationToken);
-
-        // Domain event available for IAM integration later:
-        // var domainEvent = organization.ToRegisteredEvent(command);
-
-        return new Result<Organization, string>.Success(organization);
+        return Result<Organization>.Success(organization);
     }
 }

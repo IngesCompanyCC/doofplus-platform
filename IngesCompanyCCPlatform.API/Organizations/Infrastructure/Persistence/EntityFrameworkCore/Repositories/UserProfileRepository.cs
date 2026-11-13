@@ -20,7 +20,7 @@ public class UserProfileRepository(AppDbContext context)
     }
 
     public async Task<UserProfile?> FindByUserIdAsync(
-        Guid userId,
+        int userId,
         CancellationToken cancellationToken = default)
     {
         return await Context.Set<UserProfile>()
@@ -28,7 +28,7 @@ public class UserProfileRepository(AppDbContext context)
     }
 
     public async Task<IEnumerable<UserProfile>> FindByOrganizationIdAsync(
-        Guid organizationId,
+        int organizationId,
         CancellationToken cancellationToken = default)
     {
         return await Context.Set<UserProfile>()

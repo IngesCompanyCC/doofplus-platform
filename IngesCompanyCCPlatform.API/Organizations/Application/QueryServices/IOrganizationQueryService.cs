@@ -1,5 +1,7 @@
 using IngesCompanyCCPlatform.API.Organizations.Domain.Model.Aggregates;
 using IngesCompanyCCPlatform.API.Organizations.Domain.Model.Queries;
+using IngesCompanyCCPlatform.API.Shared.Application.Model;
+
 
 namespace IngesCompanyCCPlatform.API.Organizations.Application.QueryServices;
 

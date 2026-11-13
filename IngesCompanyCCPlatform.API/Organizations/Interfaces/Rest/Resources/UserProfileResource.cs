@@ -1,9 +1,9 @@
 namespace IngesCompanyCCPlatform.API.Organizations.Interfaces.Rest.Resources;
 
 public record UserProfileResource(
-    Guid Id,
-    Guid OrganizationId,
-    Guid UserId,
+    int Id,
+    int OrganizationId,
+    int UserId,
     string FirstName,
     string LastName,
     string FullName,

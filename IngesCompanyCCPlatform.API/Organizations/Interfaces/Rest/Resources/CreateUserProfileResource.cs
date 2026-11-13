@@ -1,8 +1,8 @@
 namespace IngesCompanyCCPlatform.API.Organizations.Interfaces.Rest.Resources;
 
 public record CreateUserProfileResource(
-    Guid OrganizationId,
-    Guid UserId,
+    int OrganizationId,
+    int UserId,
     string FirstName,
     string LastName,
     string Email,

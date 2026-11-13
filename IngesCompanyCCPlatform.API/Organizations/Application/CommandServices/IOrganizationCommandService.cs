@@ -1,6 +1,6 @@
 using IngesCompanyCCPlatform.API.Organizations.Domain.Model.Aggregates;
 using IngesCompanyCCPlatform.API.Organizations.Domain.Model.Commands;
-using IngesCompanyCCPlatform.API.Shared.Application.Patterns;
+using IngesCompanyCCPlatform.API.Shared.Application.Model;
 
 namespace IngesCompanyCCPlatform.API.Organizations.Application.CommandServices;
 
@@ -12,7 +12,7 @@ public interface IOrganizationCommandService
     /// <summary>
     ///     Registers a new organization (US50).
     /// </summary>
-    Task<Result<Organization, string>> Handle(
+    Task<Result<Organization>> Handle(
         RegisterOrganizationCommand command,
         CancellationToken cancellationToken = default);
 }

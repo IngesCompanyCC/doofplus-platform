@@ -13,7 +13,7 @@ public interface IUserProfileRepository : IBaseRepository<UserProfile>
     Task<UserProfile?> FindByUserIdAsync(int userId, CancellationToken cancellationToken = default);
 
     Task<IEnumerable<UserProfile>> FindByOrganizationIdAsync(
-        Guid organizationId,
+        int organizationId,
         CancellationToken cancellationToken = default);
 
     Task<bool> ExistsByEmailAsync(string email, CancellationToken cancellationToken = default);
