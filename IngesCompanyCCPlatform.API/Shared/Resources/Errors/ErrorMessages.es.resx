@@ -3,6 +3,9 @@
       <data name="GenericError" xml:space="preserve">
     <value>Ocurrió un error.</value>
   </data>
+  <data name="InvalidArgument" xml:space="preserve">
+    <value>Solicitud no válida</value>
+  </data>
   <data name="OperationCancelled" xml:space="preserve">
     <value>La operación fue cancelada.</value>
   </data>
