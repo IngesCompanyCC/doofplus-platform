@@ -12,6 +12,12 @@ using IngesCompanyCCPlatform.API.Shared.Infrastructure.Mediator.Cortex.Configura
 using IngesCompanyCCPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
 using IngesCompanyCCPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.Interceptors;
 using IngesCompanyCCPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using IngesCompanyCCPlatform.API.Organizations.Application.CommandServices;
+using IngesCompanyCCPlatform.API.Organizations.Application.Internal.CommandServices;
+using IngesCompanyCCPlatform.API.Organizations.Application.Internal.QueryServices;
+using IngesCompanyCCPlatform.API.Organizations.Application.QueryServices;
+using IngesCompanyCCPlatform.API.Organizations.Domain.Repositories;
+using IngesCompanyCCPlatform.API.Organizations.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using IngesCompanyCCPlatform.API.Shared.Infrastructure.Pipeline.Middleware.Components;
 using IngesCompanyCCPlatform.API.Shared.Resources;
 using Cortex.Mediator.Commands;
@@ -79,6 +85,19 @@ builder.Services.AddLocalization();
 builder.Services.AddSingleton<ProblemDetailsFactory>();
 
 // Configure Dependency Injection
+
+// Organizations Bounded Context
+builder.Services.AddScoped<IOrganizationRepository, OrganizationRepository>();
+builder.Services.AddScoped<IUserProfileRepository, UserProfileRepository>();
+builder.Services.AddScoped<IFacilityRepository, FacilityRepository>();
+builder.Services.AddScoped<IContactInquiryRepository, ContactInquiryRepository>();
+
+builder.Services.AddScoped<IOrganizationCommandService, OrganizationCommandService>();
+builder.Services.AddScoped<IUserProfileCommandService, UserProfileCommandService>();
+builder.Services.AddScoped<IContactInquiryCommandService, ContactInquiryCommandService>();
+builder.Services.AddScoped<IOrganizationQueryService, OrganizationQueryService>();
+builder.Services.AddScoped<IUserProfileQueryService, UserProfileQueryService>();
+builder.Services.AddScoped<IContactInquiryQueryService, ContactInquiryQueryService>();
 
 // Shared Bounded Context Injection Configuration
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
