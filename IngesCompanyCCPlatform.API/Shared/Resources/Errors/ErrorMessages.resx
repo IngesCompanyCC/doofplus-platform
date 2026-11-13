@@ -60,4 +60,31 @@
   <data name="OrganizationsError.InvalidContactInquiryData" xml:space="preserve">
     <value>Invalid contact inquiry data.</value>
   </data>
+  <data name="MonitoringError.EquipmentNotFound" xml:space="preserve">
+    <value>Equipment not found</value>
+  </data>
+  <data name="MonitoringError.DuplicateEquipmentCode" xml:space="preserve">
+    <value>Duplicate equipment code</value>
+  </data>
+  <data name="MonitoringError.EquipmentInUse" xml:space="preserve">
+    <value>Equipment in use</value>
+  </data>
+  <data name="MonitoringError.SensorNotFound" xml:space="preserve">
+    <value>Sensor not found</value>
+  </data>
+  <data name="MonitoringError.DuplicateSensorCode" xml:space="preserve">
+    <value>Duplicate sensor code</value>
+  </data>
+  <data name="MonitoringError.DuplicateDeviceId" xml:space="preserve">
+    <value>Device already linked</value>
+  </data>
+  <data name="MonitoringError.ReadingNotFound" xml:space="preserve">
+    <value>Reading not found</value>
+  </data>
+  <data name="MonitoringError.AlertNotFound" xml:space="preserve">
+    <value>Alert not found</value>
+  </data>
+  <data name="MonitoringError.DuplicateAlertCode" xml:space="preserve">
+    <value>Duplicate alert code</value>
+  </data>
 </root>
