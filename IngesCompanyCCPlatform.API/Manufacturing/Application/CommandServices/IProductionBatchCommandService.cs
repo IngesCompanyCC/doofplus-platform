@@ -33,4 +33,6 @@ public interface IProductionBatchCommandService
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>Result containing the registered incident or a domain error.</returns>
     Task<Result<Incident>> Handle(RegisterIncidentCommand command, CancellationToken cancellationToken = default);
+
+    Task<Result<ProductionBatch>> Handle(UpdateBatchProgressCommand command, CancellationToken cancellationToken = default);
 }

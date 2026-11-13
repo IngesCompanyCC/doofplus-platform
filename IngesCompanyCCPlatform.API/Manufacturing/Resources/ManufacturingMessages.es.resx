@@ -135,4 +135,7 @@
   <data name="manufacturing.lot.error.notFoundById" xml:space="preserve">
     <value>No se encontró el lote de materia prima con id {0}.</value>
   </data>
+  <data name="manufacturing.batch.error.progress.invalid" xml:space="preserve">
+    <value>El avance del lote debe estar entre 0 y 100.</value>
+  </data>
 </root>

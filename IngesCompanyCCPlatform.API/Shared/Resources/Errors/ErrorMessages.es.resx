@@ -99,4 +99,31 @@
   <data name="ManufacturingError.InvalidRawMaterialLotState" xml:space="preserve">
     <value>Estado de lote no válido</value>
   </data>
+  <data name="MonitoringError.EquipmentNotFound" xml:space="preserve">
+    <value>Equipo no encontrado</value>
+  </data>
+  <data name="MonitoringError.DuplicateEquipmentCode" xml:space="preserve">
+    <value>Código de equipo duplicado</value>
+  </data>
+  <data name="MonitoringError.EquipmentInUse" xml:space="preserve">
+    <value>Equipo en uso</value>
+  </data>
+  <data name="MonitoringError.SensorNotFound" xml:space="preserve">
+    <value>Sensor no encontrado</value>
+  </data>
+  <data name="MonitoringError.DuplicateSensorCode" xml:space="preserve">
+    <value>Código de sensor duplicado</value>
+  </data>
+  <data name="MonitoringError.DuplicateDeviceId" xml:space="preserve">
+    <value>Dispositivo ya vinculado</value>
+  </data>
+  <data name="MonitoringError.ReadingNotFound" xml:space="preserve">
+    <value>Lectura no encontrada</value>
+  </data>
+  <data name="MonitoringError.AlertNotFound" xml:space="preserve">
+    <value>Alerta no encontrada</value>
+  </data>
+  <data name="MonitoringError.DuplicateAlertCode" xml:space="preserve">
+    <value>Código de alerta duplicado</value>
+  </data>
 </root>

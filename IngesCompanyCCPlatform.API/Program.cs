@@ -13,6 +13,13 @@ using IngesCompanyCCPlatform.API.Shared.Infrastructure.Mediator.Cortex.Configura
 using IngesCompanyCCPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
 using IngesCompanyCCPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.Interceptors;
 using IngesCompanyCCPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using IngesCompanyCCPlatform.API.Monitoring.Application.CommandServices;
+using IngesCompanyCCPlatform.API.Monitoring.Application.Internal.CommandServices;
+using IngesCompanyCCPlatform.API.Monitoring.Application.Internal.QueryServices;
+using IngesCompanyCCPlatform.API.Monitoring.Application.QueryServices;
+using IngesCompanyCCPlatform.API.Monitoring.Domain.Repositories;
+using IngesCompanyCCPlatform.API.Monitoring.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using IngesCompanyCCPlatform.API.Monitoring.Resources;
 using IngesCompanyCCPlatform.API.Organizations.Application.CommandServices;
 using IngesCompanyCCPlatform.API.Organizations.Application.Internal.CommandServices;
 using IngesCompanyCCPlatform.API.Organizations.Application.Internal.QueryServices;
@@ -127,6 +134,7 @@ builder.Services.AddSingleton<IStringLocalizer<SubscriptionsMessages>, StringLoc
 builder.Services.AddBoundedContextMessages<CommonMessages>();
 builder.Services.AddBoundedContextMessages<SubscriptionsMessages>();
 builder.Services.AddBoundedContextMessages<ManufacturingMessages>();
+builder.Services.AddBoundedContextMessages<MonitoringMessages>();
 
 // Manufacturing Bounded Context Injection Configuration
 builder.Services.AddScoped<IProductionBatchRepository, ProductionBatchRepository>();
@@ -144,6 +152,20 @@ builder.Services.AddScoped<IProductionOrderCommandService, ProductionOrderComman
 builder.Services.AddScoped<IProductionOrderQueryService, ProductionOrderQueryService>();
 builder.Services.AddScoped<IRawMaterialLotCommandService, RawMaterialLotCommandService>();
 builder.Services.AddScoped<IRawMaterialLotQueryService, RawMaterialLotQueryService>();
+
+// Monitoring Bounded Context Injection Configuration
+builder.Services.AddScoped<IEquipmentRepository, EquipmentRepository>();
+builder.Services.AddScoped<ISensorRepository, SensorRepository>();
+builder.Services.AddScoped<IReadingRepository, ReadingRepository>();
+builder.Services.AddScoped<IAlertRepository, AlertRepository>();
+builder.Services.AddScoped<IEquipmentCommandService, EquipmentCommandService>();
+builder.Services.AddScoped<IEquipmentQueryService, EquipmentQueryService>();
+builder.Services.AddScoped<ISensorCommandService, SensorCommandService>();
+builder.Services.AddScoped<ISensorQueryService, SensorQueryService>();
+builder.Services.AddScoped<IReadingCommandService, ReadingCommandService>();
+builder.Services.AddScoped<IReadingQueryService, ReadingQueryService>();
+builder.Services.AddScoped<IAlertCommandService, AlertCommandService>();
+builder.Services.AddScoped<IAlertQueryService, AlertQueryService>();
 
 // Mediator Configuration
 builder.Services.AddScoped(typeof(ICommandPipelineBehavior<>), typeof(LoggingCommandBehavior<>));
@@ -176,10 +198,8 @@ app.UseRequestLocalization(localizationOptions);
 
 app.UseExceptionHandler();
 
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-}
+// The OpenAPI document is served in every environment, so the Scalar reference also works once deployed.
+app.MapOpenApi();
 
 // Apply CORS Policy
 app.UseCors("AllowAllPolicy");

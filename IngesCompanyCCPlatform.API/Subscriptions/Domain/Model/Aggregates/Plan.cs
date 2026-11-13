@@ -14,6 +14,7 @@ public partial class Plan : AggregateRoot
 {
     private const string NameNotBlankMessageKey = "plan.error.name.notBlank";
     private const string LimitsInvalidMessageKey = "plan.error.limits.invalid";
+    private const string CurrencyMismatchMessageKey = "plan.error.currency.mismatch";
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="Plan" /> aggregate. Used by Entity Framework Core.
@@ -22,8 +23,7 @@ public partial class Plan : AggregateRoot
     {
         PlanKey = null!;
         Name = string.Empty;
-        MonthlyPrice = null!;
-        AnnualPrice = null!;
+        Currency = string.Empty;
     }
 
     /// <summary>
@@ -35,11 +35,14 @@ public partial class Plan : AggregateRoot
     public Plan(CreatePlanCommand command) : this()
     {
         if (string.IsNullOrWhiteSpace(command.Name)) throw new ArgumentException(NameNotBlankMessageKey);
-        if (command.UserLimit <= 0 || command.IotDeviceLimit < 0) throw new ArgumentException(LimitsInvalidMessageKey);
+        if (command.UserLimit < 0 || command.IotDeviceLimit < 0) throw new ArgumentException(LimitsInvalidMessageKey);
+        if (command.MonthlyPrice.Currency != command.AnnualPrice.Currency)
+            throw new ArgumentException(CurrencyMismatchMessageKey);
         PlanKey = command.PlanKey;
         Name = command.Name;
-        MonthlyPrice = command.MonthlyPrice;
-        AnnualPrice = command.AnnualPrice;
+        MonthlyPriceAmount = command.MonthlyPrice.Amount;
+        AnnualPriceAmount = command.AnnualPrice.Amount;
+        Currency = command.MonthlyPrice.Currency;
         UserLimit = command.UserLimit;
         IotDeviceLimit = command.IotDeviceLimit;
     }
@@ -60,22 +63,37 @@ public partial class Plan : AggregateRoot
     public string Name { get; private set; }
 
     /// <summary>
+    ///     Gets the amount of the monthly cycle, in <see cref="Currency" />.
+    /// </summary>
+    public decimal MonthlyPriceAmount { get; private set; }
+
+    /// <summary>
+    ///     Gets the amount of the annual cycle, in <see cref="Currency" />.
+    /// </summary>
+    public decimal AnnualPriceAmount { get; private set; }
+
+    /// <summary>
+    ///     Gets the ISO 4217 currency shared by both prices, for example <c>USD</c>.
+    /// </summary>
+    public string Currency { get; private set; }
+
+    /// <summary>
     ///     Gets the price of the monthly cycle.
     /// </summary>
-    public Money MonthlyPrice { get; private set; }
+    public Money MonthlyPrice => new(MonthlyPriceAmount, Currency);
 
     /// <summary>
     ///     Gets the price of the annual cycle.
     /// </summary>
-    public Money AnnualPrice { get; private set; }
+    public Money AnnualPrice => new(AnnualPriceAmount, Currency);
 
     /// <summary>
-    ///     Gets the maximum number of users of the plan.
+    ///     Gets the maximum number of users of the plan; 0 means unlimited.
     /// </summary>
     public int UserLimit { get; private set; }
 
     /// <summary>
-    ///     Gets the maximum number of IoT devices of the plan.
+    ///     Gets the maximum number of IoT devices of the plan; 0 means unlimited.
     /// </summary>
     public int IotDeviceLimit { get; private set; }
 
@@ -100,10 +118,10 @@ public partial class Plan : AggregateRoot
     ///     The devices already registered by the organization.
     /// </param>
     /// <returns>
-    ///     <c>true</c> when one more device fits in the plan.
+    ///     <c>true</c> when one more device fits in the plan or the plan has no limit (0).
     /// </returns>
     public bool AllowsOneMoreIotDevice(int registeredDevices)
     {
-        return registeredDevices < IotDeviceLimit;
+        return IotDeviceLimit == 0 || registeredDevices < IotDeviceLimit;
     }
 }

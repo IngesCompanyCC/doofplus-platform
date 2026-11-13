@@ -8,14 +8,18 @@ namespace IngesCompanyCCPlatform.API.Manufacturing.Domain.Model.Commands;
 public record CreateBatchCommand(
     BatchNumber BatchNumber,
     int ProductionOrderId,
-    Quantity PlannedQuantity)
+    Quantity PlannedQuantity,
+    string? Line = null,
+    string? Owner = null)
 {
     public CreateBatchCommand(
         string batchNumber,
         int productionOrderId,
         decimal quantityValue,
-        string quantityUnit)
-        : this(new BatchNumber(batchNumber), productionOrderId, new Quantity(quantityValue, quantityUnit))
+        string quantityUnit,
+        string? line = null,
+        string? owner = null)
+        : this(new BatchNumber(batchNumber), productionOrderId, new Quantity(quantityValue, quantityUnit), line, owner)
     {
     }
 }

@@ -135,4 +135,7 @@
   <data name="manufacturing.lot.error.notFoundById" xml:space="preserve">
     <value>Raw material lot not found for id {0}.</value>
   </data>
+  <data name="manufacturing.batch.error.progress.invalid" xml:space="preserve">
+    <value>The batch progress must be between 0 and 100.</value>
+  </data>
 </root>

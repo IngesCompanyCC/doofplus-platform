@@ -17,6 +17,9 @@ public static class ModelBuilderExtensions
         builder.Entity<ProductionBatch>().Property(b => b.Id).IsRequired().ValueGeneratedOnAdd();
         builder.Entity<ProductionBatch>().Property(b => b.ProductionOrderId).IsRequired();
         builder.Entity<ProductionBatch>().Property(b => b.Status).IsRequired().HasConversion<string>().HasMaxLength(50);
+        builder.Entity<ProductionBatch>().Property(b => b.Line).HasMaxLength(30);
+        builder.Entity<ProductionBatch>().Property(b => b.Owner).HasMaxLength(100);
+        builder.Entity<ProductionBatch>().Property(b => b.Progress).IsRequired();
         builder.Entity<ProductionBatch>().Property(b => b.StartedAt);
         builder.Entity<ProductionBatch>().Property(b => b.FinishedAt);
 
@@ -95,6 +98,7 @@ public static class ModelBuilderExtensions
         builder.Entity<BatchEvent>().Property(e => e.ProductionBatchId).IsRequired();
         builder.Entity<BatchEvent>().Property(e => e.Type).IsRequired().HasMaxLength(100);
         builder.Entity<BatchEvent>().Property(e => e.Description).IsRequired().HasMaxLength(500);
+        builder.Entity<BatchEvent>().Property(e => e.Tone).IsRequired().HasConversion<string>().HasMaxLength(10);
         builder.Entity<BatchEvent>().Property(e => e.OccurredAt).IsRequired();
         builder.Entity<BatchEvent>().Property(e => e.PerformedBy);
     }

@@ -82,4 +82,22 @@ public class ProductionBatchCommandService(
 
         return Result<Incident>.Success(incident);
     }
+
+    public async Task<Result<ProductionBatch>> Handle(
+        UpdateBatchProgressCommand command,
+        CancellationToken cancellationToken = default)
+    {
+        var batch = await productionBatchRepository.FindByIdAsync(command.BatchId, cancellationToken);
+        if (batch is null)
+            return Result<ProductionBatch>.Failure(
+                ManufacturingErrors.BatchNotFound,
+                ManufacturingError.BatchNotFound);
+
+        batch.UpdateProgress(command.Progress);
+
+        productionBatchRepository.Update(batch);
+        await unitOfWork.CompleteAsync(cancellationToken);
+
+        return Result<ProductionBatch>.Success(batch);
+    }
 }

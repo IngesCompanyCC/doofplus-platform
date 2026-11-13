@@ -16,7 +16,7 @@
     <value>name no debe ser nulo o estar en blanco.</value>
   </data>
   <data name="plan.error.limits.invalid" xml:space="preserve">
-    <value>userLimit debe ser mayor que 0 e iotDeviceLimit no debe ser negativo.</value>
+    <value>userLimit e iotDeviceLimit no pueden ser negativos; 0 significa ilimitado.</value>
   </data>
   <data name="plan.error.id.invalid" xml:space="preserve">
     <value>El id del plan debe ser mayor que 0.</value>
@@ -74,5 +74,11 @@
   </data>
   <data name="subscription.error.state.notActive" xml:space="preserve">
     <value>Solo una suscripción activa se puede renovar o cancelar.</value>
+  </data>
+  <data name="plan.error.currency.mismatch" xml:space="preserve">
+    <value>El precio mensual y el anual deben usar la misma moneda.</value>
+  </data>
+  <data name="subscription.error.cardBrand.size" xml:space="preserve">
+    <value>La marca de la tarjeta debe tener como máximo 20 caracteres.</value>
   </data>
 </root>

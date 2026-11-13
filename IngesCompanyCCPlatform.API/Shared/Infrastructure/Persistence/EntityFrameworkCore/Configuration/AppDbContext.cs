@@ -1,6 +1,7 @@
 ﻿using IngesCompanyCCPlatform.API.Manufacturing.Domain.Model.Aggregates;
 using IngesCompanyCCPlatform.API.Manufacturing.Domain.Model.Entities;
 using IngesCompanyCCPlatform.API.Manufacturing.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
+using IngesCompanyCCPlatform.API.Monitoring.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using IngesCompanyCCPlatform.API.Organizations.Domain.Model.Aggregates;
 using IngesCompanyCCPlatform.API.Organizations.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
 using IngesCompanyCCPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
@@ -50,6 +51,9 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
         // Subscriptions Context
         builder.ApplySubscriptionsConfiguration();
+
+        // Monitoring Context
+        builder.ApplyMonitoringConfiguration();
 
         // General naming convention for the database objects
         builder.UseSnakeCaseNamingConvention();
