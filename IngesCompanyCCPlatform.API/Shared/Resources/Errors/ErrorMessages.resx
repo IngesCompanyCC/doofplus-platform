@@ -36,4 +36,10 @@
   <data name="OrganizationsError.InternalServerError" xml:space="preserve">
     <value>An unexpected internal error occurred.</value>
   </data>
+  <data name="OrganizationsError.ContactInquiryNotFound" xml:space="preserve">
+    <value>Contact inquiry was not found.</value>
+  </data>
+  <data name="OrganizationsError.InvalidContactInquiryData" xml:space="preserve">
+    <value>Invalid contact inquiry data.</value>
+  </data>
 </root>
