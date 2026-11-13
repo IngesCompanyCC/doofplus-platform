@@ -13,6 +13,8 @@ public enum OrganizationsError
     UserProfileNotFound,
     DuplicateUserEmail,
     FacilityNotFound,
+    ContactInquiryNotFound,
+    InvalidContactInquiryData,
     InvalidOperation,
     DatabaseError,
     InternalServerError
