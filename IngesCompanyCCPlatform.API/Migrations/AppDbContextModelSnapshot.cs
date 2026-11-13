@@ -168,6 +168,54 @@ namespace IngesCompanyCCPlatform.API.Migrations
                     b.ToTable("material_consumptions", (string)null);
                 });
 
+            modelBuilder.Entity("IngesCompanyCCPlatform.API.Organizations.Domain.Model.Aggregates.ContactInquiry", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<DateTimeOffset?>("CreatedAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("created_at");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("email");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("varchar(150)")
+                        .HasColumnName("full_name");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("message");
+
+                    b.Property<DateTimeOffset>("ReceivedAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("received_at");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)")
+                        .HasColumnName("status");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("Id")
+                        .HasName("p_k_contact_inquiries");
+
+                    b.ToTable("contact_inquiries", (string)null);
+                });
+
             modelBuilder.Entity("IngesCompanyCCPlatform.API.Organizations.Domain.Model.Aggregates.Facility", b =>
                 {
                     b.Property<int>("Id")
