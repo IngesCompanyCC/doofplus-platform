@@ -6,12 +6,12 @@ namespace IngesCompanyCCPlatform.API.Monitoring.Domain.Model.ValueObjects;
 ///     The business code of an alert (for example ALT-26031), for example the code shown in the Web App.
 /// </summary>
 /// <remarks>
-///     Letters, digits and hyphens between them, up to 40 characters. Each broken rule throws an
+///     Letters, digits and hyphens between them, up to 50 characters. Each broken rule throws an
 ///     <see cref="ArgumentException" /> whose message is the key of the localized error.
 /// </remarks>
 public partial record AlertCode
 {
-    private const int MaxLength = 40;
+    private const int MaxLength = 50;
     private const string NotBlankMessageKey = "monitoring.alert.error.code.notBlank";
     private const string SizeMessageKey = "monitoring.alert.error.code.size";
     private const string PatternMessageKey = "monitoring.alert.error.code.pattern";
