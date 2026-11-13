@@ -53,8 +53,8 @@ public partial class RawMaterialLot : AggregateRoot
         ExpiryDate = command.ExpiryDate;
         StorageLocation = command.StorageLocation?.Trim() ?? string.Empty;
         Certificate = command.Certificate?.Trim() ?? string.Empty;
-        Status = ERawMaterialLotStatus.Inspection;
-        SamplingStatus = ESamplingStatus.Requested;
+        Status = ERawMaterialLotStatus.Quarantine;
+        SamplingStatus = ESamplingStatus.Pending;
     }
 
     /// <summary>The id of the lot.</summary>
@@ -108,10 +108,13 @@ public partial class RawMaterialLot : AggregateRoot
     /// <summary>
     ///     Records the incoming inspection of the lot.
     /// </summary>
-    /// <exception cref="InvalidOperationException">Thrown when the lot is no longer in Inspection.</exception>
+    /// <remarks>A lot in Quarantine or Sampling moves to Inspection, as in the Web App.</remarks>
+    /// <exception cref="InvalidOperationException">Thrown when the lot was already approved or rejected.</exception>
     public void Inspect(InspectRawMaterialLotCommand command)
     {
-        if (Status != ERawMaterialLotStatus.Inspection) throw new InvalidOperationException(NotInInspectionMessageKey);
+        if (Status is not (ERawMaterialLotStatus.Quarantine or ERawMaterialLotStatus.Sampling or ERawMaterialLotStatus.Inspection))
+            throw new InvalidOperationException(NotInInspectionMessageKey);
+        Status = ERawMaterialLotStatus.Inspection;
         PackagingVerified = command.PackagingVerified;
         IdentityVerified = command.IdentityVerified;
         SamplingStatus = command.SamplingStatus;

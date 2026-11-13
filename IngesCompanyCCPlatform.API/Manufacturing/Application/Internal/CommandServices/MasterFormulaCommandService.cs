@@ -57,7 +57,7 @@ public class MasterFormulaCommandService(
         // Only one approved version per product: the one approved before becomes obsolete
         var formulasOfProduct = await masterFormulaRepository.FindAllByProductCodeAsync(formula.ProductCode,
             cancellationToken);
-        foreach (var other in formulasOfProduct.Where(other => other.Id != formula.Id)) other.MakeObsolete();
+        foreach (var other in formulasOfProduct.Where(other => other.Id != formula.Id)) other.Lock();
 
         await unitOfWork.CompleteAsync(cancellationToken);
         return Result<MasterFormula>.Success(formula);

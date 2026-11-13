@@ -10,8 +10,10 @@ public enum EFormulaStatus
 {
     /// <summary>Being written; cannot be used yet.</summary>
     Draft,
+    /// <summary>Sent to Quality and waiting for approval.</summary>
+    Pending,
     /// <summary>Approved by Quality; production orders can follow it.</summary>
     Approved,
-    /// <summary>Replaced by a newer approved version.</summary>
-    Obsolete
+    /// <summary>Replaced by a newer approved version; kept for traceability.</summary>
+    Locked
 }

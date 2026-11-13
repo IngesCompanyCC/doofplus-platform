@@ -8,10 +8,14 @@
 /// </remarks>
 public enum ERawMaterialLotStatus
 {
-    /// <summary>Received and in quarantine until it is inspected.</summary>
+    /// <summary>Received and waiting for sampling.</summary>
+    Quarantine,
+    /// <summary>Samples are being taken.</summary>
+    Sampling,
+    /// <summary>Under quality inspection.</summary>
     Inspection,
     /// <summary>Released for production.</summary>
     Approved,
-    /// <summary>Cannot be used.</summary>
+    /// <summary>Rejected by Quality.</summary>
     Rejected
 }

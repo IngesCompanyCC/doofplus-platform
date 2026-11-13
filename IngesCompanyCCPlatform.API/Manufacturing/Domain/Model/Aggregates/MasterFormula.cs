@@ -85,11 +85,12 @@ public partial class MasterFormula : AggregateRoot
     /// </summary>
     /// <param name="approvedBy">Who approves it.</param>
     /// <exception cref="ArgumentException">Thrown when the approver is blank.</exception>
-    /// <exception cref="InvalidOperationException">Thrown when the formula is not in Draft.</exception>
+    /// <exception cref="InvalidOperationException">Thrown when the formula is not in Draft or Pending.</exception>
     public void Approve(string approvedBy)
     {
         if (string.IsNullOrWhiteSpace(approvedBy)) throw new ArgumentException(ApproverNotBlankMessageKey);
-        if (Status != EFormulaStatus.Draft) throw new InvalidOperationException(NotDraftMessageKey);
+        if (Status is not (EFormulaStatus.Draft or EFormulaStatus.Pending))
+            throw new InvalidOperationException(NotDraftMessageKey);
         Status = EFormulaStatus.Approved;
         ApprovedBy = approvedBy.Trim();
         ApprovedAt = DateOnly.FromDateTime(DateTime.UtcNow);
@@ -98,8 +99,8 @@ public partial class MasterFormula : AggregateRoot
     /// <summary>
     ///     Marks an approved formula as replaced by a newer approved version.
     /// </summary>
-    public void MakeObsolete()
+    public void Lock()
     {
-        if (Status == EFormulaStatus.Approved) Status = EFormulaStatus.Obsolete;
+        if (Status == EFormulaStatus.Approved) Status = EFormulaStatus.Locked;
     }
 }

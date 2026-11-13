@@ -105,7 +105,9 @@ public partial class ProductionOrder : AggregateRoot
     {
         var allowed = (Status, status) switch
         {
+            (EProductionOrderStatus.Planned, EProductionOrderStatus.Approved) => true,
             (EProductionOrderStatus.Planned, EProductionOrderStatus.InProgress) => true,
+            (EProductionOrderStatus.Approved, EProductionOrderStatus.InProgress) => true,
             (EProductionOrderStatus.InProgress, EProductionOrderStatus.OnHold) => true,
             (EProductionOrderStatus.OnHold, EProductionOrderStatus.InProgress) => true,
             (EProductionOrderStatus.InProgress, EProductionOrderStatus.Completed) => true,
