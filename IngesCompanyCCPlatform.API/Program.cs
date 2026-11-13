@@ -162,10 +162,8 @@ app.UseRequestLocalization(localizationOptions);
 
 app.UseExceptionHandler();
 
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-}
+// The OpenAPI document is served in every environment, so the Scalar reference also works once deployed.
+app.MapOpenApi();
 
 // Apply CORS Policy
 app.UseCors("AllowAllPolicy");
