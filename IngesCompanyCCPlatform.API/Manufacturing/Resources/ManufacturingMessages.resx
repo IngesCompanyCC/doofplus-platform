@@ -1,0 +1,141 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="manufacturing.product.error.code.notBlank" xml:space="preserve">
+    <value>The product code must not be blank.</value>
+  </data>
+  <data name="manufacturing.product.error.code.size" xml:space="preserve">
+    <value>The product code must have at most 30 characters.</value>
+  </data>
+  <data name="manufacturing.product.error.code.pattern" xml:space="preserve">
+    <value>The product code may only have letters, digits and hyphens between them, for example AC500.</value>
+  </data>
+  <data name="manufacturing.product.error.name.notBlank" xml:space="preserve">
+    <value>The product name must not be blank.</value>
+  </data>
+  <data name="manufacturing.product.error.dosageForm.invalid" xml:space="preserve">
+    <value>dosageForm must be Tablet, Capsule, Syrup, Injectable or Cream.</value>
+  </data>
+  <data name="manufacturing.product.error.duplicate" xml:space="preserve">
+    <value>A product with the same code already exists.</value>
+  </data>
+  <data name="manufacturing.product.error.notFoundById" xml:space="preserve">
+    <value>Product not found for id {0}.</value>
+  </data>
+  <data name="manufacturing.product.error.notFoundByCode" xml:space="preserve">
+    <value>Product not found for code {0}.</value>
+  </data>
+  <data name="manufacturing.formula.error.version.notBlank" xml:space="preserve">
+    <value>The formula version must not be blank.</value>
+  </data>
+  <data name="manufacturing.formula.error.batchSize.invalid" xml:space="preserve">
+    <value>The batch size must be greater than zero.</value>
+  </data>
+  <data name="manufacturing.formula.error.items.empty" xml:space="preserve">
+    <value>The formula must have at least one component or parameter.</value>
+  </data>
+  <data name="manufacturing.formula.error.itemName.notBlank" xml:space="preserve">
+    <value>Every line of the formula needs a name.</value>
+  </data>
+  <data name="manufacturing.formula.error.itemKind.invalid" xml:space="preserve">
+    <value>kind must be Component or Parameter.</value>
+  </data>
+  <data name="manufacturing.formula.error.approvedBy.notBlank" xml:space="preserve">
+    <value>The approver must not be blank.</value>
+  </data>
+  <data name="manufacturing.formula.error.notDraft" xml:space="preserve">
+    <value>Only a formula in Draft can be approved.</value>
+  </data>
+  <data name="manufacturing.formula.error.notApproved" xml:space="preserve">
+    <value>The master formula is not approved, so no production order can follow it.</value>
+  </data>
+  <data name="manufacturing.formula.error.duplicate" xml:space="preserve">
+    <value>The product already has a formula with the same version.</value>
+  </data>
+  <data name="manufacturing.formula.error.notFoundById" xml:space="preserve">
+    <value>Master formula not found for id {0}.</value>
+  </data>
+  <data name="manufacturing.order.error.code.notBlank" xml:space="preserve">
+    <value>The order code must not be blank.</value>
+  </data>
+  <data name="manufacturing.order.error.code.size" xml:space="preserve">
+    <value>The order code must have at most 30 characters.</value>
+  </data>
+  <data name="manufacturing.order.error.code.pattern" xml:space="preserve">
+    <value>The order code may only have letters, digits and hyphens between them, for example PO-26041.</value>
+  </data>
+  <data name="manufacturing.order.error.plannedQuantity.invalid" xml:space="preserve">
+    <value>The planned quantity must be greater than zero.</value>
+  </data>
+  <data name="manufacturing.order.error.operations.empty" xml:space="preserve">
+    <value>The order must have at least one operation.</value>
+  </data>
+  <data name="manufacturing.order.error.operationName.notBlank" xml:space="preserve">
+    <value>Every operation needs a name.</value>
+  </data>
+  <data name="manufacturing.order.error.sequence.duplicate" xml:space="preserve">
+    <value>Two operations cannot have the same sequence.</value>
+  </data>
+  <data name="manufacturing.order.error.plannedDates.invalid" xml:space="preserve">
+    <value>The planned end cannot be before the planned start.</value>
+  </data>
+  <data name="manufacturing.order.error.progress.invalid" xml:space="preserve">
+    <value>The progress must be between 0 and 100.</value>
+  </data>
+  <data name="manufacturing.order.error.status.invalid" xml:space="preserve">
+    <value>status must be InProgress, OnHold or Completed.</value>
+  </data>
+  <data name="manufacturing.order.error.operationStatus.invalid" xml:space="preserve">
+    <value>status must be NotStarted, InProgress, OnHold or Complete.</value>
+  </data>
+  <data name="manufacturing.order.error.transition.invalid" xml:space="preserve">
+    <value>The production order cannot change to that status from its current one.</value>
+  </data>
+  <data name="manufacturing.order.error.duplicate" xml:space="preserve">
+    <value>A production order with the same code already exists.</value>
+  </data>
+  <data name="manufacturing.order.error.notFoundById" xml:space="preserve">
+    <value>Production order not found for id {0}.</value>
+  </data>
+  <data name="manufacturing.order.error.operationNotFound" xml:space="preserve">
+    <value>The order has no operation with sequence {0}.</value>
+  </data>
+  <data name="manufacturing.lot.error.code.notBlank" xml:space="preserve">
+    <value>The lot code must not be blank.</value>
+  </data>
+  <data name="manufacturing.lot.error.code.size" xml:space="preserve">
+    <value>The lot code must have at most 30 characters.</value>
+  </data>
+  <data name="manufacturing.lot.error.code.pattern" xml:space="preserve">
+    <value>The lot code may only have letters, digits and hyphens between them, for example RM-26098.</value>
+  </data>
+  <data name="manufacturing.lot.error.material.notBlank" xml:space="preserve">
+    <value>The material must not be blank.</value>
+  </data>
+  <data name="manufacturing.lot.error.category.invalid" xml:space="preserve">
+    <value>category must be Api, Excipient or Packaging.</value>
+  </data>
+  <data name="manufacturing.lot.error.samplingStatus.invalid" xml:space="preserve">
+    <value>samplingStatus must be Requested or Done.</value>
+  </data>
+  <data name="manufacturing.lot.error.notInInspection" xml:space="preserve">
+    <value>The lot is no longer in Inspection.</value>
+  </data>
+  <data name="manufacturing.lot.error.inspectionIncomplete" xml:space="preserve">
+    <value>The lot can be released only after its packaging and identity are verified and its samples are taken.</value>
+  </data>
+  <data name="manufacturing.lot.error.notApproved" xml:space="preserve">
+    <value>Only an approved lot can be allocated to a batch.</value>
+  </data>
+  <data name="manufacturing.lot.error.batch.notBlank" xml:space="preserve">
+    <value>The batch code must not be blank.</value>
+  </data>
+  <data name="manufacturing.lot.error.duplicate" xml:space="preserve">
+    <value>A lot with the same code already exists.</value>
+  </data>
+  <data name="manufacturing.lot.error.notFoundById" xml:space="preserve">
+    <value>Raw material lot not found for id {0}.</value>
+  </data>
+  <data name="manufacturing.batch.error.progress.invalid" xml:space="preserve">
+    <value>The batch progress must be between 0 and 100.</value>
+  </data>
+</root>

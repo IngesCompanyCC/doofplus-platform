@@ -60,6 +60,45 @@
   <data name="OrganizationsError.InvalidContactInquiryData" xml:space="preserve">
     <value>Invalid contact inquiry data.</value>
   </data>
+  <data name="ManufacturingError.ProductNotFound" xml:space="preserve">
+    <value>Product not found</value>
+  </data>
+  <data name="ManufacturingError.DuplicateProductCode" xml:space="preserve">
+    <value>Duplicate product code</value>
+  </data>
+  <data name="ManufacturingError.MasterFormulaNotFound" xml:space="preserve">
+    <value>Master formula not found</value>
+  </data>
+  <data name="ManufacturingError.DuplicateFormulaVersion" xml:space="preserve">
+    <value>Duplicate formula version</value>
+  </data>
+  <data name="ManufacturingError.InvalidFormulaState" xml:space="preserve">
+    <value>Invalid formula status</value>
+  </data>
+  <data name="ManufacturingError.FormulaNotApproved" xml:space="preserve">
+    <value>Formula not approved</value>
+  </data>
+  <data name="ManufacturingError.ProductionOrderNotFound" xml:space="preserve">
+    <value>Production order not found</value>
+  </data>
+  <data name="ManufacturingError.DuplicateProductionOrderCode" xml:space="preserve">
+    <value>Duplicate production order code</value>
+  </data>
+  <data name="ManufacturingError.InvalidProductionOrderState" xml:space="preserve">
+    <value>Invalid production order status</value>
+  </data>
+  <data name="ManufacturingError.OperationNotFound" xml:space="preserve">
+    <value>Operation not found</value>
+  </data>
+  <data name="ManufacturingError.RawMaterialLotNotFound" xml:space="preserve">
+    <value>Raw material lot not found</value>
+  </data>
+  <data name="ManufacturingError.DuplicateRawMaterialLotCode" xml:space="preserve">
+    <value>Duplicate lot code</value>
+  </data>
+  <data name="ManufacturingError.InvalidRawMaterialLotState" xml:space="preserve">
+    <value>Invalid lot status</value>
+  </data>
   <data name="MonitoringError.EquipmentNotFound" xml:space="preserve">
     <value>Equipment not found</value>
   </data>

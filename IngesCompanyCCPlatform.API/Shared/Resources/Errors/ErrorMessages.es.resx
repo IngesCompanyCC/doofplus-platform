@@ -60,6 +60,45 @@
   <data name="OrganizationsError.InvalidContactInquiryData" xml:space="preserve">
     <value>Datos de la consulta de contacto no válidos.</value>
   </data>
+  <data name="ManufacturingError.ProductNotFound" xml:space="preserve">
+    <value>Producto no encontrado</value>
+  </data>
+  <data name="ManufacturingError.DuplicateProductCode" xml:space="preserve">
+    <value>Código de producto duplicado</value>
+  </data>
+  <data name="ManufacturingError.MasterFormulaNotFound" xml:space="preserve">
+    <value>Fórmula maestra no encontrada</value>
+  </data>
+  <data name="ManufacturingError.DuplicateFormulaVersion" xml:space="preserve">
+    <value>Versión de fórmula duplicada</value>
+  </data>
+  <data name="ManufacturingError.InvalidFormulaState" xml:space="preserve">
+    <value>Estado de fórmula no válido</value>
+  </data>
+  <data name="ManufacturingError.FormulaNotApproved" xml:space="preserve">
+    <value>Fórmula no aprobada</value>
+  </data>
+  <data name="ManufacturingError.ProductionOrderNotFound" xml:space="preserve">
+    <value>Orden de producción no encontrada</value>
+  </data>
+  <data name="ManufacturingError.DuplicateProductionOrderCode" xml:space="preserve">
+    <value>Código de orden de producción duplicado</value>
+  </data>
+  <data name="ManufacturingError.InvalidProductionOrderState" xml:space="preserve">
+    <value>Estado de orden de producción no válido</value>
+  </data>
+  <data name="ManufacturingError.OperationNotFound" xml:space="preserve">
+    <value>Operación no encontrada</value>
+  </data>
+  <data name="ManufacturingError.RawMaterialLotNotFound" xml:space="preserve">
+    <value>Lote de materia prima no encontrado</value>
+  </data>
+  <data name="ManufacturingError.DuplicateRawMaterialLotCode" xml:space="preserve">
+    <value>Código de lote duplicado</value>
+  </data>
+  <data name="ManufacturingError.InvalidRawMaterialLotState" xml:space="preserve">
+    <value>Estado de lote no válido</value>
+  </data>
   <data name="MonitoringError.EquipmentNotFound" xml:space="preserve">
     <value>Equipo no encontrado</value>
   </data>
