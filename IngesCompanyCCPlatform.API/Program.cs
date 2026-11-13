@@ -4,6 +4,7 @@ using IngesCompanyCCPlatform.API.Manufacturing.Application.Internal.QueryService
 using IngesCompanyCCPlatform.API.Manufacturing.Application.QueryServices;
 using IngesCompanyCCPlatform.API.Manufacturing.Domain.Repositories;
 using IngesCompanyCCPlatform.API.Manufacturing.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using IngesCompanyCCPlatform.API.Manufacturing.Resources;
 using IngesCompanyCCPlatform.API.Shared.Domain.Repositories;
 using IngesCompanyCCPlatform.API.Shared.Infrastructure.Interfaces.Asp.Configuration;
 using IngesCompanyCCPlatform.API.Shared.Infrastructure.Interfaces.Asp.OpenApi;
@@ -125,11 +126,24 @@ builder.Services.AddSingleton<IStringLocalizer<SubscriptionsMessages>, StringLoc
 // Example: builder.Services.AddBoundedContextMessages<SubscriptionsMessages>();
 builder.Services.AddBoundedContextMessages<CommonMessages>();
 builder.Services.AddBoundedContextMessages<SubscriptionsMessages>();
+builder.Services.AddBoundedContextMessages<ManufacturingMessages>();
 
 // Manufacturing Bounded Context Injection Configuration
 builder.Services.AddScoped<IProductionBatchRepository, ProductionBatchRepository>();
 builder.Services.AddScoped<IProductionBatchCommandService, ProductionBatchCommandService>();
 builder.Services.AddScoped<IProductionBatchQueryService, ProductionBatchQueryService>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IMasterFormulaRepository, MasterFormulaRepository>();
+builder.Services.AddScoped<IProductionOrderRepository, ProductionOrderRepository>();
+builder.Services.AddScoped<IRawMaterialLotRepository, RawMaterialLotRepository>();
+builder.Services.AddScoped<IProductCommandService, ProductCommandService>();
+builder.Services.AddScoped<IProductQueryService, ProductQueryService>();
+builder.Services.AddScoped<IMasterFormulaCommandService, MasterFormulaCommandService>();
+builder.Services.AddScoped<IMasterFormulaQueryService, MasterFormulaQueryService>();
+builder.Services.AddScoped<IProductionOrderCommandService, ProductionOrderCommandService>();
+builder.Services.AddScoped<IProductionOrderQueryService, ProductionOrderQueryService>();
+builder.Services.AddScoped<IRawMaterialLotCommandService, RawMaterialLotCommandService>();
+builder.Services.AddScoped<IRawMaterialLotQueryService, RawMaterialLotQueryService>();
 
 // Mediator Configuration
 builder.Services.AddScoped(typeof(ICommandPipelineBehavior<>), typeof(LoggingCommandBehavior<>));

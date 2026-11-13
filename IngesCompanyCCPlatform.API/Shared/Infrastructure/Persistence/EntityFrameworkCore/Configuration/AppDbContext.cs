@@ -46,6 +46,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
         // Manufacturing Context
         builder.ApplyManufacturingConfiguration();
+        builder.ApplyManufacturingCatalogConfiguration();
 
         // Subscriptions Context
         builder.ApplySubscriptionsConfiguration();
