@@ -7,11 +7,13 @@ using IngesCompanyCCPlatform.API.Manufacturing.Infrastructure.Persistence.Entity
 using IngesCompanyCCPlatform.API.Shared.Domain.Repositories;
 using IngesCompanyCCPlatform.API.Shared.Infrastructure.Interfaces.Asp.Configuration;
 using IngesCompanyCCPlatform.API.Shared.Infrastructure.Interfaces.Asp.OpenApi;
+using IngesCompanyCCPlatform.API.Shared.Infrastructure.Localization.Extensions;
 using IngesCompanyCCPlatform.API.Shared.Infrastructure.Mediator.Cortex.Configuration;
 using IngesCompanyCCPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
 using IngesCompanyCCPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.Interceptors;
 using IngesCompanyCCPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using IngesCompanyCCPlatform.API.Shared.Infrastructure.Pipeline.Middleware.Components;
+using IngesCompanyCCPlatform.API.Shared.Resources;
 using Cortex.Mediator.Commands;
 using Cortex.Mediator.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
@@ -81,6 +83,11 @@ builder.Services.AddSingleton<ProblemDetailsFactory>();
 // Shared Bounded Context Injection Configuration
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<DispatchDomainEventsInterceptor>();
+
+// Localized messages of the bounded contexts. Each bounded context adds one line with its marker class;
+// the global exception handler uses them to translate the message keys of the value objects.
+// Example: builder.Services.AddBoundedContextMessages<SubscriptionsMessages>();
+builder.Services.AddBoundedContextMessages<CommonMessages>();
 
 // Manufacturing Bounded Context Injection Configuration
 builder.Services.AddScoped<IProductionBatchRepository, ProductionBatchRepository>();
