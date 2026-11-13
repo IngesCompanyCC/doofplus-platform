@@ -83,6 +83,11 @@ public partial class Subscription : AggregateRoot
     public BillingEmail BillingEmail { get; private set; }
 
     /// <summary>
+    ///     Gets the first day of the paid period, or <c>null</c> while the subscription is pending.
+    /// </summary>
+    public DateOnly? CurrentPeriodStart { get; private set; }
+
+    /// <summary>
     ///     Gets the last day of the paid period, or <c>null</c> while the subscription is pending.
     /// </summary>
     public DateOnly? CurrentPeriodEnd { get; private set; }
@@ -102,7 +107,8 @@ public partial class Subscription : AggregateRoot
     {
         if (Status != ESubscriptionStatus.Pending) throw new InvalidOperationException(NotPendingMessageKey);
         Status = ESubscriptionStatus.Active;
-        CurrentPeriodEnd = NextPeriodEnd(DateOnly.FromDateTime(DateTime.UtcNow));
+        CurrentPeriodStart = DateOnly.FromDateTime(DateTime.UtcNow);
+        CurrentPeriodEnd = NextPeriodEnd(CurrentPeriodStart.Value);
     }
 
     /// <summary>
@@ -115,7 +121,8 @@ public partial class Subscription : AggregateRoot
     {
         if (Status != ESubscriptionStatus.Active || CurrentPeriodEnd is null)
             throw new InvalidOperationException(NotActiveMessageKey);
-        CurrentPeriodEnd = NextPeriodEnd(CurrentPeriodEnd.Value);
+        CurrentPeriodStart = CurrentPeriodEnd;
+        CurrentPeriodEnd = NextPeriodEnd(CurrentPeriodStart.Value);
     }
 
     /// <summary>

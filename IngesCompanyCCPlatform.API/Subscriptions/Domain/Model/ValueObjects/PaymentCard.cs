@@ -9,6 +9,8 @@ namespace IngesCompanyCCPlatform.API.Subscriptions.Domain.Model.ValueObjects;
 public partial record PaymentCard
 {
     private const string BrandNotBlankMessageKey = "subscription.error.cardBrand.notBlank";
+    private const string BrandSizeMessageKey = "subscription.error.cardBrand.size";
+    private const int BrandMaxLength = 20;
     private const string Last4PatternMessageKey = "subscription.error.cardLast4.pattern";
     private const string ExpiryPatternMessageKey = "subscription.error.cardExpiry.pattern";
 
@@ -24,6 +26,7 @@ public partial record PaymentCard
     public PaymentCard(string brand, string last4, string expiry)
     {
         if (string.IsNullOrWhiteSpace(brand)) throw new ArgumentException(BrandNotBlankMessageKey);
+        if (brand.Length > BrandMaxLength) throw new ArgumentException(BrandSizeMessageKey);
         if (last4 is null || !Last4Pattern().IsMatch(last4)) throw new ArgumentException(Last4PatternMessageKey);
         if (expiry is null || !ExpiryPattern().IsMatch(expiry)) throw new ArgumentException(ExpiryPatternMessageKey);
         Brand = brand;

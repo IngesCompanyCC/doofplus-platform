@@ -25,4 +25,5 @@ public record SubscriptionResource(
     string CardLast4,
     string CardExpiry,
     string BillingEmail,
+    DateOnly? CurrentPeriodStart,
     DateOnly? CurrentPeriodEnd);
