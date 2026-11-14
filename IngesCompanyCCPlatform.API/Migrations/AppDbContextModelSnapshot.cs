@@ -27,7 +27,7 @@ namespace IngesCompanyCCPlatform.API.Migrations
                         .HasColumnType("int")
                         .HasColumnName("id");
 
-                    b.Property<DateOnly?>("ApprovedAt")
+                    b.Property<DateTime?>("ApprovedAt")
                         .HasColumnType("date")
                         .HasColumnName("approved_at");
 
@@ -281,7 +281,7 @@ namespace IngesCompanyCCPlatform.API.Migrations
                         .HasColumnType("datetime")
                         .HasColumnName("created_at");
 
-                    b.Property<DateOnly>("ExpiryDate")
+                    b.Property<DateTime>("ExpiryDate")
                         .HasColumnType("date")
                         .HasColumnName("expiry_date");
 
@@ -688,7 +688,7 @@ namespace IngesCompanyCCPlatform.API.Migrations
                         .HasColumnType("int")
                         .HasColumnName("id");
 
-                    b.Property<DateOnly?>("CalibrationDue")
+                    b.Property<DateTime?>("CalibrationDue")
                         .HasColumnType("date")
                         .HasColumnName("calibration_due");
 
@@ -744,7 +744,7 @@ namespace IngesCompanyCCPlatform.API.Migrations
                         .HasColumnType("varchar(150)")
                         .HasColumnName("name");
 
-                    b.Property<DateOnly?>("NextMaintenance")
+                    b.Property<DateTime?>("NextMaintenance")
                         .HasColumnType("date")
                         .HasColumnName("next_maintenance");
 
@@ -904,6 +904,42 @@ namespace IngesCompanyCCPlatform.API.Migrations
                         .HasDatabaseName("i_x_sensors_equipment_code");
 
                     b.ToTable("sensors");
+                });
+
+            modelBuilder.Entity("IngesCompanyCCPlatform.API.Organizations.Domain.Model.Aggregates.AdministrativeActivity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Actor")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("varchar(150)")
+                        .HasColumnName("actor");
+
+                    b.Property<DateTime>("OccurredAt")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("occurred_at");
+
+                    b.Property<int>("OrganizationId")
+                        .HasColumnType("int")
+                        .HasColumnName("organization_id");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)")
+                        .HasColumnName("title");
+
+                    b.HasKey("Id")
+                        .HasName("p_k_administrative_activities");
+
+                    b.HasIndex("OrganizationId")
+                        .HasDatabaseName("i_x_administrative_activities_organization_id");
+
+                    b.ToTable("administrative_activities", (string)null);
                 });
 
             modelBuilder.Entity("IngesCompanyCCPlatform.API.Organizations.Domain.Model.Aggregates.ContactInquiry", b =>
@@ -1249,11 +1285,11 @@ namespace IngesCompanyCCPlatform.API.Migrations
                         .HasColumnType("datetime")
                         .HasColumnName("created_at");
 
-                    b.Property<DateOnly?>("CurrentPeriodEnd")
+                    b.Property<DateTime?>("CurrentPeriodEnd")
                         .HasColumnType("date")
                         .HasColumnName("current_period_end");
 
-                    b.Property<DateOnly?>("CurrentPeriodStart")
+                    b.Property<DateTime?>("CurrentPeriodStart")
                         .HasColumnType("date")
                         .HasColumnName("current_period_start");
 

@@ -132,4 +132,7 @@
   <data name="MonitoringError.InvalidApiKey" xml:space="preserve">
     <value>Invalid API key</value>
   </data>
+  <data name="OrganizationsError.DuplicateFacilityName" xml:space="preserve">
+    <value>Duplicate facility name</value>
+  </data>
 </root>

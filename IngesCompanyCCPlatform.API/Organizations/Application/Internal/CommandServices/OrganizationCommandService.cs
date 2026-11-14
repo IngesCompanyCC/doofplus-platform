@@ -15,6 +15,7 @@ namespace IngesCompanyCCPlatform.API.Organizations.Application.Internal.CommandS
 public class OrganizationCommandService(
     IOrganizationRepository organizationRepository,
     IFacilityRepository facilityRepository,
+    IAdministrativeActivityRepository administrativeActivityRepository,
     IUnitOfWork unitOfWork) : IOrganizationCommandService
 {
     public async Task<Result<Organization>> Handle(
@@ -60,13 +61,46 @@ public class OrganizationCommandService(
                 organization.Id,
                 command.FacilityName,
                 FacilityType.Manufacturing,
-                "UTC",
+                Facility.DefaultTimezone,
                 command.AdministratorName);
 
             await facilityRepository.AddAsync(facility, cancellationToken);
-            await unitOfWork.CompleteAsync(cancellationToken);
         }
 
+        await administrativeActivityRepository.AddAsync(
+            new AdministrativeActivity(organization.Id, "Organization registered", organization.OwnerName),
+            cancellationToken);
+        await unitOfWork.CompleteAsync(cancellationToken);
+
         return Result<Organization>.Success(organization);
+    }
+
+    public async Task<Result<Facility>> Handle(
+        AddFacilityCommand command,
+        CancellationToken cancellationToken = default)
+    {
+        if (string.IsNullOrWhiteSpace(command.Name))
+            return Result<Facility>.Failure(OrganizationsError.InvalidOperation, "Facility name is required.");
+
+        var organization = await organizationRepository.FindByIdAsync(command.OrganizationId, cancellationToken);
+        if (organization is null)
+            return Result<Facility>.Failure(OrganizationsError.OrganizationNotFound,
+                $"Organization with ID {command.OrganizationId} was not found.");
+
+        var name = command.Name.Trim();
+        if (await facilityRepository.ExistsByOrganizationIdAndNameAsync(organization.Id, name, cancellationToken))
+            return Result<Facility>.Failure(OrganizationsError.DuplicateFacilityName,
+                "The organization already has a facility with this name.");
+
+        var ownerName = string.IsNullOrWhiteSpace(command.OwnerName) ? organization.OwnerName : command.OwnerName;
+        var facility = new Facility(organization.Id, name, command.Type, command.Timezone ?? string.Empty, ownerName);
+
+        await facilityRepository.AddAsync(facility, cancellationToken);
+        await administrativeActivityRepository.AddAsync(
+            new AdministrativeActivity(organization.Id, $"Facility {facility.Name} added", ownerName),
+            cancellationToken);
+        await unitOfWork.CompleteAsync(cancellationToken);
+
+        return Result<Facility>.Success(facility);
     }
 }

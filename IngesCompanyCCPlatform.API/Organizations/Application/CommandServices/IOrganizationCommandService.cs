@@ -15,4 +15,8 @@ public interface IOrganizationCommandService
     Task<Result<Organization>> Handle(
         RegisterOrganizationCommand command,
         CancellationToken cancellationToken = default);
+
+    Task<Result<Facility>> Handle(
+        AddFacilityCommand command,
+        CancellationToken cancellationToken = default);
 }
