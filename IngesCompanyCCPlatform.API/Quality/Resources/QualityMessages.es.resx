@@ -1,0 +1,162 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="quality.analyticalResult.error.minimumValue.range" xml:space="preserve">
+    <value>El valor mínimo no debe ser mayor que el valor máximo.</value>
+  </data>
+  <data name="quality.analyticalResult.error.notFoundById" xml:space="preserve">
+    <value>No existe el registro de resultado analítico con id {0}.</value>
+  </data>
+  <data name="quality.analyticalResult.error.testName.notBlank" xml:space="preserve">
+    <value>Falta el nombre de la prueba (resultado analítico).</value>
+  </data>
+  <data name="quality.audit.error.code.notBlank" xml:space="preserve">
+    <value>Falta el código (auditoría).</value>
+  </data>
+  <data name="quality.audit.error.duplicate" xml:space="preserve">
+    <value>Ya existe un registro de auditoría con el mismo código.</value>
+  </data>
+  <data name="quality.audit.error.notFoundById" xml:space="preserve">
+    <value>No existe el registro de auditoría con id {0}.</value>
+  </data>
+  <data name="quality.audit.error.title.notBlank" xml:space="preserve">
+    <value>Falta el título (auditoría).</value>
+  </data>
+  <data name="quality.auditEvent.error.aggregateType.notBlank" xml:space="preserve">
+    <value>Falta el tipo de registro (evento de auditoría).</value>
+  </data>
+  <data name="quality.auditEvent.error.eventType.notBlank" xml:space="preserve">
+    <value>Falta el tipo de evento (evento de auditoría).</value>
+  </data>
+  <data name="quality.auditEvent.error.notFoundById" xml:space="preserve">
+    <value>No existe el registro de evento de auditoría con id {0}.</value>
+  </data>
+  <data name="quality.auditFinding.error.notFoundById" xml:space="preserve">
+    <value>No existe el registro de hallazgo de auditoría con id {0}.</value>
+  </data>
+  <data name="quality.auditFinding.error.severity.invalid" xml:space="preserve">
+    <value>La severidad no es válido. Usa uno de: Low, Medium, High, Critical.</value>
+  </data>
+  <data name="quality.auditFinding.error.title.notBlank" xml:space="preserve">
+    <value>Falta el título (hallazgo de auditoría).</value>
+  </data>
+  <data name="quality.batchRelease.error.alreadyRequested" xml:space="preserve">
+    <value>Ya existe una solicitud de liberación para este lote.</value>
+  </data>
+  <data name="quality.batchRelease.error.batchCode.notBlank" xml:space="preserve">
+    <value>Falta el código del lote (liberación de lote).</value>
+  </data>
+  <data name="quality.batchRelease.error.decision.notBlank" xml:space="preserve">
+    <value>Falta la decisión (liberación de lote).</value>
+  </data>
+  <data name="quality.batchRelease.error.notFoundById" xml:space="preserve">
+    <value>No existe el registro de liberación de lote con id {0}.</value>
+  </data>
+  <data name="quality.batchRelease.error.notPending" xml:space="preserve">
+    <value>Solo se puede aprobar o rechazar una liberación pendiente.</value>
+  </data>
+  <data name="quality.batchRelease.error.requestedBy.notBlank" xml:space="preserve">
+    <value>Falta quién solicita (liberación de lote).</value>
+  </data>
+  <data name="quality.batchRelease.error.signatureReference.notBlank" xml:space="preserve">
+    <value>Falta la referencia de la firma (liberación de lote).</value>
+  </data>
+  <data name="quality.batchRelease.error.signedBy.notBlank" xml:space="preserve">
+    <value>Falta quién firma (liberación de lote).</value>
+  </data>
+  <data name="quality.capaAction.error.assignedTo.notBlank" xml:space="preserve">
+    <value>Falta el responsable (acción CAPA).</value>
+  </data>
+  <data name="quality.capaAction.error.description.notBlank" xml:space="preserve">
+    <value>Falta la descripción (acción CAPA).</value>
+  </data>
+  <data name="quality.capaAction.error.notFoundById" xml:space="preserve">
+    <value>No existe el registro de acción CAPA con id {0}.</value>
+  </data>
+  <data name="quality.capaAction.error.title.notBlank" xml:space="preserve">
+    <value>Falta el título (acción CAPA).</value>
+  </data>
+  <data name="quality.capaPlan.error.description.notBlank" xml:space="preserve">
+    <value>Falta la descripción (plan CAPA).</value>
+  </data>
+  <data name="quality.capaPlan.error.notFoundById" xml:space="preserve">
+    <value>No existe el registro de plan CAPA con id {0}.</value>
+  </data>
+  <data name="quality.capaPlan.error.responsible.notBlank" xml:space="preserve">
+    <value>Falta el responsable (plan CAPA).</value>
+  </data>
+  <data name="quality.capaPlan.error.title.notBlank" xml:space="preserve">
+    <value>Falta el título (plan CAPA).</value>
+  </data>
+  <data name="quality.collaborationTask.error.notFoundById" xml:space="preserve">
+    <value>No existe el registro de tarea de colaboración con id {0}.</value>
+  </data>
+  <data name="quality.collaborationTask.error.title.notBlank" xml:space="preserve">
+    <value>Falta el título (tarea de colaboración).</value>
+  </data>
+  <data name="quality.deviation.error.code.notBlank" xml:space="preserve">
+    <value>Falta el código (desviación).</value>
+  </data>
+  <data name="quality.deviation.error.description.notBlank" xml:space="preserve">
+    <value>Falta la descripción (desviación).</value>
+  </data>
+  <data name="quality.deviation.error.duplicate" xml:space="preserve">
+    <value>Ya existe un registro de desviación con el mismo código.</value>
+  </data>
+  <data name="quality.deviation.error.notFoundById" xml:space="preserve">
+    <value>No existe el registro de desviación con id {0}.</value>
+  </data>
+  <data name="quality.deviation.error.severity.invalid" xml:space="preserve">
+    <value>La severidad no es válido. Usa uno de: Low, Medium, High, Critical.</value>
+  </data>
+  <data name="quality.deviation.error.title.notBlank" xml:space="preserve">
+    <value>Falta el título (desviación).</value>
+  </data>
+  <data name="quality.evidence.error.fileReference.notBlank" xml:space="preserve">
+    <value>Falta la referencia del archivo (evidencia).</value>
+  </data>
+  <data name="quality.evidence.error.notFoundById" xml:space="preserve">
+    <value>No existe el registro de evidencia con id {0}.</value>
+  </data>
+  <data name="quality.evidence.error.title.notBlank" xml:space="preserve">
+    <value>Falta el título (evidencia).</value>
+  </data>
+  <data name="quality.evidence.error.type.invalid" xml:space="preserve">
+    <value>El tipo no es válido. Usa uno de: Document, Image, LabResult, Record, Other.</value>
+  </data>
+  <data name="quality.qualityDocument.error.code.notBlank" xml:space="preserve">
+    <value>Falta el código (documento de calidad).</value>
+  </data>
+  <data name="quality.qualityDocument.error.duplicate" xml:space="preserve">
+    <value>Ya existe un registro de documento de calidad con el mismo código.</value>
+  </data>
+  <data name="quality.qualityDocument.error.notFoundById" xml:space="preserve">
+    <value>No existe el registro de documento de calidad con id {0}.</value>
+  </data>
+  <data name="quality.qualityDocument.error.title.notBlank" xml:space="preserve">
+    <value>Falta el título (documento de calidad).</value>
+  </data>
+  <data name="quality.regulatoryReport.error.code.notBlank" xml:space="preserve">
+    <value>Falta el código (reporte regulatorio).</value>
+  </data>
+  <data name="quality.regulatoryReport.error.duplicate" xml:space="preserve">
+    <value>Ya existe un registro de reporte regulatorio con el mismo código.</value>
+  </data>
+  <data name="quality.regulatoryReport.error.notFoundById" xml:space="preserve">
+    <value>No existe el registro de reporte regulatorio con id {0}.</value>
+  </data>
+  <data name="quality.regulatoryReport.error.title.notBlank" xml:space="preserve">
+    <value>Falta el título (reporte regulatorio).</value>
+  </data>
+  <data name="quality.taskComment.error.content.notBlank" xml:space="preserve">
+    <value>Falta el contenido (comentario).</value>
+  </data>
+  <data name="quality.taskComment.error.notFoundById" xml:space="preserve">
+    <value>No existe el registro de comentario con id {0}.</value>
+  </data>
+  <data name="quality.traceabilityGap.error.description.notBlank" xml:space="preserve">
+    <value>Falta la descripción (brecha de trazabilidad).</value>
+  </data>
+  <data name="quality.traceabilityGap.error.notFoundById" xml:space="preserve">
+    <value>No existe el registro de brecha de trazabilidad con id {0}.</value>
+  </data>
+</root>

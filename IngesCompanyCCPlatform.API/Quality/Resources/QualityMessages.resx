@@ -1,0 +1,162 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="quality.analyticalResult.error.minimumValue.range" xml:space="preserve">
+    <value>The minimum value must not be greater than the maximum value.</value>
+  </data>
+  <data name="quality.analyticalResult.error.notFoundById" xml:space="preserve">
+    <value>Analytical result not found for id {0}.</value>
+  </data>
+  <data name="quality.analyticalResult.error.testName.notBlank" xml:space="preserve">
+    <value>The test name of the analytical result must not be blank.</value>
+  </data>
+  <data name="quality.audit.error.code.notBlank" xml:space="preserve">
+    <value>The code of the audit must not be blank.</value>
+  </data>
+  <data name="quality.audit.error.duplicate" xml:space="preserve">
+    <value>A audit with the same code already exists.</value>
+  </data>
+  <data name="quality.audit.error.notFoundById" xml:space="preserve">
+    <value>Audit not found for id {0}.</value>
+  </data>
+  <data name="quality.audit.error.title.notBlank" xml:space="preserve">
+    <value>The title of the audit must not be blank.</value>
+  </data>
+  <data name="quality.auditEvent.error.aggregateType.notBlank" xml:space="preserve">
+    <value>The aggregate type of the audit event must not be blank.</value>
+  </data>
+  <data name="quality.auditEvent.error.eventType.notBlank" xml:space="preserve">
+    <value>The event type of the audit event must not be blank.</value>
+  </data>
+  <data name="quality.auditEvent.error.notFoundById" xml:space="preserve">
+    <value>Audit event not found for id {0}.</value>
+  </data>
+  <data name="quality.auditFinding.error.notFoundById" xml:space="preserve">
+    <value>Audit finding not found for id {0}.</value>
+  </data>
+  <data name="quality.auditFinding.error.severity.invalid" xml:space="preserve">
+    <value>The severity of the audit finding is not valid. Use one of: Low, Medium, High, Critical.</value>
+  </data>
+  <data name="quality.auditFinding.error.title.notBlank" xml:space="preserve">
+    <value>The title of the audit finding must not be blank.</value>
+  </data>
+  <data name="quality.batchRelease.error.alreadyRequested" xml:space="preserve">
+    <value>A release request already exists for this batch.</value>
+  </data>
+  <data name="quality.batchRelease.error.batchCode.notBlank" xml:space="preserve">
+    <value>The batch code of the batch release must not be blank.</value>
+  </data>
+  <data name="quality.batchRelease.error.decision.notBlank" xml:space="preserve">
+    <value>The decision of the batch release must not be blank.</value>
+  </data>
+  <data name="quality.batchRelease.error.notFoundById" xml:space="preserve">
+    <value>Batch release not found for id {0}.</value>
+  </data>
+  <data name="quality.batchRelease.error.notPending" xml:space="preserve">
+    <value>Only a pending release can be approved or rejected.</value>
+  </data>
+  <data name="quality.batchRelease.error.requestedBy.notBlank" xml:space="preserve">
+    <value>The requested by of the batch release must not be blank.</value>
+  </data>
+  <data name="quality.batchRelease.error.signatureReference.notBlank" xml:space="preserve">
+    <value>The signature reference of the batch release must not be blank.</value>
+  </data>
+  <data name="quality.batchRelease.error.signedBy.notBlank" xml:space="preserve">
+    <value>The signed by of the batch release must not be blank.</value>
+  </data>
+  <data name="quality.capaAction.error.assignedTo.notBlank" xml:space="preserve">
+    <value>The assigned to of the capa action must not be blank.</value>
+  </data>
+  <data name="quality.capaAction.error.description.notBlank" xml:space="preserve">
+    <value>The description of the capa action must not be blank.</value>
+  </data>
+  <data name="quality.capaAction.error.notFoundById" xml:space="preserve">
+    <value>Capa action not found for id {0}.</value>
+  </data>
+  <data name="quality.capaAction.error.title.notBlank" xml:space="preserve">
+    <value>The title of the capa action must not be blank.</value>
+  </data>
+  <data name="quality.capaPlan.error.description.notBlank" xml:space="preserve">
+    <value>The description of the capa plan must not be blank.</value>
+  </data>
+  <data name="quality.capaPlan.error.notFoundById" xml:space="preserve">
+    <value>Capa plan not found for id {0}.</value>
+  </data>
+  <data name="quality.capaPlan.error.responsible.notBlank" xml:space="preserve">
+    <value>The responsible of the capa plan must not be blank.</value>
+  </data>
+  <data name="quality.capaPlan.error.title.notBlank" xml:space="preserve">
+    <value>The title of the capa plan must not be blank.</value>
+  </data>
+  <data name="quality.collaborationTask.error.notFoundById" xml:space="preserve">
+    <value>Collaboration task not found for id {0}.</value>
+  </data>
+  <data name="quality.collaborationTask.error.title.notBlank" xml:space="preserve">
+    <value>The title of the collaboration task must not be blank.</value>
+  </data>
+  <data name="quality.deviation.error.code.notBlank" xml:space="preserve">
+    <value>The code of the deviation must not be blank.</value>
+  </data>
+  <data name="quality.deviation.error.description.notBlank" xml:space="preserve">
+    <value>The description of the deviation must not be blank.</value>
+  </data>
+  <data name="quality.deviation.error.duplicate" xml:space="preserve">
+    <value>A deviation with the same code already exists.</value>
+  </data>
+  <data name="quality.deviation.error.notFoundById" xml:space="preserve">
+    <value>Deviation not found for id {0}.</value>
+  </data>
+  <data name="quality.deviation.error.severity.invalid" xml:space="preserve">
+    <value>The severity of the deviation is not valid. Use one of: Low, Medium, High, Critical.</value>
+  </data>
+  <data name="quality.deviation.error.title.notBlank" xml:space="preserve">
+    <value>The title of the deviation must not be blank.</value>
+  </data>
+  <data name="quality.evidence.error.fileReference.notBlank" xml:space="preserve">
+    <value>The file reference of the evidence must not be blank.</value>
+  </data>
+  <data name="quality.evidence.error.notFoundById" xml:space="preserve">
+    <value>Evidence not found for id {0}.</value>
+  </data>
+  <data name="quality.evidence.error.title.notBlank" xml:space="preserve">
+    <value>The title of the evidence must not be blank.</value>
+  </data>
+  <data name="quality.evidence.error.type.invalid" xml:space="preserve">
+    <value>The type of the evidence is not valid. Use one of: Document, Image, LabResult, Record, Other.</value>
+  </data>
+  <data name="quality.qualityDocument.error.code.notBlank" xml:space="preserve">
+    <value>The code of the quality document must not be blank.</value>
+  </data>
+  <data name="quality.qualityDocument.error.duplicate" xml:space="preserve">
+    <value>A quality document with the same code already exists.</value>
+  </data>
+  <data name="quality.qualityDocument.error.notFoundById" xml:space="preserve">
+    <value>Quality document not found for id {0}.</value>
+  </data>
+  <data name="quality.qualityDocument.error.title.notBlank" xml:space="preserve">
+    <value>The title of the quality document must not be blank.</value>
+  </data>
+  <data name="quality.regulatoryReport.error.code.notBlank" xml:space="preserve">
+    <value>The code of the regulatory report must not be blank.</value>
+  </data>
+  <data name="quality.regulatoryReport.error.duplicate" xml:space="preserve">
+    <value>A regulatory report with the same code already exists.</value>
+  </data>
+  <data name="quality.regulatoryReport.error.notFoundById" xml:space="preserve">
+    <value>Regulatory report not found for id {0}.</value>
+  </data>
+  <data name="quality.regulatoryReport.error.title.notBlank" xml:space="preserve">
+    <value>The title of the regulatory report must not be blank.</value>
+  </data>
+  <data name="quality.taskComment.error.content.notBlank" xml:space="preserve">
+    <value>The content of the task comment must not be blank.</value>
+  </data>
+  <data name="quality.taskComment.error.notFoundById" xml:space="preserve">
+    <value>Task comment not found for id {0}.</value>
+  </data>
+  <data name="quality.traceabilityGap.error.description.notBlank" xml:space="preserve">
+    <value>The description of the traceability gap must not be blank.</value>
+  </data>
+  <data name="quality.traceabilityGap.error.notFoundById" xml:space="preserve">
+    <value>Traceability gap not found for id {0}.</value>
+  </data>
+</root>
