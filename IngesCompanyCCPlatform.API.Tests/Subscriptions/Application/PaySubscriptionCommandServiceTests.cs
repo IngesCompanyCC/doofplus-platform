@@ -147,6 +147,49 @@ public class PaySubscriptionCommandServiceTests
         Assert.Equal(0, _unitOfWork.Completed);
     }
 
+    [Fact]
+    public async Task ChangePlanShouldSaveTheNewPlanAndCycle()
+    {
+        _subscriptions.Stored = SubscriptionTestData.PendingSubscription();
+        _plans.Stored = SubscriptionTestData.StandardLabPlan();
+
+        var result = await Service.Handle(
+            new ChangeSubscriptionPlanCommand(new SubscriptionId(0), new PlanId(2), EBillingCycle.Annual),
+            CancellationToken.None);
+
+        Assert.True(result.IsSuccess);
+        Assert.Equal(EBillingCycle.Annual, result.Value!.BillingCycle);
+        Assert.Equal(1, _unitOfWork.Completed);
+    }
+
+    [Fact]
+    public async Task ChangePlanShouldAnswerPlanNotFound()
+    {
+        _subscriptions.Stored = SubscriptionTestData.PendingSubscription();
+
+        var result = await Service.Handle(
+            new ChangeSubscriptionPlanCommand(new SubscriptionId(0), new PlanId(9), EBillingCycle.Annual),
+            CancellationToken.None);
+
+        Assert.Equal(SubscriptionsError.PlanNotFound, result.Error);
+    }
+
+    [Fact]
+    public async Task ChangePlanShouldNotChangeACancelledSubscription()
+    {
+        var subscription = SubscriptionTestData.ActiveSubscription();
+        subscription.Cancel();
+        _subscriptions.Stored = subscription;
+        _plans.Stored = SubscriptionTestData.StandardLabPlan();
+
+        var result = await Service.Handle(
+            new ChangeSubscriptionPlanCommand(new SubscriptionId(0), new PlanId(2), EBillingCycle.Annual),
+            CancellationToken.None);
+
+        Assert.Equal(SubscriptionsError.InvalidSubscriptionState, result.Error);
+        Assert.Equal(0, _unitOfWork.Completed);
+    }
+
     private sealed class FakeSubscriptionRepository : ISubscriptionRepository
     {
         public Subscription? Stored { get; set; }

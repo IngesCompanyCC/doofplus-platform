@@ -102,6 +102,23 @@ public class SubscriptionCommandService(
                 SubscriptionsError.PaymentRejected);
     }
 
+    /// <inheritdoc />
+    public async Task<Result<Subscription>> Handle(ChangeSubscriptionPlanCommand command,
+        CancellationToken cancellationToken)
+    {
+        if (await planRepository.FindByIdAsNoTrackingAsync(command.PlanId, cancellationToken) is null)
+            return Result<Subscription>.Failure(SubscriptionErrors.PlanNotFound, SubscriptionsError.PlanNotFound);
+        var subscription = await subscriptionRepository.FindByIdAsync(command.SubscriptionId, cancellationToken);
+        if (subscription is null)
+            return Result<Subscription>.Failure(SubscriptionErrors.NotFound, SubscriptionsError.SubscriptionNotFound);
+        if (!subscription.IsCurrent)
+            return Result<Subscription>.Failure(SubscriptionErrors.NotCurrent, SubscriptionsError.InvalidSubscriptionState);
+
+        subscription.ChangePlan(command.PlanId, command.BillingCycle);
+        await unitOfWork.CompleteAsync(cancellationToken);
+        return Result<Subscription>.Success(subscription);
+    }
+
     private async Task<Result<Subscription>> Transition(SubscriptionId subscriptionId,
         Action<Subscription> transition, CancellationToken cancellationToken)
     {

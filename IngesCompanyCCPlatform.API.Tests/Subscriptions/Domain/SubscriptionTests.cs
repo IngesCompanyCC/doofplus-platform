@@ -122,6 +122,28 @@ public class SubscriptionTests
     }
 
     [Fact]
+    public void ChangePlanShouldKeepThePeriodAndChangeThePlanAndCycle()
+    {
+        var subscription = SubscriptionTestData.ActiveSubscription();
+        var paidUntil = subscription.CurrentPeriodEnd;
+
+        subscription.ChangePlan(new PlanId(2), EBillingCycle.Annual);
+
+        Assert.Equal(new PlanId(2), subscription.PlanId);
+        Assert.Equal(EBillingCycle.Annual, subscription.BillingCycle);
+        Assert.Equal(paidUntil, subscription.CurrentPeriodEnd);
+    }
+
+    [Fact]
+    public void ChangePlanShouldFailWhenTheSubscriptionIsCancelled()
+    {
+        var subscription = SubscriptionTestData.ActiveSubscription();
+        subscription.Cancel();
+
+        Assert.Throws<InvalidOperationException>(() => subscription.ChangePlan(new PlanId(2), EBillingCycle.Annual));
+    }
+
+    [Fact]
     public void RecordPaymentShouldAddThePaymentAndNumberTheNextInvoice()
     {
         var subscription = SubscriptionTestData.PendingSubscription();
