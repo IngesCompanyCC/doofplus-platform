@@ -11,4 +11,9 @@ public interface IFacilityRepository : IBaseRepository<Facility>
     Task<IEnumerable<Facility>> FindByOrganizationIdAsync(
         int organizationId,
         CancellationToken cancellationToken = default);
+
+    Task<bool> ExistsByOrganizationIdAndNameAsync(
+        int organizationId,
+        string name,
+        CancellationToken cancellationToken = default);
 }

@@ -17,4 +17,13 @@ public class FacilityRepository(AppDbContext context)
             .Where(facility => facility.OrganizationId == organizationId)
             .ToListAsync(cancellationToken);
     }
+
+    public async Task<bool> ExistsByOrganizationIdAndNameAsync(
+        int organizationId,
+        string name,
+        CancellationToken cancellationToken = default)
+    {
+        return await Context.Set<Facility>()
+            .AnyAsync(facility => facility.OrganizationId == organizationId && facility.Name == name, cancellationToken);
+    }
 }

@@ -17,6 +17,7 @@ public static class OrganizationsActionResultAssembler
             OrganizationsError.ContactInquiryNotFound => StatusCodes.Status404NotFound,
             OrganizationsError.DuplicateRuc => StatusCodes.Status409Conflict,
             OrganizationsError.DuplicateUserEmail => StatusCodes.Status409Conflict,
+            OrganizationsError.DuplicateFacilityName => StatusCodes.Status409Conflict,
             OrganizationsError.OrganizationAlreadyActive => StatusCodes.Status409Conflict,
             OrganizationsError.OrganizationSuspended => StatusCodes.Status409Conflict,
             OrganizationsError.InvalidContactInquiryData => StatusCodes.Status400BadRequest,

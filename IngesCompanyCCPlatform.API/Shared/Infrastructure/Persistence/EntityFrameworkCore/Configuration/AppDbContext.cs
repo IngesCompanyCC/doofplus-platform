@@ -19,6 +19,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<UserProfile> UserProfiles => Set<UserProfile>();
     public DbSet<Facility> Facilities => Set<Facility>();
     public DbSet<ContactInquiry> ContactInquiries => Set<ContactInquiry>();
+    public DbSet<AdministrativeActivity> AdministrativeActivities => Set<AdministrativeActivity>();
     public DbSet<ProductionBatch> ProductionBatches => Set<ProductionBatch>();
     public DbSet<Incident> Incidents => Set<Incident>();
     public DbSet<MaterialConsumption> MaterialConsumptions => Set<MaterialConsumption>();
@@ -54,6 +55,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         builder.ApplyConfiguration(new UserProfileEntityTypeConfiguration());
         builder.ApplyConfiguration(new FacilityEntityTypeConfiguration());
         builder.ApplyConfiguration(new ContactInquiryEntityTypeConfiguration());
+        builder.ApplyConfiguration(new AdministrativeActivityEntityTypeConfiguration());
         
 
         // Manufacturing Context

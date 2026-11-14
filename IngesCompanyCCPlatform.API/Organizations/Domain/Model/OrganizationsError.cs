@@ -13,6 +13,7 @@ public enum OrganizationsError
     UserProfileNotFound,
     DuplicateUserEmail,
     FacilityNotFound,
+    DuplicateFacilityName,
     ContactInquiryNotFound,
     InvalidContactInquiryData,
     InvalidOperation,
