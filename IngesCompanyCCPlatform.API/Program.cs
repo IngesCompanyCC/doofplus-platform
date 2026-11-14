@@ -1,4 +1,17 @@
-﻿using IngesCompanyCCPlatform.API.Manufacturing.Application.CommandServices;
+﻿using IngesCompanyCCPlatform.API.Iam.Application.Acl;
+using IngesCompanyCCPlatform.API.Iam.Application.CommandServices;
+using IngesCompanyCCPlatform.API.Iam.Application.Internal.CommandServices;
+using IngesCompanyCCPlatform.API.Iam.Application.Internal.OutboundServices;
+using IngesCompanyCCPlatform.API.Iam.Application.Internal.QueryServices;
+using IngesCompanyCCPlatform.API.Iam.Application.QueryServices;
+using IngesCompanyCCPlatform.API.Iam.Domain.Repositories;
+using IngesCompanyCCPlatform.API.Iam.Infrastructure.Hashing.BCrypt.Services;
+using IngesCompanyCCPlatform.API.Iam.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using IngesCompanyCCPlatform.API.Iam.Infrastructure.Pipeline.Middleware.Extensions;
+using IngesCompanyCCPlatform.API.Iam.Infrastructure.Tokens.Jwt.Configuration;
+using IngesCompanyCCPlatform.API.Iam.Infrastructure.Tokens.Jwt.Services;
+using IngesCompanyCCPlatform.API.Iam.Interfaces.Acl;
+using IngesCompanyCCPlatform.API.Manufacturing.Application.CommandServices;
 using IngesCompanyCCPlatform.API.Manufacturing.Application.Internal.CommandServices;
 using IngesCompanyCCPlatform.API.Manufacturing.Application.Internal.QueryServices;
 using IngesCompanyCCPlatform.API.Manufacturing.Application.QueryServices;
@@ -80,6 +93,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddOpenApi(options =>
 {
     options.AddDocumentTransformer<BearerSecuritySchemeTransformer>();
+    options.AddOperationTransformer<IamBearerSecurityOperationTransformer>();
 });
 
 // Add Database Connection
@@ -129,6 +143,15 @@ builder.Services.AddScoped<IAdministrativeActivityQueryService, AdministrativeAc
 
 // Shared Bounded Context Injection Configuration
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+// IAM Bounded Context (JWT secret in TokenSettings:Secret; in production set TokenSettings__Secret)
+builder.Services.Configure<TokenSettings>(builder.Configuration.GetSection("TokenSettings"));
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserCommandService, UserCommandService>();
+builder.Services.AddScoped<IUserQueryService, UserQueryService>();
+builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IHashingService, HashingService>();
+builder.Services.AddScoped<IIamContextFacade, IamContextFacade>();
 builder.Services.AddScoped<DispatchDomainEventsInterceptor>();
 
 // Subscriptions Bounded Context Injection Configuration
@@ -261,6 +284,9 @@ app.MapOpenApi();
 
 // Apply CORS Policy
 app.UseCors("AllowAllPolicy");
+
+// Reads the Bearer token; the IAM [Authorize] attribute answers 401 or 403
+app.UseRequestAuthorization();
 
 app.UseHttpsRedirection();
 
