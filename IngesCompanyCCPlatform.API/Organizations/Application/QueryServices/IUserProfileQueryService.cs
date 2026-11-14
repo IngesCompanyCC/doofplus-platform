@@ -16,4 +16,11 @@ public interface IUserProfileQueryService
     Task<IEnumerable<UserProfile>> Handle(
         GetUserProfilesByOrganizationIdQuery query,
         CancellationToken cancellationToken = default);
+
+    /// <summary>
+    ///     Handles the query to get every user profile.
+    /// </summary>
+    Task<IEnumerable<UserProfile>> Handle(
+        GetAllUserProfilesQuery query,
+        CancellationToken cancellationToken = default);
 }

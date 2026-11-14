@@ -15,4 +15,11 @@ public interface IUserProfileCommandService
     Task<Result<UserProfile>> Handle(
         CreateUserProfileCommand command,
         CancellationToken cancellationToken = default);
+
+    /// <summary>
+    ///     Handles the command to update the notification preferences and the language of a user profile.
+    /// </summary>
+    Task<Result<UserProfile>> Handle(
+        UpdateUserProfilePreferencesCommand command,
+        CancellationToken cancellationToken = default);
 }
