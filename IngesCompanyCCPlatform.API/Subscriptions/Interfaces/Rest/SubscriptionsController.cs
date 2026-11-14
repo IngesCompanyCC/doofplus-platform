@@ -106,6 +106,42 @@ public class SubscriptionsController(
                 Ok(SubscriptionResourceFromEntityAssembler.ToResourceFromEntity(paidSubscription)));
     }
 
+    [HttpPut("{subscriptionId:int}/plan")]
+    [EndpointSummary("Change the plan of a subscription")]
+    [EndpointDescription("Changes the plan and the billing cycle of a Pending or Active subscription; the new price is charged in the next payment (US53).")]
+    [ProducesResponseType(typeof(SubscriptionResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    public async Task<IActionResult> ChangeSubscriptionPlan([FromRoute] int subscriptionId,
+        [FromBody] ChangeSubscriptionPlanResource resource,
+        CancellationToken cancellationToken)
+    {
+        try
+        {
+            if (!Enum.TryParse<Domain.Model.ValueObjects.EBillingCycle>(resource.BillingCycle, true, out var billingCycle)
+                || !Enum.IsDefined(billingCycle))
+                throw new ArgumentException("subscription.error.billingCycle.invalid");
+            if (resource.PlanId <= 0) throw new ArgumentException("plan.error.id.invalid");
+            var command = new ChangeSubscriptionPlanCommand(
+                new Domain.Model.ValueObjects.SubscriptionId(subscriptionId), new Domain.Model.ValueObjects.PlanId(resource.PlanId), billingCycle);
+            var result = await subscriptionCommandService.Handle(command, cancellationToken);
+
+            return SubscriptionsActionResultAssembler.ToActionResultFromCommandResult(
+                this,
+                result,
+                messages,
+                problemDetailsFactory,
+                changedSubscription =>
+                    Ok(SubscriptionResourceFromEntityAssembler.ToResourceFromEntity(changedSubscription)));
+        }
+        catch (ArgumentException exception)
+        {
+            return SubscriptionsActionResultAssembler.ToActionResultFromInvalidArgument(this, exception, messages,
+                problemDetailsFactory);
+        }
+    }
+
     [HttpPost("{subscriptionId:int}/renewal")]
     [EndpointSummary("Renew a subscription")]
     [EndpointDescription("Extends an Active subscription one more billing period (US53).")]

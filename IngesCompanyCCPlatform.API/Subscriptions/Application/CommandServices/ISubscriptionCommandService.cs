@@ -27,4 +27,9 @@ public interface ISubscriptionCommandService
     Task<Result<Subscription>> Handle(RenewSubscriptionCommand command, CancellationToken cancellationToken);
 
     Task<Result<Subscription>> Handle(PaySubscriptionCommand command, CancellationToken cancellationToken);
+
+    /// <summary>
+    ///     Changes the plan and the billing cycle of a pending or active subscription (US53).
+    /// </summary>
+    Task<Result<Subscription>> Handle(ChangeSubscriptionPlanCommand command, CancellationToken cancellationToken);
 }
