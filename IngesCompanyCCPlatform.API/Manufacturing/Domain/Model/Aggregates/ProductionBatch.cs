@@ -57,7 +57,7 @@ public class ProductionBatch : AggregateRoot, IAuditableEntity
     public void Start()
     {
         if (Status != BatchStatus.Planned)
-            throw new InvalidOperationException($"Cannot start batch in status {Status}. Only PLANNED batches can be started.");
+            throw new InvalidOperationException($"Cannot start batch in status {Status}. Only Planned batches can be started.");
 
         Status = BatchStatus.InProgress;
         StartedAt = DateTime.UtcNow;
@@ -68,14 +68,41 @@ public class ProductionBatch : AggregateRoot, IAuditableEntity
     {
         ArgumentNullException.ThrowIfNull(command);
 
-        if (Status == BatchStatus.Closed)
-            throw new InvalidOperationException("Batch is already closed.");
+        if (Status != BatchStatus.InProgress)
+            throw new InvalidOperationException($"Cannot close batch in status {Status}. Only InProgress batches can be closed.");
 
         ManufacturedQuantity = command.ManufacturedQuantity;
-        Status = BatchStatus.Closed;
+        Status = BatchStatus.ReleaseRequested;
         Progress = 100;
         FinishedAt = DateTime.UtcNow;
-        RecordEvent("BATCH_CLOSED", $"Batch closed with manufactured quantity: {ManufacturedQuantity}");
+        RecordEvent("RELEASE_REQUESTED", $"Production finished with {ManufacturedQuantity}; release requested to QA");
+    }
+
+    /// <summary>
+    ///     Resumes a batch that was on hold.
+    /// </summary>
+    /// <exception cref="InvalidOperationException">When the batch is not on hold.</exception>
+    public void Resume()
+    {
+        if (Status != BatchStatus.OnHold)
+            throw new InvalidOperationException($"Cannot resume batch in status {Status}. Only OnHold batches can be resumed.");
+        Status = BatchStatus.InProgress;
+        RecordEvent("BATCH_RESUMED", "Batch manufacturing resumed");
+    }
+
+    /// <summary>
+    ///     Releases the batch after the QA electronic signature.
+    /// </summary>
+    /// <param name="releasedBy">Who signs the release.</param>
+    /// <exception cref="InvalidOperationException">When the release was not requested.</exception>
+    public void Release(string releasedBy)
+    {
+        if (Status != BatchStatus.ReleaseRequested)
+            throw new InvalidOperationException($"Cannot release batch in status {Status}. Only ReleaseRequested batches can be released.");
+        Status = BatchStatus.Released;
+        RecordEvent("BATCH_RELEASED", string.IsNullOrWhiteSpace(releasedBy)
+            ? "Released for distribution"
+            : $"Released for distribution by {releasedBy.Trim()}");
     }
 
     public Incident RegisterIncident(RegisterIncidentCommand command)

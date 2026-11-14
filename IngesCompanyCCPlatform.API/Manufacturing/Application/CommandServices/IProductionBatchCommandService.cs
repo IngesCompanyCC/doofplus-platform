@@ -35,4 +35,10 @@ public interface IProductionBatchCommandService
     Task<Result<Incident>> Handle(RegisterIncidentCommand command, CancellationToken cancellationToken = default);
 
     Task<Result<ProductionBatch>> Handle(UpdateBatchProgressCommand command, CancellationToken cancellationToken = default);
+
+    Task<Result<ProductionBatch>> Handle(StartBatchCommand command, CancellationToken cancellationToken = default);
+
+    Task<Result<ProductionBatch>> Handle(ResumeBatchCommand command, CancellationToken cancellationToken = default);
+
+    Task<Result<ProductionBatch>> Handle(ReleaseBatchCommand command, CancellationToken cancellationToken = default);
 }

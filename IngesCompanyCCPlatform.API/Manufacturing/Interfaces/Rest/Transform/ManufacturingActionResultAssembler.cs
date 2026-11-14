@@ -17,8 +17,7 @@ public static class ManufacturingActionResultAssembler
         {
             ManufacturingError.BatchNotFound => StatusCodes.Status404NotFound,
             ManufacturingError.DuplicateBatchNumber => StatusCodes.Status409Conflict,
-            ManufacturingError.BatchAlreadyClosed => StatusCodes.Status409Conflict,
-            ManufacturingError.BatchNotPlanned => StatusCodes.Status400BadRequest,
+            ManufacturingError.InvalidBatchState => StatusCodes.Status409Conflict,
             ManufacturingError.InvalidOperation => StatusCodes.Status400BadRequest,
             ManufacturingError.DatabaseError => StatusCodes.Status500InternalServerError,
             ManufacturingError.InternalServerError => StatusCodes.Status500InternalServerError,
