@@ -13,7 +13,6 @@ public static class OrganizationResourceFromEntityAssembler
             entity.Ruc,
             entity.Region,
             entity.OwnerName,
-            entity.Status.ToString(),
-            entity.CreatedAt);
+            entity.Status.ToString());
     }
 }

@@ -8,7 +8,4 @@ public record CreateUserProfileResource(
     string Email,
     string Area,
     string Site,
-    string Role,
-    bool EmailNotifications = true,
-    bool InAppNotifications = true,
     string Language = "en");

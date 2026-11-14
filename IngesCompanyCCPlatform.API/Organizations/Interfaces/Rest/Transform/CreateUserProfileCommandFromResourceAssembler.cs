@@ -9,9 +9,6 @@ public static class CreateUserProfileCommandFromResourceAssembler
     public static CreateUserProfileCommand ToCommandFromResource(
         CreateUserProfileResource resource)
     {
-        var role = Enum.TryParse<UserRole>(resource.Role, ignoreCase: true, out var parsedRole)
-            ? parsedRole
-            : UserRole.QaSpecialist;
 
         return new CreateUserProfileCommand(
             resource.OrganizationId,
@@ -21,9 +18,9 @@ public static class CreateUserProfileCommandFromResourceAssembler
             resource.Email,
             resource.Area,
             resource.Site,
-            role,
-            resource.EmailNotifications,
-            resource.InAppNotifications,
+            UserRole.QaSpecialist,
+            true,
+            true,
             resource.Language);
     }
 }
