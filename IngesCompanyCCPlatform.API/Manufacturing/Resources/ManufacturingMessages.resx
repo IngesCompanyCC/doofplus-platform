@@ -66,9 +66,6 @@
   <data name="manufacturing.order.error.plannedQuantity.invalid" xml:space="preserve">
     <value>The planned quantity must be greater than zero.</value>
   </data>
-  <data name="manufacturing.order.error.operations.empty" xml:space="preserve">
-    <value>The order must have at least one operation.</value>
-  </data>
   <data name="manufacturing.order.error.operationName.notBlank" xml:space="preserve">
     <value>Every operation needs a name.</value>
   </data>

@@ -12,7 +12,6 @@ namespace IngesCompanyCCPlatform.API.Manufacturing.Domain.Model.Aggregates;
 public partial class ProductionOrder : AggregateRoot
 {
     private const string QuantityInvalidMessageKey = "manufacturing.order.error.plannedQuantity.invalid";
-    private const string OperationsEmptyMessageKey = "manufacturing.order.error.operations.empty";
     private const string OperationNameNotBlankMessageKey = "manufacturing.order.error.operationName.notBlank";
     private const string SequenceDuplicateMessageKey = "manufacturing.order.error.sequence.duplicate";
     private const string PlannedDatesInvalidMessageKey = "manufacturing.order.error.plannedDates.invalid";
@@ -36,13 +35,13 @@ public partial class ProductionOrder : AggregateRoot
     /// </summary>
     /// <param name="command">The data of the order.</param>
     /// <param name="productCode">The product of the approved formula.</param>
+    /// <remarks>The operations are optional: the Web App can create the order first and its operations later.</remarks>
     /// <exception cref="ArgumentException">Thrown when the quantity, the operations or the planned dates are not valid.</exception>
     public ProductionOrder(CreateProductionOrderCommand command, ProductCode productCode) : this()
     {
         if (command.PlannedQuantity <= 0) throw new ArgumentException(QuantityInvalidMessageKey);
-        if (command.Operations is null || command.Operations.Count == 0)
-            throw new ArgumentException(OperationsEmptyMessageKey);
-        if (command.Operations.Select(o => o.Sequence).Distinct().Count() != command.Operations.Count)
+        var operations = command.Operations ?? [];
+        if (operations.Select(o => o.Sequence).Distinct().Count() != operations.Count)
             throw new ArgumentException(SequenceDuplicateMessageKey);
         if (command.PlannedStart is not null && command.PlannedEnd is not null && command.PlannedEnd < command.PlannedStart)
             throw new ArgumentException(PlannedDatesInvalidMessageKey);
@@ -56,7 +55,7 @@ public partial class ProductionOrder : AggregateRoot
         Status = EProductionOrderStatus.Planned;
         PlannedStart = command.PlannedStart?.ToUniversalTime();
         PlannedEnd = command.PlannedEnd?.ToUniversalTime();
-        foreach (var operation in command.Operations.OrderBy(o => o.Sequence))
+        foreach (var operation in operations.OrderBy(o => o.Sequence))
         {
             if (string.IsNullOrWhiteSpace(operation.Name)) throw new ArgumentException(OperationNameNotBlankMessageKey);
             _operations.Add(new Operation(operation.Sequence, operation.Name, operation.Equipment));
