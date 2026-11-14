@@ -81,6 +81,51 @@ public class SubscriptionsController(
                 Ok(SubscriptionResourceFromEntityAssembler.ToResourceFromEntity(activatedSubscription)));
     }
 
+    [HttpPost("{subscriptionId:int}/payments")]
+    [EndpointSummary("Pay a subscription")]
+    [EndpointDescription("Charges the next billing period with Niubiz: activates a Pending subscription or renews an Active one. Answers 422 when Niubiz rejects the card and 503 when it is not available.")]
+    [ProducesResponseType(typeof(SubscriptionResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+    [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
+    public async Task<IActionResult> PaySubscription([FromRoute] int subscriptionId,
+        [FromBody] PaySubscriptionResource resource,
+        CancellationToken cancellationToken)
+    {
+        if (string.IsNullOrWhiteSpace(resource.CardToken)) throw new ArgumentException("payment.error.cardToken.notBlank");
+        var result = await subscriptionCommandService.Handle(new PaySubscriptionCommand(new Domain.Model.ValueObjects.SubscriptionId(subscriptionId), resource.CardToken), cancellationToken);
+
+        return SubscriptionsActionResultAssembler.ToActionResultFromCommandResult(
+            this,
+            result,
+            messages,
+            problemDetailsFactory,
+            paidSubscription =>
+                Ok(SubscriptionResourceFromEntityAssembler.ToResourceFromEntity(paidSubscription)));
+    }
+
+    [HttpPost("{subscriptionId:int}/renewal")]
+    [EndpointSummary("Renew a subscription")]
+    [EndpointDescription("Extends an Active subscription one more billing period (US53).")]
+    [ProducesResponseType(typeof(SubscriptionResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    public async Task<IActionResult> RenewSubscription([FromRoute] int subscriptionId,
+        CancellationToken cancellationToken)
+    {
+        var result = await subscriptionCommandService.Handle(new RenewSubscriptionCommand(new Domain.Model.ValueObjects.SubscriptionId(subscriptionId)), cancellationToken);
+
+        return SubscriptionsActionResultAssembler.ToActionResultFromCommandResult(
+            this,
+            result,
+            messages,
+            problemDetailsFactory,
+            renewedSubscription =>
+                Ok(SubscriptionResourceFromEntityAssembler.ToResourceFromEntity(renewedSubscription)));
+    }
+
     [HttpPost("{subscriptionId:int}/cancellation")]
     [EndpointSummary("Cancel a subscription")]
     [EndpointDescription("Cancels an Active subscription; the access stays until the end of the paid period (US53).")]

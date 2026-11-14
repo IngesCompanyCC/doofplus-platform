@@ -11,5 +11,7 @@ public enum SubscriptionsError
     SubscriptionNotFound,
     AlreadySubscribed,
     InvalidSubscriptionState,
-    InvalidArgument
+    InvalidArgument,
+    PaymentRejected,
+    PaymentGatewayUnavailable
 }

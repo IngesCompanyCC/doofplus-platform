@@ -30,6 +30,8 @@ public static class SubscriptionsActionResultAssembler
             SubscriptionsError.DuplicatePlanKey => StatusCodes.Status409Conflict,
             SubscriptionsError.AlreadySubscribed => StatusCodes.Status409Conflict,
             SubscriptionsError.InvalidSubscriptionState => StatusCodes.Status409Conflict,
+            SubscriptionsError.PaymentRejected => StatusCodes.Status422UnprocessableEntity,
+            SubscriptionsError.PaymentGatewayUnavailable => StatusCodes.Status503ServiceUnavailable,
             _ => StatusCodes.Status400BadRequest
         };
     }

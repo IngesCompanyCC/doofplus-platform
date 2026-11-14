@@ -1,5 +1,6 @@
 ﻿using IngesCompanyCCPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration.ValueConverters;
 using IngesCompanyCCPlatform.API.Subscriptions.Domain.Model.Aggregates;
+using IngesCompanyCCPlatform.API.Subscriptions.Domain.Model.Entities;
 using IngesCompanyCCPlatform.API.Subscriptions.Domain.Model.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 
@@ -63,5 +64,22 @@ public static class ModelBuilderExtensions
         builder.Entity<Subscription>().Property(s => s.CurrentPeriodStart);
         builder.Entity<Subscription>().Property(s => s.CurrentPeriodEnd);
         builder.Entity<Subscription>().HasIndex(s => s.OrganizationId);
+        builder.Entity<Subscription>().HasMany(s => s.Payments).WithOne().HasForeignKey(p => p.SubscriptionId);
+        builder.Entity<Subscription>().Navigation(s => s.Payments).UsePropertyAccessMode(PropertyAccessMode.Field);
+
+        builder.Entity<Payment>().ToTable("payments");
+        builder.Entity<Payment>().HasKey(p => p.Id);
+        builder.Entity<Payment>().Property(p => p.Id).IsRequired().ValueGeneratedOnAdd();
+        builder.Entity<Payment>().Property(p => p.SubscriptionId)
+            .HasConversion(new StronglyTypedIdConverter<SubscriptionId, int>(id => id.Value, value => new SubscriptionId(value)))
+            .IsRequired();
+        builder.Entity<Payment>().Property(p => p.InvoiceNumber).IsRequired().HasMaxLength(20);
+        builder.Entity<Payment>().HasIndex(p => p.InvoiceNumber).IsUnique();
+        builder.Entity<Payment>().Property(p => p.Amount).HasPrecision(10, 2).IsRequired();
+        builder.Entity<Payment>().Property(p => p.Currency).IsRequired().HasMaxLength(3).IsFixedLength();
+        builder.Entity<Payment>().Property(p => p.GatewayTransactionId).HasMaxLength(100);
+        builder.Entity<Payment>().HasIndex(p => p.GatewayTransactionId).IsUnique();
+        builder.Entity<Payment>().Property(p => p.Status).HasConversion<string>().HasMaxLength(20).IsRequired();
+        builder.Entity<Payment>().Property(p => p.ProcessedAt);
     }
 }

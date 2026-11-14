@@ -144,4 +144,10 @@
   <data name="ManufacturingError.InvalidBatchState" xml:space="preserve">
     <value>Invalid production batch status</value>
   </data>
+  <data name="SubscriptionsError.PaymentRejected" xml:space="preserve">
+    <value>Payment rejected</value>
+  </data>
+  <data name="SubscriptionsError.PaymentGatewayUnavailable" xml:space="preserve">
+    <value>Payment gateway unavailable</value>
+  </data>
 </root>

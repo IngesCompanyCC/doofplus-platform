@@ -81,4 +81,25 @@
   <data name="subscription.error.cardBrand.size" xml:space="preserve">
     <value>The card brand must have at most 20 characters.</value>
   </data>
+  <data name="payment.error.cardToken.notBlank" xml:space="preserve">
+    <value>The card token must not be blank.</value>
+  </data>
+  <data name="payment.error.invoiceNumber.notBlank" xml:space="preserve">
+    <value>The invoice number must not be blank.</value>
+  </data>
+  <data name="payment.error.transactionId.notBlank" xml:space="preserve">
+    <value>The transaction identifier must not be blank.</value>
+  </data>
+  <data name="payment.error.notPending" xml:space="preserve">
+    <value>Only a pending payment can be approved or rejected.</value>
+  </data>
+  <data name="payment.error.rejected" xml:space="preserve">
+    <value>The payment gateway rejected the charge.</value>
+  </data>
+  <data name="payment.error.gatewayUnavailable" xml:space="preserve">
+    <value>The payment gateway is not available; the payment was not recorded.</value>
+  </data>
+  <data name="subscription.error.state.notCurrent" xml:space="preserve">
+    <value>Only a pending or active subscription can be paid.</value>
+  </data>
 </root>
