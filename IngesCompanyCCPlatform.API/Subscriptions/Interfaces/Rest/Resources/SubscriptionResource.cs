@@ -26,4 +26,5 @@ public record SubscriptionResource(
     string CardExpiry,
     string BillingEmail,
     DateOnly? CurrentPeriodStart,
-    DateOnly? CurrentPeriodEnd);
+    DateOnly? CurrentPeriodEnd,
+    IEnumerable<PaymentResource> Payments);

@@ -1,5 +1,6 @@
 ﻿using IngesCompanyCCPlatform.API.Shared.Domain.Model.Aggregates.Internal;
 using IngesCompanyCCPlatform.API.Subscriptions.Domain.Model.Commands;
+using IngesCompanyCCPlatform.API.Subscriptions.Domain.Model.Entities;
 using IngesCompanyCCPlatform.API.Subscriptions.Domain.Model.ValueObjects;
 
 namespace IngesCompanyCCPlatform.API.Subscriptions.Domain.Model.Aggregates;
@@ -15,6 +16,7 @@ public partial class Subscription : AggregateRoot
 {
     private const string NotPendingMessageKey = "subscription.error.state.notPending";
     private const string NotActiveMessageKey = "subscription.error.state.notActive";
+    private readonly List<Payment> _payments = [];
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="Subscription" /> aggregate. Used by Entity Framework Core.
@@ -96,6 +98,35 @@ public partial class Subscription : AggregateRoot
     ///     Gets whether the subscription is pending or active.
     /// </summary>
     public bool IsCurrent => Status is ESubscriptionStatus.Pending or ESubscriptionStatus.Active;
+
+    /// <summary>
+    ///     Gets the payments of the subscription, shown as invoices in the Web App.
+    /// </summary>
+    public IReadOnlyCollection<Payment> Payments => _payments.AsReadOnly();
+
+    /// <summary>
+    ///     Gets the invoice number of the next payment, for example <c>INV-12-3</c>.
+    /// </summary>
+    public string NextInvoiceNumber => $"INV-{Id.Value}-{_payments.Count + 1}";
+
+    /// <summary>
+    ///     Records a payment of the subscription.
+    /// </summary>
+    /// <param name="payment">The payment, approved or rejected.</param>
+    public void RecordPayment(Payment payment)
+    {
+        ArgumentNullException.ThrowIfNull(payment);
+        _payments.Add(payment);
+    }
+
+    /// <summary>
+    ///     Applies an approved payment: activates a pending subscription or renews an active one (US52, US53).
+    /// </summary>
+    public void ApplyApprovedPayment()
+    {
+        if (Status == ESubscriptionStatus.Pending) Activate();
+        else Renew();
+    }
 
     /// <summary>
     ///     Activates the subscription once the payment is authorized (US52).

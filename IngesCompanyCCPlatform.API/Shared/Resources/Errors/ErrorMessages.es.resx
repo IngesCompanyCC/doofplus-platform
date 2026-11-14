@@ -144,4 +144,10 @@
   <data name="ManufacturingError.InvalidBatchState" xml:space="preserve">
     <value>Estado de lote de producción no válido</value>
   </data>
+  <data name="SubscriptionsError.PaymentRejected" xml:space="preserve">
+    <value>Pago rechazado</value>
+  </data>
+  <data name="SubscriptionsError.PaymentGatewayUnavailable" xml:space="preserve">
+    <value>Pasarela de pagos no disponible</value>
+  </data>
 </root>

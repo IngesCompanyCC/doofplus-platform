@@ -1343,6 +1343,67 @@ namespace IngesCompanyCCPlatform.API.Migrations
                     b.ToTable("subscriptions");
                 });
 
+            modelBuilder.Entity("IngesCompanyCCPlatform.API.Subscriptions.Domain.Model.Entities.Payment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<decimal>("Amount")
+                        .HasPrecision(10, 2)
+                        .HasColumnType("decimal(10,2)")
+                        .HasColumnName("amount");
+
+                    b.Property<string>("Currency")
+                        .IsRequired()
+                        .HasMaxLength(3)
+                        .HasColumnType("char(3)")
+                        .HasColumnName("currency")
+                        .IsFixedLength();
+
+                    b.Property<string>("GatewayTransactionId")
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("gateway_transaction_id");
+
+                    b.Property<string>("InvoiceNumber")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)")
+                        .HasColumnName("invoice_number");
+
+                    b.Property<DateTime?>("ProcessedAt")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("processed_at");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)")
+                        .HasColumnName("status");
+
+                    b.Property<int>("SubscriptionId")
+                        .HasColumnType("int")
+                        .HasColumnName("subscription_id");
+
+                    b.HasKey("Id")
+                        .HasName("p_k_payments");
+
+                    b.HasIndex("GatewayTransactionId")
+                        .IsUnique()
+                        .HasDatabaseName("i_x_payments_gateway_transaction_id");
+
+                    b.HasIndex("InvoiceNumber")
+                        .IsUnique()
+                        .HasDatabaseName("i_x_payments_invoice_number");
+
+                    b.HasIndex("SubscriptionId")
+                        .HasDatabaseName("i_x_payments_subscription_id");
+
+                    b.ToTable("payments", (string)null);
+                });
+
             modelBuilder.Entity("IngesCompanyCCPlatform.API.Manufacturing.Domain.Model.Aggregates.ProductionBatch", b =>
                 {
                     b.OwnsOne("IngesCompanyCCPlatform.API.Manufacturing.Domain.Model.ValueObjects.Quantity", "ManufacturedQuantity", b1 =>
@@ -1514,6 +1575,16 @@ namespace IngesCompanyCCPlatform.API.Migrations
                         .HasConstraintName("f_k_operations_production_orders_production_order_id");
                 });
 
+            modelBuilder.Entity("IngesCompanyCCPlatform.API.Subscriptions.Domain.Model.Entities.Payment", b =>
+                {
+                    b.HasOne("IngesCompanyCCPlatform.API.Subscriptions.Domain.Model.Aggregates.Subscription", null)
+                        .WithMany("Payments")
+                        .HasForeignKey("SubscriptionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("f_k_payments_subscriptions_subscription_id");
+                });
+
             modelBuilder.Entity("IngesCompanyCCPlatform.API.Manufacturing.Domain.Model.Aggregates.MasterFormula", b =>
                 {
                     b.Navigation("Items");
@@ -1531,6 +1602,11 @@ namespace IngesCompanyCCPlatform.API.Migrations
             modelBuilder.Entity("IngesCompanyCCPlatform.API.Manufacturing.Domain.Model.Aggregates.ProductionOrder", b =>
                 {
                     b.Navigation("Operations");
+                });
+
+            modelBuilder.Entity("IngesCompanyCCPlatform.API.Subscriptions.Domain.Model.Aggregates.Subscription", b =>
+                {
+                    b.Navigation("Payments");
                 });
 #pragma warning restore 612, 618
         }

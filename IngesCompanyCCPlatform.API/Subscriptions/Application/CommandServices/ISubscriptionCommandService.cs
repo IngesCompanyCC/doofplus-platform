@@ -23,4 +23,8 @@ public interface ISubscriptionCommandService
     ///     Handles the cancellation of an active subscription (US53).
     /// </summary>
     Task<Result<Subscription>> Handle(CancelSubscriptionCommand command, CancellationToken cancellationToken);
+
+    Task<Result<Subscription>> Handle(RenewSubscriptionCommand command, CancellationToken cancellationToken);
+
+    Task<Result<Subscription>> Handle(PaySubscriptionCommand command, CancellationToken cancellationToken);
 }

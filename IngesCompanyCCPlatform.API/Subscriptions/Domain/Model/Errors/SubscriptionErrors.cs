@@ -26,6 +26,15 @@ public static class SubscriptionErrors
     /// <param name="messageKey">
     ///     The message key thrown by the aggregate, for example <c>subscription.error.state.notPending</c>.
     /// </param>
+    public static readonly Error NotCurrent =
+        Error.Conflict("subscription.error.state.notCurrent", "Only a pending or active subscription can be paid.");
+
+    public static Error PaymentRejected(string reason) =>
+        Error.Validation("payment.error.rejected", $"The payment gateway rejected the charge: {reason}");
+
+    public static readonly Error PaymentGatewayUnavailable =
+        Error.Failure("payment.error.gatewayUnavailable", "The payment gateway is not available; the payment was not recorded.");
+
     public static Error InvalidState(string messageKey) =>
         Error.Validation(messageKey, "The subscription does not allow this change of state.");
 }

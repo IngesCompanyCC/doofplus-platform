@@ -25,6 +25,8 @@ public static class SubscriptionResourceFromEntityAssembler
             entity.PaymentCard.Expiry,
             entity.BillingEmail.Value,
             entity.CurrentPeriodStart,
-            entity.CurrentPeriodEnd);
+            entity.CurrentPeriodEnd,
+            entity.Payments.Select(payment => new PaymentResource(payment.Id, payment.InvoiceNumber, payment.Amount,
+                payment.Currency, payment.GatewayTransactionId, payment.Status.ToString(), payment.ProcessedAt)));
     }
 }

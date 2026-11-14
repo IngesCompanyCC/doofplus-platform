@@ -40,6 +40,8 @@ using Cortex.Mediator.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Scalar.AspNetCore;
+using IngesCompanyCCPlatform.API.Subscriptions.Application.OutboundServices.PaymentGateway;
+using IngesCompanyCCPlatform.API.Subscriptions.Infrastructure.PaymentGateway.Niubiz;
 using ProblemDetailsFactory = IngesCompanyCCPlatform.API.Shared.Interfaces.Rest.ProblemDetails.ProblemDetailsFactory;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -128,6 +130,8 @@ builder.Services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
 builder.Services.AddScoped<IPlanCommandService, PlanCommandService>();
 builder.Services.AddScoped<IPlanQueryService, PlanQueryService>();
 builder.Services.AddScoped<ISubscriptionCommandService, SubscriptionCommandService>();
+builder.Services.Configure<NiubizSettings>(builder.Configuration.GetSection("Niubiz"));
+builder.Services.AddHttpClient<IPaymentGateway, NiubizPaymentGateway>(client => client.Timeout = TimeSpan.FromSeconds(30));
 builder.Services.AddScoped<ISubscriptionQueryService, SubscriptionQueryService>();
 builder.Services.AddSingleton<IStringLocalizer<SubscriptionsMessages>, StringLocalizer<SubscriptionsMessages>>();
 

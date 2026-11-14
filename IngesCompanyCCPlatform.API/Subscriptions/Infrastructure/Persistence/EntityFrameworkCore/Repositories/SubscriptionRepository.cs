@@ -22,6 +22,7 @@ public class SubscriptionRepository(AppDbContext context)
     {
         return await Context.Set<Subscription>()
             .AsNoTracking()
+            .Include(subscription => subscription.Payments)
             .Where(subscription => subscription.OrganizationId == organizationId)
             .ToListAsync(cancellationToken);
     }
@@ -41,6 +42,7 @@ public class SubscriptionRepository(AppDbContext context)
     {
         var subscriptionId = new SubscriptionId(id);
         return await Context.Set<Subscription>()
+            .Include(subscription => subscription.Payments)
             .FirstOrDefaultAsync(subscription => subscription.Id == subscriptionId, cancellationToken);
     }
 
@@ -50,6 +52,7 @@ public class SubscriptionRepository(AppDbContext context)
         var subscriptionId = new SubscriptionId(id);
         return await Context.Set<Subscription>()
             .AsNoTracking()
+            .Include(subscription => subscription.Payments)
             .FirstOrDefaultAsync(subscription => subscription.Id == subscriptionId, cancellationToken);
     }
 }
