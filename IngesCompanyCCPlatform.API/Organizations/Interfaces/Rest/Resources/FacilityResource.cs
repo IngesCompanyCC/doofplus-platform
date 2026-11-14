@@ -7,5 +7,4 @@ public record FacilityResource(
     string Type,
     string Timezone,
     string OwnerName,
-    string Status,
-    DateTimeOffset? CreatedAt);
+    string Status);

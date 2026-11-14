@@ -28,14 +28,8 @@ public class OrganizationCommandService(
         if (string.IsNullOrWhiteSpace(command.Ruc))
             return Result<Organization>.Failure(OrganizationsError.InvalidOperation, "RUC is required.");
 
-        if (string.IsNullOrWhiteSpace(command.AdministratorName))
-            return Result<Organization>.Failure(OrganizationsError.InvalidOperation, "Administrator name is required.");
-
-        if (string.IsNullOrWhiteSpace(command.AdministratorEmail))
-            return Result<Organization>.Failure(OrganizationsError.InvalidOperation, "Administrator email is required.");
-
-        if (string.IsNullOrWhiteSpace(command.Password))
-            return Result<Organization>.Failure(OrganizationsError.InvalidOperation, "Password is required.");
+        if (string.IsNullOrWhiteSpace(command.OwnerName))
+            return Result<Organization>.Failure(OrganizationsError.InvalidOperation, "Owner name is required.");
 
         Ruc ruc;
         try
@@ -55,17 +49,6 @@ public class OrganizationCommandService(
         await organizationRepository.AddAsync(organization, cancellationToken);
         await unitOfWork.CompleteAsync(cancellationToken);
 
-        if (!string.IsNullOrWhiteSpace(command.FacilityName))
-        {
-            var facility = new Facility(
-                organization.Id,
-                command.FacilityName,
-                FacilityType.Manufacturing,
-                Facility.DefaultTimezone,
-                command.AdministratorName);
-
-            await facilityRepository.AddAsync(facility, cancellationToken);
-        }
 
         await administrativeActivityRepository.AddAsync(
             new AdministrativeActivity(organization.Id, "Organization registered", organization.OwnerName),

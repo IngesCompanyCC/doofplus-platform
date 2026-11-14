@@ -14,7 +14,6 @@ public static class FacilityResourceFromEntityAssembler
             entity.Type.ToString(),
             entity.Timezone,
             entity.OwnerName,
-            entity.Status.ToString(),
-            entity.CreatedAt);
+            entity.Status.ToString());
     }
 }

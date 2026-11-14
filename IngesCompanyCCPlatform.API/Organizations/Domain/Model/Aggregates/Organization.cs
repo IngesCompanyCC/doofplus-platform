@@ -25,12 +25,17 @@ public class Organization : IAuditableEntity
     {
     }
 
+    /// <summary>
+    ///     Region used when the registration does not send one.
+    /// </summary>
+    public const string DefaultRegion = "Peru";
+
     public Organization(RegisterOrganizationCommand command)
     {
         LegalName = command.LegalName.Trim();
         Ruc = new Ruc(command.Ruc).Value;
-        Region = string.Empty;
-        OwnerName = command.AdministratorName.Trim();
+        Region = string.IsNullOrWhiteSpace(command.Region) ? DefaultRegion : command.Region.Trim();
+        OwnerName = command.OwnerName.Trim();
         Status = OrganizationStatus.PendingVerification;
     }
 
@@ -50,8 +55,6 @@ public class Organization : IAuditableEntity
             Id,
             LegalName,
             Ruc,
-            command.AdministratorEmail,
-            command.AdministratorName,
-            command.Password);
+            OwnerName);
     }
 }
