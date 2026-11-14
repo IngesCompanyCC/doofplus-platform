@@ -20,6 +20,103 @@ namespace IngesCompanyCCPlatform.API.Migrations
                 .HasAnnotation("ProductVersion", "10.0.13")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
+            modelBuilder.Entity("IngesCompanyCCPlatform.API.Iam.Domain.Model.Aggregates.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<DateTimeOffset?>("CreatedAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("created_at");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("varchar(120)")
+                        .HasColumnName("email");
+
+                    b.Property<string>("Environment")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)")
+                        .HasColumnName("environment");
+
+                    b.Property<string>("Facility")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("facility");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("varchar(120)")
+                        .HasColumnName("full_name");
+
+                    b.Property<int>("OrganizationId")
+                        .HasColumnType("int")
+                        .HasColumnName("organization_id");
+
+                    b.Property<string>("OrganizationName")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("varchar(150)")
+                        .HasColumnName("organization_name");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("varchar(120)")
+                        .HasColumnName("password_hash");
+
+                    b.Property<string>("Plant")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("plant");
+
+                    b.Property<string>("Privilege")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(30)")
+                        .HasColumnName("privilege");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnName("role");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)")
+                        .HasColumnName("status");
+
+                    b.Property<string>("TwoFactorCodeHash")
+                        .HasMaxLength(120)
+                        .HasColumnType("varchar(120)")
+                        .HasColumnName("two_factor_code_hash");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("Id")
+                        .HasName("p_k_users");
+
+                    b.HasIndex("Email")
+                        .IsUnique()
+                        .HasDatabaseName("i_x_users_email");
+
+                    b.HasIndex("OrganizationId")
+                        .HasDatabaseName("i_x_users_organization_id");
+
+                    b.ToTable("users");
+                });
+
             modelBuilder.Entity("IngesCompanyCCPlatform.API.Manufacturing.Domain.Model.Aggregates.MasterFormula", b =>
                 {
                     b.Property<int>("Id")
@@ -1272,7 +1369,7 @@ namespace IngesCompanyCCPlatform.API.Migrations
                     b.HasIndex("BatchId")
                         .HasDatabaseName("i_x_analytical_results_batch_id");
 
-                    b.ToTable("analytical_results", (string)null);
+                    b.ToTable("analytical_results");
                 });
 
             modelBuilder.Entity("IngesCompanyCCPlatform.API.Quality.Domain.Model.Aggregates.Audit", b =>
@@ -1343,7 +1440,7 @@ namespace IngesCompanyCCPlatform.API.Migrations
                         .IsUnique()
                         .HasDatabaseName("i_x_audits_code");
 
-                    b.ToTable("audits", (string)null);
+                    b.ToTable("audits");
                 });
 
             modelBuilder.Entity("IngesCompanyCCPlatform.API.Quality.Domain.Model.Aggregates.AuditEvent", b =>
@@ -1402,7 +1499,7 @@ namespace IngesCompanyCCPlatform.API.Migrations
                     b.HasIndex("AggregateType")
                         .HasDatabaseName("i_x_audit_events_aggregate_type");
 
-                    b.ToTable("audit_events", (string)null);
+                    b.ToTable("audit_events");
                 });
 
             modelBuilder.Entity("IngesCompanyCCPlatform.API.Quality.Domain.Model.Aggregates.AuditFinding", b =>
@@ -1456,7 +1553,7 @@ namespace IngesCompanyCCPlatform.API.Migrations
                     b.HasIndex("AuditId")
                         .HasDatabaseName("i_x_audit_findings_audit_id");
 
-                    b.ToTable("audit_findings", (string)null);
+                    b.ToTable("audit_findings");
                 });
 
             modelBuilder.Entity("IngesCompanyCCPlatform.API.Quality.Domain.Model.Aggregates.BatchRelease", b =>
@@ -1524,7 +1621,7 @@ namespace IngesCompanyCCPlatform.API.Migrations
                     b.HasIndex("BatchId")
                         .HasDatabaseName("i_x_batch_releases_batch_id");
 
-                    b.ToTable("batch_releases", (string)null);
+                    b.ToTable("batch_releases");
                 });
 
             modelBuilder.Entity("IngesCompanyCCPlatform.API.Quality.Domain.Model.Aggregates.CapaAction", b =>
@@ -1584,7 +1681,7 @@ namespace IngesCompanyCCPlatform.API.Migrations
                     b.HasIndex("CapaPlanId")
                         .HasDatabaseName("i_x_capa_actions_capa_plan_id");
 
-                    b.ToTable("capa_actions", (string)null);
+                    b.ToTable("capa_actions");
                 });
 
             modelBuilder.Entity("IngesCompanyCCPlatform.API.Quality.Domain.Model.Aggregates.CapaPlan", b =>
@@ -1641,7 +1738,7 @@ namespace IngesCompanyCCPlatform.API.Migrations
                     b.HasKey("Id")
                         .HasName("p_k_capa_plans");
 
-                    b.ToTable("capa_plans", (string)null);
+                    b.ToTable("capa_plans");
                 });
 
             modelBuilder.Entity("IngesCompanyCCPlatform.API.Quality.Domain.Model.Aggregates.CollaborationTask", b =>
@@ -1700,7 +1797,7 @@ namespace IngesCompanyCCPlatform.API.Migrations
                     b.HasKey("Id")
                         .HasName("p_k_collaboration_tasks");
 
-                    b.ToTable("collaboration_tasks", (string)null);
+                    b.ToTable("collaboration_tasks");
                 });
 
             modelBuilder.Entity("IngesCompanyCCPlatform.API.Quality.Domain.Model.Aggregates.Deviation", b =>
@@ -1774,7 +1871,7 @@ namespace IngesCompanyCCPlatform.API.Migrations
                         .IsUnique()
                         .HasDatabaseName("i_x_deviations_code");
 
-                    b.ToTable("deviations", (string)null);
+                    b.ToTable("deviations");
                 });
 
             modelBuilder.Entity("IngesCompanyCCPlatform.API.Quality.Domain.Model.Aggregates.Evidence", b =>
@@ -1848,7 +1945,7 @@ namespace IngesCompanyCCPlatform.API.Migrations
                     b.HasIndex("DeviationId")
                         .HasDatabaseName("i_x_evidences_deviation_id");
 
-                    b.ToTable("evidences", (string)null);
+                    b.ToTable("evidences");
                 });
 
             modelBuilder.Entity("IngesCompanyCCPlatform.API.Quality.Domain.Model.Aggregates.QualityDocument", b =>
@@ -1923,7 +2020,7 @@ namespace IngesCompanyCCPlatform.API.Migrations
                         .IsUnique()
                         .HasDatabaseName("i_x_quality_documents_code");
 
-                    b.ToTable("quality_documents", (string)null);
+                    b.ToTable("quality_documents");
                 });
 
             modelBuilder.Entity("IngesCompanyCCPlatform.API.Quality.Domain.Model.Aggregates.RegulatoryReport", b =>
@@ -1996,7 +2093,7 @@ namespace IngesCompanyCCPlatform.API.Migrations
                         .IsUnique()
                         .HasDatabaseName("i_x_regulatory_reports_code");
 
-                    b.ToTable("regulatory_reports", (string)null);
+                    b.ToTable("regulatory_reports");
                 });
 
             modelBuilder.Entity("IngesCompanyCCPlatform.API.Quality.Domain.Model.Aggregates.TaskComment", b =>
@@ -2034,7 +2131,7 @@ namespace IngesCompanyCCPlatform.API.Migrations
                     b.HasIndex("TaskId")
                         .HasDatabaseName("i_x_task_comments_task_id");
 
-                    b.ToTable("task_comments", (string)null);
+                    b.ToTable("task_comments");
                 });
 
             modelBuilder.Entity("IngesCompanyCCPlatform.API.Quality.Domain.Model.Aggregates.TraceabilityGap", b =>
@@ -2098,7 +2195,7 @@ namespace IngesCompanyCCPlatform.API.Migrations
                     b.HasIndex("BatchId")
                         .HasDatabaseName("i_x_traceability_gaps_batch_id");
 
-                    b.ToTable("traceability_gaps", (string)null);
+                    b.ToTable("traceability_gaps");
                 });
 
             modelBuilder.Entity("IngesCompanyCCPlatform.API.Subscriptions.Domain.Model.Aggregates.Plan", b =>

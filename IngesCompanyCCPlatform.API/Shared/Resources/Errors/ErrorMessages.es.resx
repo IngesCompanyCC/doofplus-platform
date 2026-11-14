@@ -210,4 +210,28 @@
   <data name="QualityError.AuditEventNotFound" xml:space="preserve">
     <value>Registro de evento de auditoría no encontrado</value>
   </data>
+  <data name="IamError.InvalidCredentials" xml:space="preserve">
+    <value>Credenciales no válidas</value>
+  </data>
+  <data name="IamError.TwoFactorRequired" xml:space="preserve">
+    <value>Se requiere el código de doble factor</value>
+  </data>
+  <data name="IamError.InvalidTwoFactorCode" xml:space="preserve">
+    <value>Código de doble factor no válido</value>
+  </data>
+  <data name="IamError.EmailAlreadyTaken" xml:space="preserve">
+    <value>Correo ya registrado</value>
+  </data>
+  <data name="IamError.UserNotFound" xml:space="preserve">
+    <value>Usuario no encontrado</value>
+  </data>
+  <data name="IamError.InvalidUserData" xml:space="preserve">
+    <value>Datos de usuario no válidos</value>
+  </data>
+  <data name="IamError.DatabaseError" xml:space="preserve">
+    <value>Error de base de datos</value>
+  </data>
+  <data name="IamError.InternalServerError" xml:space="preserve">
+    <value>Error interno del servidor</value>
+  </data>
 </root>

@@ -1,4 +1,6 @@
 ﻿using System.Net.Mime;
+using IngesCompanyCCPlatform.API.Iam.Domain.Model.ValueObjects;
+using IngesCompanyCCPlatform.API.Iam.Infrastructure.Pipeline.Middleware.Attributes;
 using IngesCompanyCCPlatform.API.Organizations.Application.CommandServices;
 using IngesCompanyCCPlatform.API.Organizations.Application.QueryServices;
 using IngesCompanyCCPlatform.API.Organizations.Domain.Model;
@@ -42,6 +44,9 @@ public class ContactInquiriesController(
     }
 
     [HttpGet("{inquiryId:int}")]
+    [Authorize(Roles.RoleAdministrator)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [EndpointSummary("Get contact inquiry by id")]
     [EndpointDescription("Retrieves a single contact inquiry by its identifier.")]
     [ProducesResponseType(typeof(ContactInquiryResource), StatusCodes.Status200OK)]
@@ -64,6 +69,9 @@ public class ContactInquiriesController(
     }
 
     [HttpGet]
+    [Authorize(Roles.RoleAdministrator)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [EndpointSummary("Get all contact inquiries")]
     [EndpointDescription("Retrieves all contact inquiries registered in the system.")]
     [ProducesResponseType(typeof(IEnumerable<ContactInquiryResource>), StatusCodes.Status200OK)]
