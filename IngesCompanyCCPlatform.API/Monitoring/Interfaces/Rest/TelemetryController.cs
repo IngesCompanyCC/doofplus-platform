@@ -1,4 +1,5 @@
-﻿using System.Net.Mime;
+﻿using IngesCompanyCCPlatform.API.Monitoring.Domain.Model;
+using System.Net.Mime;
 using System.Security.Cryptography;
 using System.Text;
 using IngesCompanyCCPlatform.API.Monitoring.Application.CommandServices;
@@ -48,7 +49,7 @@ public class TelemetryController(
         [FromBody] TelemetryResource resource, CancellationToken cancellationToken)
     {
         if (!IsValidApiKey(apiKey))
-            return problemDetailsFactory.CreateProblemDetails(this, StatusCodes.Status401Unauthorized, (Enum?)null,
+            return problemDetailsFactory.CreateProblemDetails(this, StatusCodes.Status401Unauthorized, MonitoringError.InvalidApiKey,
                 MonitoringActionResultAssembler.Localize(messages, ApiKeyInvalidMessageKey,
                     "The API key of ThingsBoard is missing or not valid."));
 

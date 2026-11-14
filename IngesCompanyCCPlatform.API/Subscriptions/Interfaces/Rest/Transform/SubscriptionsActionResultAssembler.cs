@@ -96,7 +96,7 @@ public static class SubscriptionsActionResultAssembler
         IStringLocalizer<SubscriptionsMessages> messages,
         ProblemDetailsFactory problemDetailsFactory)
     {
-        return problemDetailsFactory.CreateProblemDetails(controller, StatusCodes.Status400BadRequest, (Enum?)null,
+        return problemDetailsFactory.CreateProblemDetails(controller, StatusCodes.Status400BadRequest, SubscriptionsError.InvalidArgument,
             Localize(messages, exception.Message, exception.Message));
     }
 }

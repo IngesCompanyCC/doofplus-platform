@@ -15,6 +15,7 @@ public partial class RawMaterialLot : AggregateRoot
 {
     private const string MaterialNotBlankMessageKey = "manufacturing.lot.error.material.notBlank";
     private const string NotInInspectionMessageKey = "manufacturing.lot.error.notInInspection";
+    private const string ClosedMessageKey = "manufacturing.lot.error.closed";
     private const string InspectionIncompleteMessageKey = "manufacturing.lot.error.inspectionIncomplete";
     private const string NotApprovedMessageKey = "manufacturing.lot.error.notApproved";
     private const string BatchNotBlankMessageKey = "manufacturing.lot.error.batch.notBlank";
@@ -113,7 +114,7 @@ public partial class RawMaterialLot : AggregateRoot
     public void Inspect(InspectRawMaterialLotCommand command)
     {
         if (Status is not (ERawMaterialLotStatus.Quarantine or ERawMaterialLotStatus.Sampling or ERawMaterialLotStatus.Inspection))
-            throw new InvalidOperationException(NotInInspectionMessageKey);
+            throw new InvalidOperationException(ClosedMessageKey);
         Status = ERawMaterialLotStatus.Inspection;
         PackagingVerified = command.PackagingVerified;
         IdentityVerified = command.IdentityVerified;

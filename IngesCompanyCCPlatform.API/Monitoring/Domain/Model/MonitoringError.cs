@@ -34,5 +34,8 @@ public enum MonitoringError
     AlertNotFound,
 
     /// <summary>Another alert already has the code.</summary>
-    DuplicateAlertCode
+    DuplicateAlertCode,
+
+    /// <summary>The ThingsBoard API key is missing or not valid.</summary>
+    InvalidApiKey
 }

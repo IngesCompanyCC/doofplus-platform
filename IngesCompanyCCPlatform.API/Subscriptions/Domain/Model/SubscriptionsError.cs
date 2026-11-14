@@ -10,5 +10,6 @@ public enum SubscriptionsError
     PlanNotFound,
     SubscriptionNotFound,
     AlreadySubscribed,
-    InvalidSubscriptionState
+    InvalidSubscriptionState,
+    InvalidArgument
 }

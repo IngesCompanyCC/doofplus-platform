@@ -118,7 +118,7 @@
     <value>samplingStatus must be Pending, Requested or Done.</value>
   </data>
   <data name="manufacturing.lot.error.notInInspection" xml:space="preserve">
-    <value>The lot was already approved or rejected.</value>
+    <value>The lot must be in Inspection; inspect it first.</value>
   </data>
   <data name="manufacturing.lot.error.inspectionIncomplete" xml:space="preserve">
     <value>The lot can be released only after its packaging and identity are verified and its samples are taken.</value>
@@ -137,5 +137,11 @@
   </data>
   <data name="manufacturing.batch.error.progress.invalid" xml:space="preserve">
     <value>The batch progress must be between 0 and 100.</value>
+  </data>
+  <data name="manufacturing.lot.error.closed" xml:space="preserve">
+    <value>The lot was already approved or rejected.</value>
+  </data>
+  <data name="manufacturing.batch.error.severity.invalid" xml:space="preserve">
+    <value>severity must be Minor, Major or Critical.</value>
   </data>
 </root>

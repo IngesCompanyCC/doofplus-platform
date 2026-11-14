@@ -118,7 +118,7 @@
     <value>samplingStatus debe ser Pending, Requested o Done.</value>
   </data>
   <data name="manufacturing.lot.error.notInInspection" xml:space="preserve">
-    <value>El lote ya fue aprobado o rechazado.</value>
+    <value>El lote debe estar en Inspection; primero hay que inspeccionarlo.</value>
   </data>
   <data name="manufacturing.lot.error.inspectionIncomplete" xml:space="preserve">
     <value>El lote solo se puede liberar cuando se verificaron su empaque y su identidad y se tomaron sus muestras.</value>
@@ -137,5 +137,11 @@
   </data>
   <data name="manufacturing.batch.error.progress.invalid" xml:space="preserve">
     <value>El avance del lote debe estar entre 0 y 100.</value>
+  </data>
+  <data name="manufacturing.lot.error.closed" xml:space="preserve">
+    <value>El lote ya fue aprobado o rechazado.</value>
+  </data>
+  <data name="manufacturing.batch.error.severity.invalid" xml:space="preserve">
+    <value>severity debe ser Minor, Major o Critical.</value>
   </data>
 </root>
