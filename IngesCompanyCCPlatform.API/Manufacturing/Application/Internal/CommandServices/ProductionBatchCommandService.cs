@@ -54,8 +54,8 @@ public class ProductionBatchCommandService(
         catch (InvalidOperationException)
         {
             return Result<ProductionBatch>.Failure(
-                ManufacturingErrors.BatchAlreadyClosed,
-                ManufacturingError.BatchAlreadyClosed);
+                ManufacturingErrors.InvalidBatchState,
+                ManufacturingError.InvalidBatchState);
         }
 
         productionBatchRepository.Update(batch);
@@ -94,6 +94,43 @@ public class ProductionBatchCommandService(
                 ManufacturingError.BatchNotFound);
 
         batch.UpdateProgress(command.Progress);
+
+        productionBatchRepository.Update(batch);
+        await unitOfWork.CompleteAsync(cancellationToken);
+
+        return Result<ProductionBatch>.Success(batch);
+    }
+
+    public Task<Result<ProductionBatch>> Handle(StartBatchCommand command, CancellationToken cancellationToken = default)
+        => ChangeStatusAsync(command.BatchId, batch => batch.Start(), cancellationToken);
+
+    public Task<Result<ProductionBatch>> Handle(ResumeBatchCommand command, CancellationToken cancellationToken = default)
+        => ChangeStatusAsync(command.BatchId, batch => batch.Resume(), cancellationToken);
+
+    public Task<Result<ProductionBatch>> Handle(ReleaseBatchCommand command, CancellationToken cancellationToken = default)
+        => ChangeStatusAsync(command.BatchId, batch => batch.Release(command.ReleasedBy), cancellationToken);
+
+    private async Task<Result<ProductionBatch>> ChangeStatusAsync(
+        int batchId,
+        Action<ProductionBatch> change,
+        CancellationToken cancellationToken)
+    {
+        var batch = await productionBatchRepository.FindByIdAsync(batchId, cancellationToken);
+        if (batch is null)
+            return Result<ProductionBatch>.Failure(
+                ManufacturingErrors.BatchNotFound,
+                ManufacturingError.BatchNotFound);
+
+        try
+        {
+            change(batch);
+        }
+        catch (InvalidOperationException)
+        {
+            return Result<ProductionBatch>.Failure(
+                ManufacturingErrors.InvalidBatchState,
+                ManufacturingError.InvalidBatchState);
+        }
 
         productionBatchRepository.Update(batch);
         await unitOfWork.CompleteAsync(cancellationToken);

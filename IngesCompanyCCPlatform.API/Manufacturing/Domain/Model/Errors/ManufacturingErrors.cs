@@ -16,11 +16,8 @@ public static class ManufacturingErrors
     public static Error DuplicateBatchNumberWithCode(string batchNumber) =>
         Error.Conflict("Manufacturing.DuplicateBatchNumber", $"A production batch with number '{batchNumber}' already exists.");
 
-    public static readonly Error BatchAlreadyClosed =
-        Error.Conflict("Manufacturing.BatchAlreadyClosed", "The production batch is already closed.");
-
-    public static readonly Error BatchNotPlanned =
-        Error.Failure("Manufacturing.BatchNotPlanned", "Only batches in PLANNED status can be started.");
+    public static readonly Error InvalidBatchState =
+        Error.Conflict("Manufacturing.InvalidBatchState", "The production batch cannot change to that status from its current one.");
 
     public static readonly Error InvalidOperation =
         Error.Failure("Manufacturing.InvalidOperation", "The requested manufacturing operation is invalid in the current batch state.");

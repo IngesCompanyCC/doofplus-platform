@@ -135,4 +135,13 @@
   <data name="OrganizationsError.DuplicateFacilityName" xml:space="preserve">
     <value>Nombre de sede duplicado</value>
   </data>
+  <data name="ManufacturingError.BatchNotFound" xml:space="preserve">
+    <value>Lote de producción no encontrado</value>
+  </data>
+  <data name="ManufacturingError.DuplicateBatchNumber" xml:space="preserve">
+    <value>Número de lote duplicado</value>
+  </data>
+  <data name="ManufacturingError.InvalidBatchState" xml:space="preserve">
+    <value>Estado de lote de producción no válido</value>
+  </data>
 </root>

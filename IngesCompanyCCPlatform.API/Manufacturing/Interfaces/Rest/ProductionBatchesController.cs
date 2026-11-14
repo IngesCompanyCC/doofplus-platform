@@ -132,9 +132,67 @@ public class ProductionBatchesController(
             batch => Ok(ProductionBatchResourceFromEntityAssembler.ToResourceFromEntity(batch)));
     }
 
+    [HttpPost("{id:int}/start")]
+    [EndpointSummary("Start a production batch")]
+    [EndpointDescription("Moves a Planned batch to InProgress.")]
+    [ProducesResponseType(typeof(ProductionBatchResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    public async Task<IActionResult> StartBatch(
+        [FromRoute] int id,
+        CancellationToken cancellationToken)
+    {
+        var result = await commandService.Handle(new StartBatchCommand(id), cancellationToken);
+
+        return ManufacturingActionResultAssembler.ToActionResult(
+            this,
+            result,
+            problemDetailsFactory,
+            batch => Ok(ProductionBatchResourceFromEntityAssembler.ToResourceFromEntity(batch)));
+    }
+
+    [HttpPost("{id:int}/resume")]
+    [EndpointSummary("Resume a production batch")]
+    [EndpointDescription("Moves an OnHold batch back to InProgress.")]
+    [ProducesResponseType(typeof(ProductionBatchResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    public async Task<IActionResult> ResumeBatch(
+        [FromRoute] int id,
+        CancellationToken cancellationToken)
+    {
+        var result = await commandService.Handle(new ResumeBatchCommand(id), cancellationToken);
+
+        return ManufacturingActionResultAssembler.ToActionResult(
+            this,
+            result,
+            problemDetailsFactory,
+            batch => Ok(ProductionBatchResourceFromEntityAssembler.ToResourceFromEntity(batch)));
+    }
+
+    [HttpPost("{id:int}/release")]
+    [EndpointSummary("Release a production batch")]
+    [EndpointDescription("Releases a ReleaseRequested batch after the QA electronic signature.")]
+    [ProducesResponseType(typeof(ProductionBatchResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    public async Task<IActionResult> ReleaseBatch(
+        [FromRoute] int id,
+        [FromBody] ReleaseBatchResource resource,
+        CancellationToken cancellationToken)
+    {
+        var result = await commandService.Handle(new ReleaseBatchCommand(id, resource.ReleasedBy), cancellationToken);
+
+        return ManufacturingActionResultAssembler.ToActionResult(
+            this,
+            result,
+            problemDetailsFactory,
+            batch => Ok(ProductionBatchResourceFromEntityAssembler.ToResourceFromEntity(batch)));
+    }
+
     [HttpPost("{id:int}/close")]
     [EndpointSummary("Close a production batch")]
-    [EndpointDescription("Closes an active production batch and records the manufactured quantity.")]
+    [EndpointDescription("Finishes the production of an InProgress batch, records the manufactured quantity and requests the QA release.")]
     [ProducesResponseType(typeof(ProductionBatchResource), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

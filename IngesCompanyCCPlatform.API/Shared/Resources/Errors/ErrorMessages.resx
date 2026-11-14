@@ -135,4 +135,13 @@
   <data name="OrganizationsError.DuplicateFacilityName" xml:space="preserve">
     <value>Duplicate facility name</value>
   </data>
+  <data name="ManufacturingError.BatchNotFound" xml:space="preserve">
+    <value>Production batch not found</value>
+  </data>
+  <data name="ManufacturingError.DuplicateBatchNumber" xml:space="preserve">
+    <value>Duplicate batch number</value>
+  </data>
+  <data name="ManufacturingError.InvalidBatchState" xml:space="preserve">
+    <value>Invalid production batch status</value>
+  </data>
 </root>
