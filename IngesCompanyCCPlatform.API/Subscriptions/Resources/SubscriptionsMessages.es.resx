@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="plan.error.duplicate" xml:space="preserve">
+    <value>Ya existe un plan con el mismo planKey.</value>
+  </data>
+  <data name="plan.error.planKey.notBlank" xml:space="preserve">
+    <value>planKey no debe ser nulo o estar en blanco.</value>
+  </data>
+  <data name="plan.error.planKey.size" xml:space="preserve">
+    <value>planKey no debe superar los 64 caracteres.</value>
+  </data>
+  <data name="plan.error.planKey.pattern" xml:space="preserve">
+    <value>planKey debe estar en kebab case, por ejemplo standard-lab.</value>
+  </data>
+  <data name="plan.error.name.notBlank" xml:space="preserve">
+    <value>name no debe ser nulo o estar en blanco.</value>
+  </data>
+  <data name="plan.error.limits.invalid" xml:space="preserve">
+    <value>userLimit e iotDeviceLimit no pueden ser negativos; 0 significa ilimitado.</value>
+  </data>
+  <data name="plan.error.id.invalid" xml:space="preserve">
+    <value>El id del plan debe ser mayor que 0.</value>
+  </data>
+  <data name="plan.error.notFoundById" xml:space="preserve">
+    <value>No se encontró el plan con id {0}.</value>
+  </data>
+  <data name="money.error.amount.invalid" xml:space="preserve">
+    <value>El precio no debe ser nulo ni negativo.</value>
+  </data>
+  <data name="money.error.currency.pattern" xml:space="preserve">
+    <value>currency debe ser un código ISO 4217 de tres letras, por ejemplo PEN.</value>
+  </data>
+  <data name="subscription.error.id.invalid" xml:space="preserve">
+    <value>El id de la suscripción debe ser mayor que 0.</value>
+  </data>
+  <data name="subscription.error.organizationId.invalid" xml:space="preserve">
+    <value>organizationId debe ser mayor que 0.</value>
+  </data>
+  <data name="subscription.error.billingCycle.invalid" xml:space="preserve">
+    <value>billingCycle debe ser Monthly o Annual.</value>
+  </data>
+  <data name="subscription.error.billingEmail.notBlank" xml:space="preserve">
+    <value>billingEmail no debe ser nulo o estar en blanco.</value>
+  </data>
+  <data name="subscription.error.billingEmail.size" xml:space="preserve">
+    <value>billingEmail no debe superar los 254 caracteres.</value>
+  </data>
+  <data name="subscription.error.billingEmail.pattern" xml:space="preserve">
+    <value>billingEmail debe ser un correo válido.</value>
+  </data>
+  <data name="subscription.error.cardBrand.notBlank" xml:space="preserve">
+    <value>cardBrand no debe ser nulo o estar en blanco.</value>
+  </data>
+  <data name="subscription.error.cardLast4.pattern" xml:space="preserve">
+    <value>cardLast4 debe tener exactamente cuatro dígitos.</value>
+  </data>
+  <data name="subscription.error.cardExpiry.pattern" xml:space="preserve">
+    <value>cardExpiry debe usar el formato MM/yyyy.</value>
+  </data>
+  <data name="subscription.error.planNotFound" xml:space="preserve">
+    <value>El plan seleccionado no existe.</value>
+  </data>
+  <data name="subscription.error.alreadySubscribed" xml:space="preserve">
+    <value>La organización ya tiene una suscripción pendiente o activa.</value>
+  </data>
+  <data name="subscription.error.notFound" xml:space="preserve">
+    <value>No se encontró la suscripción.</value>
+  </data>
+  <data name="subscription.error.notFoundById" xml:space="preserve">
+    <value>No se encontró la suscripción con id {0}.</value>
+  </data>
+  <data name="subscription.error.state.notPending" xml:space="preserve">
+    <value>Solo una suscripción pendiente se puede activar.</value>
+  </data>
+  <data name="subscription.error.state.notActive" xml:space="preserve">
+    <value>Solo una suscripción activa se puede renovar o cancelar.</value>
+  </data>
+  <data name="plan.error.currency.mismatch" xml:space="preserve">
+    <value>El precio mensual y el anual deben usar la misma moneda.</value>
+  </data>
+  <data name="subscription.error.cardBrand.size" xml:space="preserve">
+    <value>La marca de la tarjeta debe tener como máximo 20 caracteres.</value>
+  </data>
+  <data name="payment.error.cardToken.notBlank" xml:space="preserve">
+    <value>El token de la tarjeta no puede estar vacío.</value>
+  </data>
+  <data name="payment.error.invoiceNumber.notBlank" xml:space="preserve">
+    <value>El número de factura no puede estar vacío.</value>
+  </data>
+  <data name="payment.error.transactionId.notBlank" xml:space="preserve">
+    <value>El identificador de la transacción no puede estar vacío.</value>
+  </data>
+  <data name="payment.error.notPending" xml:space="preserve">
+    <value>Solo se puede aprobar o rechazar un pago pendiente.</value>
+  </data>
+  <data name="payment.error.rejected" xml:space="preserve">
+    <value>La pasarela de pagos rechazó el cobro.</value>
+  </data>
+  <data name="payment.error.gatewayUnavailable" xml:space="preserve">
+    <value>La pasarela de pagos no está disponible; el pago no se registró.</value>
+  </data>
+  <data name="subscription.error.state.notCurrent" xml:space="preserve">
+    <value>Solo se puede pagar una suscripción pendiente o activa.</value>
+  </data>
+</root>

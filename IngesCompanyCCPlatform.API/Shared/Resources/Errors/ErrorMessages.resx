@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="GenericError" xml:space="preserve">
+    <value>An error occurred.</value>
+  </data>
+  <data name="InvalidArgument" xml:space="preserve">
+    <value>Invalid request</value>
+  </data>
+  <data name="OperationCancelled" xml:space="preserve">
+    <value>The operation was cancelled.</value>
+  </data>
+  <data name="SubscriptionsError.DuplicatePlanKey" xml:space="preserve">
+    <value>Duplicate plan key</value>
+  </data>
+  <data name="SubscriptionsError.PlanNotFound" xml:space="preserve">
+    <value>Plan not found</value>
+  </data>
+  <data name="SubscriptionsError.SubscriptionNotFound" xml:space="preserve">
+    <value>Subscription not found</value>
+  </data>
+  <data name="SubscriptionsError.AlreadySubscribed" xml:space="preserve">
+    <value>Organization already subscribed</value>
+  </data>
+  <data name="SubscriptionsError.InvalidSubscriptionState" xml:space="preserve">
+    <value>Invalid subscription state</value>
+  </data>
+  <data name="OrganizationsError.OrganizationNotFound" xml:space="preserve">
+    <value>Organization was not found.</value>
+  </data>
+  <data name="OrganizationsError.DuplicateRuc" xml:space="preserve">
+    <value>An organization with this RUC already exists.</value>
+  </data>
+  <data name="OrganizationsError.OrganizationAlreadyActive" xml:space="preserve">
+    <value>The organization is already active.</value>
+  </data>
+  <data name="OrganizationsError.OrganizationSuspended" xml:space="preserve">
+    <value>The organization is suspended.</value>
+  </data>
+  <data name="OrganizationsError.UserProfileNotFound" xml:space="preserve">
+    <value>User profile was not found.</value>
+  </data>
+  <data name="OrganizationsError.DuplicateUserEmail" xml:space="preserve">
+    <value>A user profile with this email already exists.</value>
+  </data>
+  <data name="OrganizationsError.FacilityNotFound" xml:space="preserve">
+    <value>Facility was not found.</value>
+  </data>
+  <data name="OrganizationsError.InvalidOperation" xml:space="preserve">
+    <value>Invalid operation in Organizations.</value>
+  </data>
+  <data name="OrganizationsError.DatabaseError" xml:space="preserve">
+    <value>A database error occurred while processing the organization request.</value>
+  </data>
+  <data name="OrganizationsError.InternalServerError" xml:space="preserve">
+    <value>An unexpected internal error occurred.</value>
+  </data>
+  <data name="OrganizationsError.ContactInquiryNotFound" xml:space="preserve">
+    <value>Contact inquiry was not found.</value>
+  </data>
+  <data name="OrganizationsError.InvalidContactInquiryData" xml:space="preserve">
+    <value>Invalid contact inquiry data.</value>
+  </data>
+  <data name="ManufacturingError.ProductNotFound" xml:space="preserve">
+    <value>Product not found</value>
+  </data>
+  <data name="ManufacturingError.DuplicateProductCode" xml:space="preserve">
+    <value>Duplicate product code</value>
+  </data>
+  <data name="ManufacturingError.MasterFormulaNotFound" xml:space="preserve">
+    <value>Master formula not found</value>
+  </data>
+  <data name="ManufacturingError.DuplicateFormulaVersion" xml:space="preserve">
+    <value>Duplicate formula version</value>
+  </data>
+  <data name="ManufacturingError.InvalidFormulaState" xml:space="preserve">
+    <value>Invalid formula status</value>
+  </data>
+  <data name="ManufacturingError.FormulaNotApproved" xml:space="preserve">
+    <value>Formula not approved</value>
+  </data>
+  <data name="ManufacturingError.ProductionOrderNotFound" xml:space="preserve">
+    <value>Production order not found</value>
+  </data>
+  <data name="ManufacturingError.DuplicateProductionOrderCode" xml:space="preserve">
+    <value>Duplicate production order code</value>
+  </data>
+  <data name="ManufacturingError.InvalidProductionOrderState" xml:space="preserve">
+    <value>Invalid production order status</value>
+  </data>
+  <data name="ManufacturingError.OperationNotFound" xml:space="preserve">
+    <value>Operation not found</value>
+  </data>
+  <data name="ManufacturingError.RawMaterialLotNotFound" xml:space="preserve">
+    <value>Raw material lot not found</value>
+  </data>
+  <data name="ManufacturingError.DuplicateRawMaterialLotCode" xml:space="preserve">
+    <value>Duplicate lot code</value>
+  </data>
+  <data name="ManufacturingError.InvalidRawMaterialLotState" xml:space="preserve">
+    <value>Invalid lot status</value>
+  </data>
+  <data name="MonitoringError.EquipmentNotFound" xml:space="preserve">
+    <value>Equipment not found</value>
+  </data>
+  <data name="MonitoringError.DuplicateEquipmentCode" xml:space="preserve">
+    <value>Duplicate equipment code</value>
+  </data>
+  <data name="MonitoringError.EquipmentInUse" xml:space="preserve">
+    <value>Equipment in use</value>
+  </data>
+  <data name="MonitoringError.SensorNotFound" xml:space="preserve">
+    <value>Sensor not found</value>
+  </data>
+  <data name="MonitoringError.DuplicateSensorCode" xml:space="preserve">
+    <value>Duplicate sensor code</value>
+  </data>
+  <data name="MonitoringError.DuplicateDeviceId" xml:space="preserve">
+    <value>Device already linked</value>
+  </data>
+  <data name="MonitoringError.ReadingNotFound" xml:space="preserve">
+    <value>Reading not found</value>
+  </data>
+  <data name="MonitoringError.AlertNotFound" xml:space="preserve">
+    <value>Alert not found</value>
+  </data>
+  <data name="MonitoringError.DuplicateAlertCode" xml:space="preserve">
+    <value>Duplicate alert code</value>
+  </data>
+  <data name="SubscriptionsError.InvalidArgument" xml:space="preserve">
+    <value>Invalid request</value>
+  </data>
+  <data name="MonitoringError.InvalidApiKey" xml:space="preserve">
+    <value>Invalid API key</value>
+  </data>
+  <data name="OrganizationsError.DuplicateFacilityName" xml:space="preserve">
+    <value>Duplicate facility name</value>
+  </data>
+  <data name="ManufacturingError.BatchNotFound" xml:space="preserve">
+    <value>Production batch not found</value>
+  </data>
+  <data name="ManufacturingError.DuplicateBatchNumber" xml:space="preserve">
+    <value>Duplicate batch number</value>
+  </data>
+  <data name="ManufacturingError.InvalidBatchState" xml:space="preserve">
+    <value>Invalid production batch status</value>
+  </data>
+  <data name="SubscriptionsError.PaymentRejected" xml:space="preserve">
+    <value>Payment rejected</value>
+  </data>
+  <data name="SubscriptionsError.PaymentGatewayUnavailable" xml:space="preserve">
+    <value>Payment gateway unavailable</value>
+  </data>
+</root>

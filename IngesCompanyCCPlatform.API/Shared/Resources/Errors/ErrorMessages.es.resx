@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+      <data name="GenericError" xml:space="preserve">
+    <value>Ocurrió un error.</value>
+  </data>
+  <data name="InvalidArgument" xml:space="preserve">
+    <value>Solicitud no válida</value>
+  </data>
+  <data name="OperationCancelled" xml:space="preserve">
+    <value>La operación fue cancelada.</value>
+  </data>
+  <data name="SubscriptionsError.DuplicatePlanKey" xml:space="preserve">
+    <value>Clave de plan duplicada</value>
+  </data>
+  <data name="SubscriptionsError.PlanNotFound" xml:space="preserve">
+    <value>Plan no encontrado</value>
+  </data>
+  <data name="SubscriptionsError.SubscriptionNotFound" xml:space="preserve">
+    <value>Suscripción no encontrada</value>
+  </data>
+  <data name="SubscriptionsError.AlreadySubscribed" xml:space="preserve">
+    <value>Organización ya suscrita</value>
+  </data>
+  <data name="SubscriptionsError.InvalidSubscriptionState" xml:space="preserve">
+    <value>Estado de suscripción no válido</value>
+  </data>
+  <data name="OrganizationsError.OrganizationNotFound" xml:space="preserve">
+    <value>No se encontró la organización.</value>
+  </data>
+  <data name="OrganizationsError.DuplicateRuc" xml:space="preserve">
+    <value>Ya existe una organización registrada con este RUC.</value>
+  </data>
+  <data name="OrganizationsError.OrganizationAlreadyActive" xml:space="preserve">
+    <value>La organización ya se encuentra activa.</value>
+  </data>
+  <data name="OrganizationsError.OrganizationSuspended" xml:space="preserve">
+    <value>La organización se encuentra suspendida.</value>
+  </data>
+  <data name="OrganizationsError.UserProfileNotFound" xml:space="preserve">
+    <value>No se encontró el perfil de usuario.</value>
+  </data>
+  <data name="OrganizationsError.DuplicateUserEmail" xml:space="preserve">
+    <value>Ya existe un perfil de usuario con este correo electrónico.</value>
+  </data>
+  <data name="OrganizationsError.FacilityNotFound" xml:space="preserve">
+    <value>No se encontró la sede o instalación.</value>
+  </data>
+  <data name="OrganizationsError.InvalidOperation" xml:space="preserve">
+    <value>Operación no válida en Organizaciones.</value>
+  </data>
+  <data name="OrganizationsError.DatabaseError" xml:space="preserve">
+    <value>Ocurrió un error de base de datos al procesar la solicitud.</value>
+  </data>
+  <data name="OrganizationsError.InternalServerError" xml:space="preserve">
+    <value>Ocurrió un error interno inesperado.</value>
+  </data>
+    <data name="OrganizationsError.ContactInquiryNotFound" xml:space="preserve">
+    <value>No se encontró la consulta de contacto.</value>
+  </data>
+  <data name="OrganizationsError.InvalidContactInquiryData" xml:space="preserve">
+    <value>Datos de la consulta de contacto no válidos.</value>
+  </data>
+  <data name="ManufacturingError.ProductNotFound" xml:space="preserve">
+    <value>Producto no encontrado</value>
+  </data>
+  <data name="ManufacturingError.DuplicateProductCode" xml:space="preserve">
+    <value>Código de producto duplicado</value>
+  </data>
+  <data name="ManufacturingError.MasterFormulaNotFound" xml:space="preserve">
+    <value>Fórmula maestra no encontrada</value>
+  </data>
+  <data name="ManufacturingError.DuplicateFormulaVersion" xml:space="preserve">
+    <value>Versión de fórmula duplicada</value>
+  </data>
+  <data name="ManufacturingError.InvalidFormulaState" xml:space="preserve">
+    <value>Estado de fórmula no válido</value>
+  </data>
+  <data name="ManufacturingError.FormulaNotApproved" xml:space="preserve">
+    <value>Fórmula no aprobada</value>
+  </data>
+  <data name="ManufacturingError.ProductionOrderNotFound" xml:space="preserve">
+    <value>Orden de producción no encontrada</value>
+  </data>
+  <data name="ManufacturingError.DuplicateProductionOrderCode" xml:space="preserve">
+    <value>Código de orden de producción duplicado</value>
+  </data>
+  <data name="ManufacturingError.InvalidProductionOrderState" xml:space="preserve">
+    <value>Estado de orden de producción no válido</value>
+  </data>
+  <data name="ManufacturingError.OperationNotFound" xml:space="preserve">
+    <value>Operación no encontrada</value>
+  </data>
+  <data name="ManufacturingError.RawMaterialLotNotFound" xml:space="preserve">
+    <value>Lote de materia prima no encontrado</value>
+  </data>
+  <data name="ManufacturingError.DuplicateRawMaterialLotCode" xml:space="preserve">
+    <value>Código de lote duplicado</value>
+  </data>
+  <data name="ManufacturingError.InvalidRawMaterialLotState" xml:space="preserve">
+    <value>Estado de lote no válido</value>
+  </data>
+  <data name="MonitoringError.EquipmentNotFound" xml:space="preserve">
+    <value>Equipo no encontrado</value>
+  </data>
+  <data name="MonitoringError.DuplicateEquipmentCode" xml:space="preserve">
+    <value>Código de equipo duplicado</value>
+  </data>
+  <data name="MonitoringError.EquipmentInUse" xml:space="preserve">
+    <value>Equipo en uso</value>
+  </data>
+  <data name="MonitoringError.SensorNotFound" xml:space="preserve">
+    <value>Sensor no encontrado</value>
+  </data>
+  <data name="MonitoringError.DuplicateSensorCode" xml:space="preserve">
+    <value>Código de sensor duplicado</value>
+  </data>
+  <data name="MonitoringError.DuplicateDeviceId" xml:space="preserve">
+    <value>Dispositivo ya vinculado</value>
+  </data>
+  <data name="MonitoringError.ReadingNotFound" xml:space="preserve">
+    <value>Lectura no encontrada</value>
+  </data>
+  <data name="MonitoringError.AlertNotFound" xml:space="preserve">
+    <value>Alerta no encontrada</value>
+  </data>
+  <data name="MonitoringError.DuplicateAlertCode" xml:space="preserve">
+    <value>Código de alerta duplicado</value>
+  </data>
+  <data name="SubscriptionsError.InvalidArgument" xml:space="preserve">
+    <value>Solicitud no válida</value>
+  </data>
+  <data name="MonitoringError.InvalidApiKey" xml:space="preserve">
+    <value>Clave de API no válida</value>
+  </data>
+  <data name="OrganizationsError.DuplicateFacilityName" xml:space="preserve">
+    <value>Nombre de sede duplicado</value>
+  </data>
+  <data name="ManufacturingError.BatchNotFound" xml:space="preserve">
+    <value>Lote de producción no encontrado</value>
+  </data>
+  <data name="ManufacturingError.DuplicateBatchNumber" xml:space="preserve">
+    <value>Número de lote duplicado</value>
+  </data>
+  <data name="ManufacturingError.InvalidBatchState" xml:space="preserve">
+    <value>Estado de lote de producción no válido</value>
+  </data>
+  <data name="SubscriptionsError.PaymentRejected" xml:space="preserve">
+    <value>Pago rechazado</value>
+  </data>
+  <data name="SubscriptionsError.PaymentGatewayUnavailable" xml:space="preserve">
+    <value>Pasarela de pagos no disponible</value>
+  </data>
+</root>
