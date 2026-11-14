@@ -1,8 +1,15 @@
-using IngesCompanyCCPlatform.API.Quality.Domain.Model.ValueObjects;
+﻿using IngesCompanyCCPlatform.API.Quality.Domain.Model.ValueObjects;
 
 namespace IngesCompanyCCPlatform.API.Quality.Domain.Model.Commands;
 
 /// <summary>
-///     Command to create a controlled quality document with its first version.
+///     Command to create a quality document.
 /// </summary>
-public record CreateQualityDocumentCommand(string Code, string Title, EDocumentType Type, string FileUrl, UserId AuthorId);
+public record CreateQualityDocumentCommand(
+    string Code,
+    string Title,
+    string Description,
+    string DocumentType,
+    string FileReference,
+    string Version,
+    int? OwnerId);

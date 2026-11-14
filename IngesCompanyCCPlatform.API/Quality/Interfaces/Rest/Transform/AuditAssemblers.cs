@@ -1,4 +1,4 @@
-using IngesCompanyCCPlatform.API.Quality.Domain.Model.Aggregates;
+﻿using IngesCompanyCCPlatform.API.Quality.Domain.Model.Aggregates;
 using IngesCompanyCCPlatform.API.Quality.Domain.Model.Commands;
 using IngesCompanyCCPlatform.API.Quality.Domain.Model.ValueObjects;
 using IngesCompanyCCPlatform.API.Quality.Interfaces.Rest.Resources;
@@ -6,39 +6,52 @@ using IngesCompanyCCPlatform.API.Quality.Interfaces.Rest.Resources;
 namespace IngesCompanyCCPlatform.API.Quality.Interfaces.Rest.Transform;
 
 /// <summary>
-///     Converts an <see cref="Audit" /> aggregate into an <see cref="AuditResource" />.
+///     Builds the commands of <c>Audit</c> from the resources.
 /// </summary>
-public static class AuditResourceFromEntityAssembler
+public static class AuditCommandFromResourceAssembler
 {
-    public static AuditResource ToResourceFromEntity(Audit entity)
+
+
+    /// <summary>
+    ///     Builds the command to create a audit.
+    /// </summary>
+    /// <param name="resource">The data sent by the client.</param>
+    /// <returns>The command.</returns>
+    /// <exception cref="ArgumentException">Thrown when an enum value is not valid.</exception>
+    public static CreateAuditCommand ToCommandFromResource(CreateAuditResource resource)
     {
-        return new AuditResource(entity.Id, entity.Type.ToString(), entity.ScheduledDate, entity.Status.ToString(),
-            entity.EvidencePackageUrl,
-            entity.Findings.OrderBy(finding => finding.Id).Select(finding =>
-                new AuditFindingResource(finding.Id, finding.Type.ToString(), finding.Description)));
+        return new CreateAuditCommand(
+            resource.Code,
+            resource.Title,
+            resource.Scope ?? string.Empty,
+            resource.AuditType ?? string.Empty,
+            resource.AuditorId,
+            resource.PlannedDate);
     }
 }
 
 /// <summary>
-///     Converts the request resources of the audits into commands.
+///     Builds the resource of a audit.
 /// </summary>
-public static class AuditCommandFromResourceAssembler
+public static class AuditResourceFromEntityAssembler
 {
-    public static ScheduleAuditCommand ToCommandFromResource(ScheduleAuditResource resource)
+    /// <summary>
+    ///     Builds the resource from the aggregate.
+    /// </summary>
+    /// <param name="entity">The audit.</param>
+    /// <returns>The resource.</returns>
+    public static AuditResource ToResourceFromEntity(Audit entity)
     {
-        return new ScheduleAuditCommand(QualityEnumParser.Parse<EAuditType>(resource.Type, "audit type"),
-            resource.ScheduledDate);
-    }
-
-    public static RegisterAuditFindingCommand ToCommandFromResource(int auditId, RegisterAuditFindingResource resource)
-    {
-        return new RegisterAuditFindingCommand(auditId,
-            QualityEnumParser.Parse<EFindingType>(resource.Type, "finding type"), resource.Description);
-    }
-
-    public static AttachAuditEvidencePackageCommand ToCommandFromResource(int auditId,
-        AttachAuditEvidencePackageResource resource)
-    {
-        return new AttachAuditEvidencePackageCommand(auditId, resource.FileUrl);
+        return new AuditResource(
+            entity.Id.Value,
+            entity.Code,
+            entity.Title,
+            entity.Scope,
+            entity.AuditType,
+            entity.AuditorId,
+            entity.PlannedDate,
+            entity.Status.ToString(),
+            entity.StartedAt is null ? null : DateTime.SpecifyKind(entity.StartedAt.Value, DateTimeKind.Utc),
+            entity.CompletedAt is null ? null : DateTime.SpecifyKind(entity.CompletedAt.Value, DateTimeKind.Utc));
     }
 }

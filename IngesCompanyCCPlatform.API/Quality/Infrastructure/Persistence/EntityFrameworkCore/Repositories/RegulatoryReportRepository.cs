@@ -1,4 +1,4 @@
-using IngesCompanyCCPlatform.API.Quality.Domain.Model.Aggregates;
+﻿using IngesCompanyCCPlatform.API.Quality.Domain.Model.Aggregates;
 using IngesCompanyCCPlatform.API.Quality.Domain.Model.ValueObjects;
 using IngesCompanyCCPlatform.API.Quality.Domain.Repositories;
 using IngesCompanyCCPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
@@ -8,30 +8,29 @@ using Microsoft.EntityFrameworkCore;
 namespace IngesCompanyCCPlatform.API.Quality.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 
 /// <summary>
-///     Represents the regulatory report repository of the Quality &amp; Compliance bounded context.
+///     Entity Framework Core repository of <see cref="RegulatoryReport" />.
 /// </summary>
-/// <param name="context">The <see cref="AppDbContext" /> to use.</param>
-public class RegulatoryReportRepository(AppDbContext context)
-    : BaseRepository<RegulatoryReport>(context), IRegulatoryReportRepository
+public class RegulatoryReportRepository(AppDbContext context) : BaseRepository<RegulatoryReport>(context), IRegulatoryReportRepository
 {
-    // <inheritdoc />
-    public async Task<IReadOnlyCollection<RegulatoryReport>> FindByOrganizationIdAsync(OrganizationId organizationId,
-        CancellationToken cancellationToken = default)
+    /// <inheritdoc />
+    public new async Task<RegulatoryReport?> FindByIdAsync(int id, CancellationToken cancellationToken = default)
     {
-        return await Context.Set<RegulatoryReport>()
-            .AsNoTracking()
-            .Where(report => report.OrganizationId == organizationId)
-            .OrderByDescending(report => report.GeneratedAt)
-            .ToListAsync(cancellationToken);
+        var regulatoryReportId = new RegulatoryReportId(id);
+        return await Context.Set<RegulatoryReport>().FirstOrDefaultAsync(regulatoryReport => regulatoryReport.Id == regulatoryReportId, cancellationToken);
     }
 
-    // <inheritdoc />
-    public new async Task<RegulatoryReport?> FindByIdAsNoTrackingAsync(int id,
-        CancellationToken cancellationToken = default)
+    /// <inheritdoc />
+    public new async Task<RegulatoryReport?> FindByIdAsNoTrackingAsync(int id, CancellationToken cancellationToken = default)
     {
-        var reportId = new RegulatoryReportId(id);
+        var regulatoryReportId = new RegulatoryReportId(id);
         return await Context.Set<RegulatoryReport>()
             .AsNoTracking()
-            .FirstOrDefaultAsync(report => report.Id == reportId, cancellationToken);
+            .FirstOrDefaultAsync(regulatoryReport => regulatoryReport.Id == regulatoryReportId, cancellationToken);
+    }
+
+    /// <inheritdoc />
+    public async Task<bool> ExistsByCodeAsync(string code, CancellationToken cancellationToken = default)
+    {
+        return await Context.Set<RegulatoryReport>().AnyAsync(regulatoryReport => regulatoryReport.Code == code, cancellationToken);
     }
 }

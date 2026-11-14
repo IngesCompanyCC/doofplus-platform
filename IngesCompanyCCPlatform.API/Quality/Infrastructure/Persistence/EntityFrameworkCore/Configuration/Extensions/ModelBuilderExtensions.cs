@@ -1,290 +1,244 @@
-using IngesCompanyCCPlatform.API.Quality.Domain.Model.Aggregates;
-using IngesCompanyCCPlatform.API.Quality.Domain.Model.Entities;
+﻿using IngesCompanyCCPlatform.API.Quality.Domain.Model.Aggregates;
 using IngesCompanyCCPlatform.API.Quality.Domain.Model.ValueObjects;
-using IngesCompanyCCPlatform.API.Shared.Domain.Model.ValueObjects;
 using IngesCompanyCCPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration.ValueConverters;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace IngesCompanyCCPlatform.API.Quality.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 
 /// <summary>
-///     Entity Framework Core configuration of the Quality &amp; Compliance bounded context.
+///     Entity Framework Core mapping of the Quality &amp; Compliance bounded context.
 /// </summary>
 /// <remarks>
-///     The tables follow the database diagram of the report (section 4.7.2). The references to other
-///     bounded contexts (batches, raw material lots, users, signatures and organizations) only keep the id.
+///     One table per aggregate, as in <c>db-06-quality</c>. The enums are stored as text and the codes are unique.
 /// </remarks>
 public static class ModelBuilderExtensions
 {
     /// <summary>
-    ///     Applies the mapping of the aggregates of the Quality &amp; Compliance bounded context.
+    ///     Applies the mapping of the Quality &amp; Compliance bounded context.
     /// </summary>
     /// <param name="builder">The model builder of the database context.</param>
     public static void ApplyQualityConfiguration(this ModelBuilder builder)
     {
-        ConfigureQualityDocuments(builder);
-        ConfigureMaterialApprovals(builder);
-        ConfigureAnalyticalResults(builder);
-        ConfigureBatchReviews(builder);
-        ConfigureDeviations(builder);
-        ConfigureAudits(builder);
-        ConfigureAuditTrailEntries(builder);
-        ConfigureRegulatoryReports(builder);
-    }
-
-    private static StronglyTypedIdConverter<TId, int> IdConverter<TId>(Func<int, TId> factory)
-        where TId : struct, IEntityId<int>
-    {
-        return new StronglyTypedIdConverter<TId, int>(id => id.Value, factory);
-    }
-
-    /// <summary>
-    ///     Stores a <see cref="DateOnly" /> as a <c>date</c> column. The MySQL provider reads those
-    ///     columns back as <see cref="DateTime" />, so the value goes through a converter.
-    /// </summary>
-    private static readonly ValueConverter<DateOnly, DateTime> DateOnlyConverter = new(
-        date => date.ToDateTime(TimeOnly.MinValue),
-        dateTime => DateOnly.FromDateTime(dateTime));
-
-    private static void ConfigureQualityDocuments(ModelBuilder builder)
-    {
-        builder.Entity<QualityDocument>().HasKey(d => d.Id);
-        builder.Entity<QualityDocument>().Property(d => d.Id)
-            .HasConversion(IdConverter(value => new QualityDocumentId(value)))
+        // QualityDocuments
+        builder.Entity<QualityDocument>().HasKey(e => e.Id);
+        builder.Entity<QualityDocument>().Property(e => e.Id)
+            .HasConversion(new StronglyTypedIdConverter<QualityDocumentId, int>(id => id.Value, value => new QualityDocumentId(value)))
             .IsRequired()
             .ValueGeneratedOnAdd();
-        builder.Entity<QualityDocument>().Property(d => d.Code).IsRequired().HasMaxLength(30);
-        builder.Entity<QualityDocument>().HasIndex(d => d.Code).IsUnique();
-        builder.Entity<QualityDocument>().Property(d => d.Title).IsRequired().HasMaxLength(255);
-        builder.Entity<QualityDocument>().Property(d => d.Type).HasConversion<string>().HasMaxLength(30).IsRequired();
-        builder.Entity<QualityDocument>().Property(d => d.Status).HasConversion<string>().HasMaxLength(20).IsRequired();
-        builder.Entity<QualityDocument>().Ignore(d => d.CurrentVersion);
+        builder.Entity<QualityDocument>().Property(e => e.Code).IsRequired().HasMaxLength(30);
+        builder.Entity<QualityDocument>().Property(e => e.Title).IsRequired().HasMaxLength(150);
+        builder.Entity<QualityDocument>().Property(e => e.Description).IsRequired().HasMaxLength(500);
+        builder.Entity<QualityDocument>().Property(e => e.DocumentType).IsRequired().HasMaxLength(60);
+        builder.Entity<QualityDocument>().Property(e => e.FileReference).IsRequired().HasMaxLength(255);
+        builder.Entity<QualityDocument>().Property(e => e.Version).IsRequired().HasMaxLength(20);
+        builder.Entity<QualityDocument>().Property(e => e.OwnerId);
+        builder.Entity<QualityDocument>().Property(e => e.Status).HasConversion<string>().HasMaxLength(24).IsRequired();
+        builder.Entity<QualityDocument>().Property(e => e.ApprovedAt);
+        builder.Entity<QualityDocument>().HasIndex(e => e.Code).IsUnique();
 
-        builder.Entity<DocumentVersion>().HasKey(v => v.Id);
-        builder.Entity<DocumentVersion>().Property(v => v.Id).IsRequired().ValueGeneratedOnAdd();
-        builder.Entity<DocumentVersion>().Property<QualityDocumentId>("QualityDocumentId")
-            .HasConversion(IdConverter(value => new QualityDocumentId(value)))
-            .IsRequired();
-        builder.Entity<DocumentVersion>().Property(v => v.VersionNumber).IsRequired().HasMaxLength(10);
-        builder.Entity<DocumentVersion>().Property(v => v.FileUrl).IsRequired().HasMaxLength(500);
-        builder.Entity<DocumentVersion>().Property(v => v.ChangeReason).IsRequired().HasMaxLength(500);
-        builder.Entity<DocumentVersion>().Property(v => v.AuthorId)
-            .HasConversion(IdConverter(value => new UserId(value)))
-            .IsRequired();
-        builder.Entity<DocumentVersion>().Property(v => v.ApprovalSignatureId)
-            .HasConversion(IdConverter(value => new ElectronicSignatureId(value)));
-
-        builder.Entity<QualityDocument>().HasMany(d => d.Versions)
-            .WithOne()
-            .HasForeignKey("QualityDocumentId")
-            .IsRequired();
-        builder.Entity<QualityDocument>().Navigation(d => d.Versions).UsePropertyAccessMode(PropertyAccessMode.Field);
-    }
-
-    private static void ConfigureMaterialApprovals(ModelBuilder builder)
-    {
-        builder.Entity<MaterialApproval>().HasKey(m => m.Id);
-        builder.Entity<MaterialApproval>().Property(m => m.Id)
-            .HasConversion(IdConverter(value => new MaterialApprovalId(value)))
+        // Deviations
+        builder.Entity<Deviation>().HasKey(e => e.Id);
+        builder.Entity<Deviation>().Property(e => e.Id)
+            .HasConversion(new StronglyTypedIdConverter<DeviationId, int>(id => id.Value, value => new DeviationId(value)))
             .IsRequired()
             .ValueGeneratedOnAdd();
-        builder.Entity<MaterialApproval>().Property(m => m.RawMaterialLotId)
-            .HasConversion(IdConverter(value => new RawMaterialLotId(value)))
-            .IsRequired();
-        builder.Entity<MaterialApproval>().HasIndex(m => m.RawMaterialLotId).IsUnique();
-        builder.Entity<MaterialApproval>().Property(m => m.SampleCode).HasMaxLength(30);
-        builder.Entity<MaterialApproval>().Property(m => m.Status).HasConversion<string>().HasMaxLength(20).IsRequired();
-        builder.Entity<MaterialApproval>().Property(m => m.DecidedBy)
-            .HasConversion(IdConverter(value => new UserId(value)));
-        builder.Entity<MaterialApproval>().Property(m => m.SignatureId)
-            .HasConversion(IdConverter(value => new ElectronicSignatureId(value)));
-        builder.Entity<MaterialApproval>().Property(m => m.Reason).HasMaxLength(500);
-    }
+        builder.Entity<Deviation>().Property(e => e.Code).IsRequired().HasMaxLength(30);
+        builder.Entity<Deviation>().Property(e => e.Title).IsRequired().HasMaxLength(150);
+        builder.Entity<Deviation>().Property(e => e.Description).IsRequired().HasMaxLength(1000);
+        builder.Entity<Deviation>().Property(e => e.Severity).HasConversion<string>().HasMaxLength(24).IsRequired();
+        builder.Entity<Deviation>().Property(e => e.BatchId).IsRequired();
+        builder.Entity<Deviation>().Property(e => e.AssignedTo);
+        builder.Entity<Deviation>().Property(e => e.Status).HasConversion<string>().HasMaxLength(24).IsRequired();
+        builder.Entity<Deviation>().Property(e => e.DetectedAt).IsRequired();
+        builder.Entity<Deviation>().Property(e => e.ClosedAt);
+        builder.Entity<Deviation>().HasIndex(e => e.Code).IsUnique();
+        builder.Entity<Deviation>().HasIndex(e => e.BatchId);
 
-    private static void ConfigureAnalyticalResults(ModelBuilder builder)
-    {
-        builder.Entity<AnalyticalResult>().HasKey(r => r.Id);
-        builder.Entity<AnalyticalResult>().Property(r => r.Id)
-            .HasConversion(IdConverter(value => new AnalyticalResultId(value)))
+        // Evidence
+        builder.Entity<Evidence>().HasKey(e => e.Id);
+        builder.Entity<Evidence>().Property(e => e.Id)
+            .HasConversion(new StronglyTypedIdConverter<EvidenceId, int>(id => id.Value, value => new EvidenceId(value)))
             .IsRequired()
             .ValueGeneratedOnAdd();
-        builder.Entity<AnalyticalResult>().Property(r => r.ProductionBatchId)
-            .HasConversion(IdConverter(value => new ProductionBatchId(value)))
-            .IsRequired();
-        builder.Entity<AnalyticalResult>().HasIndex(r => r.ProductionBatchId);
-        builder.Entity<AnalyticalResult>().Property(r => r.TestName).IsRequired().HasMaxLength(150);
-        builder.Entity<AnalyticalResult>().Property(r => r.Value).HasPrecision(12, 4).IsRequired();
-        builder.Entity<AnalyticalResult>().ComplexProperty(r => r.Specification, specification =>
-        {
-            specification.Property(s => s.Min).HasColumnName("spec_min").HasPrecision(12, 4).IsRequired();
-            specification.Property(s => s.Max).HasColumnName("spec_max").HasPrecision(12, 4).IsRequired();
-            specification.Property(s => s.Unit).HasColumnName("unit").HasMaxLength(10).IsRequired();
-        });
-        builder.Entity<AnalyticalResult>().Property(r => r.OutOfSpecification).IsRequired();
-        builder.Entity<AnalyticalResult>().Property(r => r.AnalystId)
-            .HasConversion(IdConverter(value => new UserId(value)))
-            .IsRequired();
-    }
+        builder.Entity<Evidence>().Property(e => e.Title).IsRequired().HasMaxLength(150);
+        builder.Entity<Evidence>().Property(e => e.Description).IsRequired().HasMaxLength(500);
+        builder.Entity<Evidence>().Property(e => e.Type).HasConversion<string>().HasMaxLength(24).IsRequired();
+        builder.Entity<Evidence>().Property(e => e.FileReference).IsRequired().HasMaxLength(255);
+        builder.Entity<Evidence>().Property(e => e.DeviationId);
+        builder.Entity<Evidence>().Property(e => e.DocumentId);
+        builder.Entity<Evidence>().Property(e => e.UploadedBy);
+        builder.Entity<Evidence>().Property(e => e.Status).HasConversion<string>().HasMaxLength(24).IsRequired();
+        builder.Entity<Evidence>().Property(e => e.UploadedAt).IsRequired();
+        builder.Entity<Evidence>().Property(e => e.VerifiedAt);
+        builder.Entity<Evidence>().HasIndex(e => e.DeviationId);
 
-    private static void ConfigureBatchReviews(ModelBuilder builder)
-    {
-        builder.Entity<BatchReview>().HasKey(b => b.Id);
-        builder.Entity<BatchReview>().Property(b => b.Id)
-            .HasConversion(IdConverter(value => new BatchReviewId(value)))
+        // CapaPlans
+        builder.Entity<CapaPlan>().HasKey(e => e.Id);
+        builder.Entity<CapaPlan>().Property(e => e.Id)
+            .HasConversion(new StronglyTypedIdConverter<CapaPlanId, int>(id => id.Value, value => new CapaPlanId(value)))
             .IsRequired()
             .ValueGeneratedOnAdd();
-        builder.Entity<BatchReview>().Property(b => b.ProductionBatchId)
-            .HasConversion(IdConverter(value => new ProductionBatchId(value)))
-            .IsRequired();
-        builder.Entity<BatchReview>().HasIndex(b => b.ProductionBatchId).IsUnique();
-        builder.Entity<BatchReview>().Property(b => b.Status).HasConversion<string>().HasMaxLength(20).IsRequired();
-        builder.Entity<BatchReview>().Property(b => b.QuarantineStartedAt).IsRequired();
-        builder.Entity<BatchReview>().Property(b => b.SampleCode).HasMaxLength(30);
-        builder.Entity<BatchReview>().Property(b => b.EvaluatedAt);
-        builder.Entity<BatchReview>().Property(b => b.ReleaseBlocked).IsRequired();
-        builder.Entity<BatchReview>().Property(b => b.RejectionReason).HasMaxLength(500);
+        builder.Entity<CapaPlan>().Property(e => e.DeviationId).IsRequired();
+        builder.Entity<CapaPlan>().Property(e => e.Title).IsRequired().HasMaxLength(150);
+        builder.Entity<CapaPlan>().Property(e => e.Description).IsRequired().HasMaxLength(1000);
+        builder.Entity<CapaPlan>().Property(e => e.DueDate).IsRequired();
+        builder.Entity<CapaPlan>().Property(e => e.Responsible).IsRequired().HasMaxLength(100);
+        builder.Entity<CapaPlan>().Property(e => e.Status).HasConversion<string>().HasMaxLength(24).IsRequired();
+        builder.Entity<CapaPlan>().Property(e => e.CompletedAt);
 
-        builder.Entity<EvidenceAttachment>().HasKey(e => e.Id);
-        builder.Entity<EvidenceAttachment>().Property(e => e.Id).IsRequired().ValueGeneratedOnAdd();
-        builder.Entity<EvidenceAttachment>().Property<BatchReviewId>("BatchReviewId")
-            .HasConversion(IdConverter(value => new BatchReviewId(value)))
-            .IsRequired();
-        builder.Entity<EvidenceAttachment>().Property(e => e.FileUrl).IsRequired().HasMaxLength(500);
-        builder.Entity<EvidenceAttachment>().Property(e => e.Description).HasMaxLength(255);
-        builder.Entity<BatchReview>().HasMany(b => b.Evidences)
-            .WithOne()
-            .HasForeignKey("BatchReviewId")
-            .IsRequired();
-        builder.Entity<BatchReview>().Navigation(b => b.Evidences).UsePropertyAccessMode(PropertyAccessMode.Field);
-
-        builder.Entity<ReleaseCertificate>().HasKey(c => c.Id);
-        builder.Entity<ReleaseCertificate>().Property(c => c.Id).IsRequired().ValueGeneratedOnAdd();
-        builder.Entity<ReleaseCertificate>().Property<BatchReviewId>("BatchReviewId")
-            .HasConversion(IdConverter(value => new BatchReviewId(value)))
-            .IsRequired();
-        builder.Entity<ReleaseCertificate>().Property(c => c.CertificateNumber).IsRequired().HasMaxLength(30);
-        builder.Entity<ReleaseCertificate>().HasIndex(c => c.CertificateNumber).IsUnique();
-        builder.Entity<ReleaseCertificate>().Property(c => c.Verdict).HasConversion<string>().HasMaxLength(10)
-            .IsRequired();
-        builder.Entity<ReleaseCertificate>().Property(c => c.SignatureId)
-            .HasConversion(IdConverter(value => new ElectronicSignatureId(value)))
-            .IsRequired();
-        builder.Entity<ReleaseCertificate>().Property(c => c.IssuedAt).IsRequired();
-        builder.Entity<BatchReview>().HasOne(b => b.Certificate)
-            .WithOne()
-            .HasForeignKey<ReleaseCertificate>("BatchReviewId")
-            .IsRequired();
-    }
-
-    private static void ConfigureDeviations(ModelBuilder builder)
-    {
-        builder.Entity<Deviation>().HasKey(d => d.Id);
-        builder.Entity<Deviation>().Property(d => d.Id)
-            .HasConversion(IdConverter(value => new DeviationId(value)))
+        // CapaActions
+        builder.Entity<CapaAction>().HasKey(e => e.Id);
+        builder.Entity<CapaAction>().Property(e => e.Id)
+            .HasConversion(new StronglyTypedIdConverter<CapaActionId, int>(id => id.Value, value => new CapaActionId(value)))
             .IsRequired()
             .ValueGeneratedOnAdd();
-        builder.Entity<Deviation>().Property(d => d.Code).IsRequired().HasMaxLength(30);
-        builder.Entity<Deviation>().HasIndex(d => d.Code).IsUnique();
-        builder.Entity<Deviation>().Property(d => d.ProductionBatchId)
-            .HasConversion(IdConverter(value => new ProductionBatchId(value)))
-            .IsRequired();
-        builder.Entity<Deviation>().HasIndex(d => d.ProductionBatchId);
-        builder.Entity<Deviation>().Property(d => d.Severity).HasConversion<string>().HasMaxLength(10).IsRequired();
-        builder.Entity<Deviation>().Property(d => d.Status).HasConversion<string>().HasMaxLength(20).IsRequired();
-        builder.Entity<Deviation>().Property(d => d.Description).IsRequired();
-        builder.Entity<Deviation>().OwnsOne(d => d.RootCause, rootCause =>
-        {
-            // The owned type shares the table and the key of the deviation
-            rootCause.Property<DeviationId>("DeviationId").HasColumnName("id");
-            rootCause.Property(r => r.Method).HasColumnName("root_cause_method").HasMaxLength(50);
-            rootCause.Property(r => r.Description).HasColumnName("root_cause_description");
-        });
-        builder.Entity<Deviation>().Property(d => d.DetectedAt).IsRequired();
-        builder.Entity<Deviation>().Property(d => d.ClosedAt);
+        builder.Entity<CapaAction>().Property(e => e.CapaPlanId).IsRequired();
+        builder.Entity<CapaAction>().Property(e => e.Title).IsRequired().HasMaxLength(150);
+        builder.Entity<CapaAction>().Property(e => e.Description).IsRequired().HasMaxLength(1000);
+        builder.Entity<CapaAction>().Property(e => e.AssignedTo).IsRequired().HasMaxLength(100);
+        builder.Entity<CapaAction>().Property(e => e.DueDate).IsRequired();
+        builder.Entity<CapaAction>().Property(e => e.Status).HasConversion<string>().HasMaxLength(24).IsRequired();
+        builder.Entity<CapaAction>().Property(e => e.CompletedAt);
+        builder.Entity<CapaAction>().HasIndex(e => e.CapaPlanId);
 
-        builder.Entity<CapaAction>().HasKey(a => a.Id);
-        builder.Entity<CapaAction>().Property(a => a.Id).IsRequired().ValueGeneratedOnAdd();
-        builder.Entity<CapaAction>().Property<DeviationId>("DeviationId")
-            .HasConversion(IdConverter(value => new DeviationId(value)))
-            .IsRequired();
-        builder.Entity<CapaAction>().Property(a => a.Type).HasConversion<string>().HasMaxLength(12).IsRequired();
-        builder.Entity<CapaAction>().Property(a => a.Description).IsRequired().HasMaxLength(500);
-        builder.Entity<CapaAction>().Property(a => a.ResponsibleId)
-            .HasConversion(IdConverter(value => new UserId(value)))
-            .IsRequired();
-        builder.Entity<CapaAction>().Property(a => a.DueDate).IsRequired().HasConversion(DateOnlyConverter).HasColumnType("date");
-        builder.Entity<CapaAction>().Property(a => a.Progress).IsRequired();
-        builder.Entity<CapaAction>().Property(a => a.Status).HasConversion<string>().HasMaxLength(20).IsRequired();
-        builder.Entity<Deviation>().HasMany(d => d.Actions)
-            .WithOne()
-            .HasForeignKey("DeviationId")
-            .IsRequired();
-        builder.Entity<Deviation>().Navigation(d => d.Actions).UsePropertyAccessMode(PropertyAccessMode.Field);
-    }
-
-    private static void ConfigureAudits(ModelBuilder builder)
-    {
-        builder.Entity<Audit>().HasKey(a => a.Id);
-        builder.Entity<Audit>().Property(a => a.Id)
-            .HasConversion(IdConverter(value => new AuditId(value)))
+        // BatchReleases
+        builder.Entity<BatchRelease>().HasKey(e => e.Id);
+        builder.Entity<BatchRelease>().Property(e => e.Id)
+            .HasConversion(new StronglyTypedIdConverter<BatchReleaseId, int>(id => id.Value, value => new BatchReleaseId(value)))
             .IsRequired()
             .ValueGeneratedOnAdd();
-        builder.Entity<Audit>().Property(a => a.Type).HasConversion<string>().HasMaxLength(20).IsRequired();
-        builder.Entity<Audit>().Property(a => a.ScheduledDate).IsRequired().HasConversion(DateOnlyConverter).HasColumnType("date");
-        builder.Entity<Audit>().Property(a => a.Status).HasConversion<string>().HasMaxLength(20).IsRequired();
-        builder.Entity<Audit>().Property(a => a.EvidencePackageUrl).HasMaxLength(500);
+        builder.Entity<BatchRelease>().Property(e => e.BatchId).IsRequired();
+        builder.Entity<BatchRelease>().Property(e => e.BatchCode).IsRequired().HasMaxLength(30);
+        builder.Entity<BatchRelease>().Property(e => e.RequestedBy).IsRequired().HasMaxLength(100);
+        builder.Entity<BatchRelease>().Property(e => e.Status).HasConversion<string>().HasMaxLength(24).IsRequired();
+        builder.Entity<BatchRelease>().Property(e => e.Decision).IsRequired().HasMaxLength(500);
+        builder.Entity<BatchRelease>().Property(e => e.SignatureReference).IsRequired().HasMaxLength(100);
+        builder.Entity<BatchRelease>().Property(e => e.SignedBy).IsRequired().HasMaxLength(100);
+        builder.Entity<BatchRelease>().Property(e => e.SignedAt);
+        builder.Entity<BatchRelease>().HasIndex(e => e.BatchId);
 
-        builder.Entity<AuditFinding>().HasKey(f => f.Id);
-        builder.Entity<AuditFinding>().Property(f => f.Id).IsRequired().ValueGeneratedOnAdd();
-        builder.Entity<AuditFinding>().Property<AuditId>("AuditId")
-            .HasConversion(IdConverter(value => new AuditId(value)))
-            .IsRequired();
-        builder.Entity<AuditFinding>().Property(f => f.Type).HasConversion<string>().HasMaxLength(20).IsRequired();
-        builder.Entity<AuditFinding>().Property(f => f.Description).IsRequired().HasMaxLength(500);
-        builder.Entity<Audit>().HasMany(a => a.Findings)
-            .WithOne()
-            .HasForeignKey("AuditId")
-            .IsRequired();
-        builder.Entity<Audit>().Navigation(a => a.Findings).UsePropertyAccessMode(PropertyAccessMode.Field);
-    }
-
-    private static void ConfigureAuditTrailEntries(ModelBuilder builder)
-    {
-        builder.Entity<AuditTrailEntry>().HasKey(e => e.Id);
-        builder.Entity<AuditTrailEntry>().Property(e => e.Id)
-            .HasConversion(IdConverter(value => new AuditTrailEntryId(value)))
+        // AnalyticalResults
+        builder.Entity<AnalyticalResult>().HasKey(e => e.Id);
+        builder.Entity<AnalyticalResult>().Property(e => e.Id)
+            .HasConversion(new StronglyTypedIdConverter<AnalyticalResultId, int>(id => id.Value, value => new AnalyticalResultId(value)))
             .IsRequired()
             .ValueGeneratedOnAdd();
-        builder.Entity<AuditTrailEntry>().Property(e => e.EntityType).IsRequired().HasMaxLength(100);
-        builder.Entity<AuditTrailEntry>().Property(e => e.EntityId).IsRequired().HasMaxLength(36);
-        builder.Entity<AuditTrailEntry>().HasIndex(e => new { e.EntityType, e.EntityId });
-        builder.Entity<AuditTrailEntry>().Property(e => e.Action).HasConversion<string>().HasMaxLength(20).IsRequired();
-        builder.Entity<AuditTrailEntry>().Property(e => e.OldValue).HasColumnType("json");
-        builder.Entity<AuditTrailEntry>().Property(e => e.NewValue).HasColumnType("json");
-        builder.Entity<AuditTrailEntry>().Property(e => e.ChangedBy)
-            .HasConversion(IdConverter(value => new UserId(value)))
-            .IsRequired();
-        builder.Entity<AuditTrailEntry>().Property(e => e.ChangedAt).IsRequired();
-        builder.Entity<AuditTrailEntry>().Property(e => e.Reason).HasMaxLength(255);
-    }
+        builder.Entity<AnalyticalResult>().Property(e => e.BatchId).IsRequired();
+        builder.Entity<AnalyticalResult>().Property(e => e.TestName).IsRequired().HasMaxLength(100);
+        builder.Entity<AnalyticalResult>().Property(e => e.Parameter).IsRequired().HasMaxLength(100);
+        builder.Entity<AnalyticalResult>().Property(e => e.MeasuredValue).HasPrecision(14, 4).IsRequired();
+        builder.Entity<AnalyticalResult>().Property(e => e.MinimumValue).HasPrecision(14, 4).IsRequired();
+        builder.Entity<AnalyticalResult>().Property(e => e.MaximumValue).HasPrecision(14, 4).IsRequired();
+        builder.Entity<AnalyticalResult>().Property(e => e.Unit).IsRequired().HasMaxLength(20);
+        builder.Entity<AnalyticalResult>().Property(e => e.Status).HasConversion<string>().HasMaxLength(24).IsRequired();
+        builder.Entity<AnalyticalResult>().Property(e => e.ReviewedBy);
+        builder.Entity<AnalyticalResult>().Property(e => e.TestedAt);
+        builder.Entity<AnalyticalResult>().Property(e => e.ReviewedAt);
+        builder.Entity<AnalyticalResult>().HasIndex(e => e.BatchId);
 
-    private static void ConfigureRegulatoryReports(ModelBuilder builder)
-    {
-        builder.Entity<RegulatoryReport>().HasKey(r => r.Id);
-        builder.Entity<RegulatoryReport>().Property(r => r.Id)
-            .HasConversion(IdConverter(value => new RegulatoryReportId(value)))
+        // Audits
+        builder.Entity<Audit>().HasKey(e => e.Id);
+        builder.Entity<Audit>().Property(e => e.Id)
+            .HasConversion(new StronglyTypedIdConverter<AuditId, int>(id => id.Value, value => new AuditId(value)))
             .IsRequired()
             .ValueGeneratedOnAdd();
-        builder.Entity<RegulatoryReport>().Property(r => r.OrganizationId)
-            .HasConversion(IdConverter(value => new OrganizationId(value)))
-            .IsRequired();
-        builder.Entity<RegulatoryReport>().HasIndex(r => r.OrganizationId);
-        builder.Entity<RegulatoryReport>().Property(r => r.Period)
-            .HasConversion(period => period.Value, value => new ReportPeriod(value))
-            .HasColumnType("char(7)")
-            .IsRequired();
-        builder.Entity<RegulatoryReport>().Property(r => r.FileUrl).IsRequired().HasMaxLength(500);
-        builder.Entity<RegulatoryReport>().Property(r => r.GeneratedAt).IsRequired();
+        builder.Entity<Audit>().Property(e => e.Code).IsRequired().HasMaxLength(30);
+        builder.Entity<Audit>().Property(e => e.Title).IsRequired().HasMaxLength(150);
+        builder.Entity<Audit>().Property(e => e.Scope).IsRequired().HasMaxLength(255);
+        builder.Entity<Audit>().Property(e => e.AuditType).IsRequired().HasMaxLength(60);
+        builder.Entity<Audit>().Property(e => e.AuditorId);
+        builder.Entity<Audit>().Property(e => e.PlannedDate);
+        builder.Entity<Audit>().Property(e => e.Status).HasConversion<string>().HasMaxLength(24).IsRequired();
+        builder.Entity<Audit>().Property(e => e.StartedAt);
+        builder.Entity<Audit>().Property(e => e.CompletedAt);
+        builder.Entity<Audit>().HasIndex(e => e.Code).IsUnique();
+
+        // AuditFindings
+        builder.Entity<AuditFinding>().HasKey(e => e.Id);
+        builder.Entity<AuditFinding>().Property(e => e.Id)
+            .HasConversion(new StronglyTypedIdConverter<AuditFindingId, int>(id => id.Value, value => new AuditFindingId(value)))
+            .IsRequired()
+            .ValueGeneratedOnAdd();
+        builder.Entity<AuditFinding>().Property(e => e.AuditId).IsRequired();
+        builder.Entity<AuditFinding>().Property(e => e.Title).IsRequired().HasMaxLength(150);
+        builder.Entity<AuditFinding>().Property(e => e.Description).IsRequired().HasMaxLength(1000);
+        builder.Entity<AuditFinding>().Property(e => e.Severity).HasConversion<string>().HasMaxLength(24).IsRequired();
+        builder.Entity<AuditFinding>().Property(e => e.RelatedDeviationId);
+        builder.Entity<AuditFinding>().Property(e => e.IdentifiedAt).IsRequired();
+        builder.Entity<AuditFinding>().HasIndex(e => e.AuditId);
+
+        // RegulatoryReports
+        builder.Entity<RegulatoryReport>().HasKey(e => e.Id);
+        builder.Entity<RegulatoryReport>().Property(e => e.Id)
+            .HasConversion(new StronglyTypedIdConverter<RegulatoryReportId, int>(id => id.Value, value => new RegulatoryReportId(value)))
+            .IsRequired()
+            .ValueGeneratedOnAdd();
+        builder.Entity<RegulatoryReport>().Property(e => e.Code).IsRequired().HasMaxLength(30);
+        builder.Entity<RegulatoryReport>().Property(e => e.Title).IsRequired().HasMaxLength(150);
+        builder.Entity<RegulatoryReport>().Property(e => e.Description).IsRequired().HasMaxLength(1000);
+        builder.Entity<RegulatoryReport>().Property(e => e.RegulatoryAuthority).IsRequired().HasMaxLength(100);
+        builder.Entity<RegulatoryReport>().Property(e => e.FileReference).IsRequired().HasMaxLength(255);
+        builder.Entity<RegulatoryReport>().Property(e => e.DueDate);
+        builder.Entity<RegulatoryReport>().Property(e => e.PreparedBy);
+        builder.Entity<RegulatoryReport>().Property(e => e.Status).HasConversion<string>().HasMaxLength(24).IsRequired();
+        builder.Entity<RegulatoryReport>().Property(e => e.SubmittedAt);
+        builder.Entity<RegulatoryReport>().HasIndex(e => e.Code).IsUnique();
+
+        // CollaborationTasks
+        builder.Entity<CollaborationTask>().HasKey(e => e.Id);
+        builder.Entity<CollaborationTask>().Property(e => e.Id)
+            .HasConversion(new StronglyTypedIdConverter<CollaborationTaskId, int>(id => id.Value, value => new CollaborationTaskId(value)))
+            .IsRequired()
+            .ValueGeneratedOnAdd();
+        builder.Entity<CollaborationTask>().Property(e => e.Title).IsRequired().HasMaxLength(150);
+        builder.Entity<CollaborationTask>().Property(e => e.Description).IsRequired().HasMaxLength(1000);
+        builder.Entity<CollaborationTask>().Property(e => e.AssignedTo);
+        builder.Entity<CollaborationTask>().Property(e => e.CreatedBy);
+        builder.Entity<CollaborationTask>().Property(e => e.RelatedDeviationId);
+        builder.Entity<CollaborationTask>().Property(e => e.DueDate);
+        builder.Entity<CollaborationTask>().Property(e => e.Status).HasConversion<string>().HasMaxLength(24).IsRequired();
+        builder.Entity<CollaborationTask>().Property(e => e.CompletedAt);
+
+        // TaskComments
+        builder.Entity<TaskComment>().HasKey(e => e.Id);
+        builder.Entity<TaskComment>().Property(e => e.Id)
+            .HasConversion(new StronglyTypedIdConverter<TaskCommentId, int>(id => id.Value, value => new TaskCommentId(value)))
+            .IsRequired()
+            .ValueGeneratedOnAdd();
+        builder.Entity<TaskComment>().Property(e => e.TaskId).IsRequired();
+        builder.Entity<TaskComment>().Property(e => e.AuthorId).IsRequired();
+        builder.Entity<TaskComment>().Property(e => e.Content).IsRequired().HasMaxLength(1000);
+        builder.Entity<TaskComment>().HasIndex(e => e.TaskId);
+
+        // TraceabilityGaps
+        builder.Entity<TraceabilityGap>().HasKey(e => e.Id);
+        builder.Entity<TraceabilityGap>().Property(e => e.Id)
+            .HasConversion(new StronglyTypedIdConverter<TraceabilityGapId, int>(id => id.Value, value => new TraceabilityGapId(value)))
+            .IsRequired()
+            .ValueGeneratedOnAdd();
+        builder.Entity<TraceabilityGap>().Property(e => e.BatchId).IsRequired();
+        builder.Entity<TraceabilityGap>().Property(e => e.Description).IsRequired().HasMaxLength(1000);
+        builder.Entity<TraceabilityGap>().Property(e => e.MissingReference).IsRequired().HasMaxLength(100);
+        builder.Entity<TraceabilityGap>().Property(e => e.AffectedProcess).IsRequired().HasMaxLength(100);
+        builder.Entity<TraceabilityGap>().Property(e => e.Status).HasConversion<string>().HasMaxLength(24).IsRequired();
+        builder.Entity<TraceabilityGap>().Property(e => e.ReviewedBy);
+        builder.Entity<TraceabilityGap>().Property(e => e.DetectedAt).IsRequired();
+        builder.Entity<TraceabilityGap>().Property(e => e.ResolvedAt);
+        builder.Entity<TraceabilityGap>().HasIndex(e => e.BatchId);
+
+        // AuditEvents
+        builder.Entity<AuditEvent>().HasKey(e => e.Id);
+        builder.Entity<AuditEvent>().Property(e => e.Id)
+            .HasConversion(new StronglyTypedIdConverter<AuditEventId, int>(id => id.Value, value => new AuditEventId(value)))
+            .IsRequired()
+            .ValueGeneratedOnAdd();
+        builder.Entity<AuditEvent>().Property(e => e.AggregateType).IsRequired().HasMaxLength(60);
+        builder.Entity<AuditEvent>().Property(e => e.AggregateId).IsRequired();
+        builder.Entity<AuditEvent>().Property(e => e.EventType).IsRequired().HasMaxLength(60);
+        builder.Entity<AuditEvent>().Property(e => e.Description).IsRequired().HasMaxLength(500);
+        builder.Entity<AuditEvent>().Property(e => e.PerformedBy).IsRequired().HasMaxLength(100);
+        builder.Entity<AuditEvent>().Property(e => e.OccurredAt).IsRequired();
+        builder.Entity<AuditEvent>().HasIndex(e => e.AggregateType);
+        builder.Entity<AuditEvent>().HasIndex(e => e.AggregateId);
     }
 }

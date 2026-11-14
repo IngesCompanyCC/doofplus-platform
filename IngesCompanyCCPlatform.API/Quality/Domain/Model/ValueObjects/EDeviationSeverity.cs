@@ -1,11 +1,15 @@
-namespace IngesCompanyCCPlatform.API.Quality.Domain.Model.ValueObjects;
+﻿namespace IngesCompanyCCPlatform.API.Quality.Domain.Model.ValueObjects;
 
 /// <summary>
-///     Represents the severity of a deviation.
+///     How serious a deviation is.
 /// </summary>
+/// <remarks>
+///     Stored as text in PascalCase, like the other enums of the project.
+/// </remarks>
 public enum EDeviationSeverity
 {
-    Minor,
-    Major,
+    Low,
+    Medium,
+    High,
     Critical
 }

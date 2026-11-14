@@ -1,4 +1,4 @@
-using IngesCompanyCCPlatform.API.Quality.Domain.Model.Aggregates;
+﻿using IngesCompanyCCPlatform.API.Quality.Domain.Model.Aggregates;
 using IngesCompanyCCPlatform.API.Quality.Domain.Model.Commands;
 using IngesCompanyCCPlatform.API.Quality.Domain.Model.ValueObjects;
 using IngesCompanyCCPlatform.API.Quality.Interfaces.Rest.Resources;
@@ -6,61 +6,52 @@ using IngesCompanyCCPlatform.API.Quality.Interfaces.Rest.Resources;
 namespace IngesCompanyCCPlatform.API.Quality.Interfaces.Rest.Transform;
 
 /// <summary>
-///     Converts a <see cref="Deviation" /> aggregate into a <see cref="DeviationResource" />.
+///     Builds the commands of <c>Deviation</c> from the resources.
 /// </summary>
-public static class DeviationResourceFromEntityAssembler
+public static class DeviationCommandFromResourceAssembler
 {
-    public static DeviationResource ToResourceFromEntity(Deviation entity)
+    private const string SeverityInvalidMessageKey = "quality.deviation.error.severity.invalid";
+
+    /// <summary>
+    ///     Builds the command to create a deviation.
+    /// </summary>
+    /// <param name="resource">The data sent by the client.</param>
+    /// <returns>The command.</returns>
+    /// <exception cref="ArgumentException">Thrown when an enum value is not valid.</exception>
+    public static CreateDeviationCommand ToCommandFromResource(CreateDeviationResource resource)
     {
-        var today = DateOnly.FromDateTime(DateTime.UtcNow);
-        return new DeviationResource(
-            entity.Id,
-            entity.Code,
-            entity.ProductionBatchId,
-            entity.Severity.ToString(),
-            entity.Status.ToString(),
-            entity.Description,
-            entity.RootCause?.Method,
-            entity.RootCause?.Description,
-            entity.DetectedAt,
-            entity.ClosedAt,
-            entity.Actions.OrderBy(action => action.Id).Select(action => new CapaActionResource(
-                action.Id, action.Type.ToString(), action.Description, action.ResponsibleId, action.DueDate,
-                action.Progress, action.Status.ToString(), action.IsOverdue(today))));
+        return new CreateDeviationCommand(
+            resource.Code,
+            resource.Title,
+            resource.Description,
+            EnumParser.Parse<EDeviationSeverity>(resource.Severity, SeverityInvalidMessageKey),
+            resource.BatchId,
+            resource.AssignedTo);
     }
 }
 
 /// <summary>
-///     Converts the request resources of the deviations into commands.
+///     Builds the resource of a deviation.
 /// </summary>
-public static class DeviationCommandFromResourceAssembler
+public static class DeviationResourceFromEntityAssembler
 {
-    public static RegisterDeviationCommand ToCommandFromResource(RegisterDeviationResource resource)
+    /// <summary>
+    ///     Builds the resource from the aggregate.
+    /// </summary>
+    /// <param name="entity">The deviation.</param>
+    /// <returns>The resource.</returns>
+    public static DeviationResource ToResourceFromEntity(Deviation entity)
     {
-        return new RegisterDeviationCommand(resource.Code, new ProductionBatchId(resource.ProductionBatchId),
-            QualityEnumParser.Parse<EDeviationSeverity>(resource.Severity, "severity"), resource.Description);
-    }
-
-    public static ClassifyDeviationCommand ToCommandFromResource(int deviationId, ClassifyDeviationResource resource)
-    {
-        return new ClassifyDeviationCommand(deviationId,
-            QualityEnumParser.Parse<EDeviationSeverity>(resource.Severity, "severity"));
-    }
-
-    public static RegisterRootCauseCommand ToCommandFromResource(int deviationId, RegisterRootCauseResource resource)
-    {
-        return new RegisterRootCauseCommand(deviationId, new RootCause(resource.Method, resource.Description));
-    }
-
-    public static AddCapaActionCommand ToCommandFromResource(int deviationId, AddCapaActionResource resource)
-    {
-        return new AddCapaActionCommand(deviationId, QualityEnumParser.Parse<ECapaType>(resource.Type, "CAPA type"),
-            resource.Description, new UserId(resource.ResponsibleId), resource.DueDate);
-    }
-
-    public static UpdateCapaActionProgressCommand ToCommandFromResource(int deviationId, int capaActionId,
-        UpdateCapaActionProgressResource resource)
-    {
-        return new UpdateCapaActionProgressCommand(deviationId, capaActionId, resource.Progress);
+        return new DeviationResource(
+            entity.Id.Value,
+            entity.Code,
+            entity.Title,
+            entity.Description,
+            entity.Severity.ToString(),
+            entity.BatchId,
+            entity.AssignedTo,
+            entity.Status.ToString(),
+            DateTime.SpecifyKind(entity.DetectedAt, DateTimeKind.Utc),
+            entity.ClosedAt is null ? null : DateTime.SpecifyKind(entity.ClosedAt.Value, DateTimeKind.Utc));
     }
 }

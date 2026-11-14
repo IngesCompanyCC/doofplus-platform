@@ -1,128 +1,119 @@
-using System.Globalization;
-using IngesCompanyCCPlatform.API.Quality.Domain.Model.Commands;
-using IngesCompanyCCPlatform.API.Quality.Domain.Model.Entities;
+﻿using IngesCompanyCCPlatform.API.Quality.Domain.Model.Commands;
 using IngesCompanyCCPlatform.API.Quality.Domain.Model.ValueObjects;
 using IngesCompanyCCPlatform.API.Shared.Domain.Model.Aggregates.Internal;
 
 namespace IngesCompanyCCPlatform.API.Quality.Domain.Model.Aggregates;
 
 /// <summary>
-///     Represents the QualityDocument aggregate root within the Quality &amp; Compliance bounded context.
+///     A controlled document of the quality system, for example an SOP.
 /// </summary>
-/// <remarks>
-///     A controlled document (SOP, protocol or specification) keeps all its revisions. A revision goes from
-///     draft to review and is approved with an electronic signature by someone who did not write it.
-/// </remarks>
 public partial class QualityDocument : AggregateRoot
 {
-    private const string InitialVersionNumber = "1.0";
-    private const string InitialChangeReason = "Initial version";
-
-    private readonly List<DocumentVersion> _versions = [];
+    private const string CodeNotBlankMessageKey = "quality.qualityDocument.error.code.notBlank";
+    private const string TitleNotBlankMessageKey = "quality.qualityDocument.error.title.notBlank";
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="QualityDocument" /> aggregate. Used by Entity Framework Core.
+    ///     Constructor used by Entity Framework Core.
     /// </summary>
     protected QualityDocument()
     {
         Code = string.Empty;
         Title = string.Empty;
+        Description = string.Empty;
+        DocumentType = string.Empty;
+        FileReference = string.Empty;
+        Version = string.Empty;
     }
 
     /// <summary>
-    ///     Initializes a new quality document in draft with its first version.
+    ///     Creates the quality document from its command.
     /// </summary>
-    /// <param name="command">The <see cref="CreateQualityDocumentCommand" /> with the document data.</param>
+    /// <param name="command">The data of the quality document.</param>
+    /// <exception cref="ArgumentException">Thrown when a required value is blank.</exception>
     public QualityDocument(CreateQualityDocumentCommand command) : this()
     {
-        ArgumentException.ThrowIfNullOrWhiteSpace(command.Code);
-        ArgumentException.ThrowIfNullOrWhiteSpace(command.Title);
-        Code = command.Code;
-        Title = command.Title;
-        Type = command.Type;
-        Status = EDocumentStatus.Draft;
-        _versions.Add(new DocumentVersion(InitialVersionNumber, command.FileUrl, InitialChangeReason, command.AuthorId));
+        if (string.IsNullOrWhiteSpace(command.Code)) throw new ArgumentException(CodeNotBlankMessageKey);
+        Code = command.Code.Trim();
+        if (string.IsNullOrWhiteSpace(command.Title)) throw new ArgumentException(TitleNotBlankMessageKey);
+        Title = command.Title.Trim();
+        Description = command.Description?.Trim() ?? string.Empty;
+        DocumentType = command.DocumentType?.Trim() ?? string.Empty;
+        FileReference = command.FileReference?.Trim() ?? string.Empty;
+        Version = command.Version?.Trim() ?? string.Empty;
+        OwnerId = command.OwnerId;
+        Status = EQualityDocumentStatus.Draft;
     }
 
+    /// <summary>
+    ///     The id of the quality document.
+    /// </summary>
     public QualityDocumentId Id { get; }
 
     /// <summary>
-    ///     Gets the unique code of the document, for example <c>SOP-QA-014</c>.
+    ///     The business code, for example SOP-QC-014.
     /// </summary>
     public string Code { get; private set; }
-
+    /// <summary>
+    ///     The title of the document.
+    /// </summary>
     public string Title { get; private set; }
-    public EDocumentType Type { get; private set; }
-    public EDocumentStatus Status { get; private set; }
+    /// <summary>
+    ///     What the document covers.
+    /// </summary>
+    public string Description { get; private set; }
+    /// <summary>
+    ///     The kind of document, for example SOP or specification.
+    /// </summary>
+    public string DocumentType { get; private set; }
+    /// <summary>
+    ///     Where the file of the document is.
+    /// </summary>
+    public string FileReference { get; private set; }
+    /// <summary>
+    ///     The version of the document.
+    /// </summary>
+    public string Version { get; private set; }
+    /// <summary>
+    ///     The id of the user who owns the document.
+    /// </summary>
+    public int? OwnerId { get; private set; }
+    /// <summary>
+    ///     Where the document is.
+    /// </summary>
+    public EQualityDocumentStatus Status { get; private set; }
+    /// <summary>
+    ///     When the document was approved (UTC).
+    /// </summary>
+    public DateTime? ApprovedAt { get; private set; }
 
     /// <summary>
-    ///     Gets the revisions of the document, oldest first.
+    ///     Sends a draft to review.
     /// </summary>
-    public IReadOnlyCollection<DocumentVersion> Versions => _versions.AsReadOnly();
-
-    /// <summary>
-    ///     Gets the latest revision of the document.
-    /// </summary>
-    public DocumentVersion CurrentVersion =>
-        _versions.MaxBy(version => decimal.Parse(version.VersionNumber, CultureInfo.InvariantCulture))!;
-
-    /// <summary>
-    ///     Sends the current revision to review.
-    /// </summary>
-    public void SubmitForReview()
+    public bool SubmitForReview()
     {
-        if (Status != EDocumentStatus.Draft)
-            throw new InvalidOperationException("Only a draft document can be submitted for review.");
-        Status = EDocumentStatus.InReview;
+        if (Status != EQualityDocumentStatus.Draft) return false;
+        Status = EQualityDocumentStatus.UnderReview;
+        return true;
     }
 
     /// <summary>
-    ///     Approves the current revision. The author of the revision cannot approve it (self-approval).
+    ///     Approves a document under review.
     /// </summary>
-    /// <param name="approverId">The user that approves the revision.</param>
-    /// <param name="signatureId">The electronic signature registered in IAM.</param>
-    public void Approve(UserId approverId, ElectronicSignatureId signatureId)
+    public bool Approve()
     {
-        if (Status != EDocumentStatus.InReview)
-            throw new InvalidOperationException("Only a document in review can be approved.");
-        if (CurrentVersion.AuthorId == approverId)
-            throw new InvalidOperationException("The author of a revision cannot approve it.");
-        CurrentVersion.Approve(signatureId);
-        Status = EDocumentStatus.Approved;
+        if (Status != EQualityDocumentStatus.UnderReview) return false;
+        Status = EQualityDocumentStatus.Approved;
+        ApprovedAt = DateTime.UtcNow;
+        return true;
     }
 
     /// <summary>
-    ///     Sends a document in review back to draft.
+    ///     Marks an approved document as obsolete.
     /// </summary>
-    /// <param name="reason">Why the revision was rejected.</param>
-    public void Reject(string reason)
+    public bool MarkObsolete()
     {
-        ArgumentException.ThrowIfNullOrWhiteSpace(reason);
-        if (Status != EDocumentStatus.InReview)
-            throw new InvalidOperationException("Only a document in review can be rejected.");
-        Status = EDocumentStatus.Draft;
-    }
-
-    /// <summary>
-    ///     Adds a new revision to an approved document. The document goes back to draft.
-    /// </summary>
-    /// <param name="fileUrl">The URL of the file of the new revision.</param>
-    /// <param name="changeReason">Why the revision was written.</param>
-    /// <param name="authorId">The user that wrote the revision.</param>
-    /// <returns>The new <see cref="DocumentVersion" />.</returns>
-    public DocumentVersion PublishNewVersion(string fileUrl, string changeReason, UserId authorId)
-    {
-        if (Status != EDocumentStatus.Approved)
-            throw new InvalidOperationException("A new version can only be published from an approved document.");
-        var version = new DocumentVersion(NextVersionNumber(), fileUrl, changeReason, authorId);
-        _versions.Add(version);
-        Status = EDocumentStatus.Draft;
-        return version;
-    }
-
-    private string NextVersionNumber()
-    {
-        var current = decimal.Parse(CurrentVersion.VersionNumber, CultureInfo.InvariantCulture);
-        return (current + 0.1m).ToString("0.0", CultureInfo.InvariantCulture);
+        if (Status != EQualityDocumentStatus.Approved) return false;
+        Status = EQualityDocumentStatus.Obsolete;
+        return true;
     }
 }

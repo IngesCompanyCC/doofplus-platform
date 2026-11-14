@@ -1,6 +1,16 @@
-namespace IngesCompanyCCPlatform.API.Quality.Interfaces.Rest.Resources;
+﻿namespace IngesCompanyCCPlatform.API.Quality.Interfaces.Rest.Resources;
 
 /// <summary>
-///     Response resource representing a quality document with its versions.
+///     A quality document, as the API returns it.
 /// </summary>
-public record QualityDocumentResource(int Id, string Code, string Title, string Type, string Status, string CurrentVersion, IEnumerable<DocumentVersionResource> Versions);
+public record QualityDocumentResource(
+    int Id,
+    string Code,
+    string Title,
+    string Description,
+    string DocumentType,
+    string FileReference,
+    string Version,
+    int? OwnerId,
+    string Status,
+    DateTime? ApprovedAt);

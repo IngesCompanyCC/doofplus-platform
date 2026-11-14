@@ -1,93 +1,117 @@
-using IngesCompanyCCPlatform.API.Quality.Domain.Model.Commands;
-using IngesCompanyCCPlatform.API.Quality.Domain.Model.Entities;
+﻿using IngesCompanyCCPlatform.API.Quality.Domain.Model.Commands;
 using IngesCompanyCCPlatform.API.Quality.Domain.Model.ValueObjects;
 using IngesCompanyCCPlatform.API.Shared.Domain.Model.Aggregates.Internal;
 
 namespace IngesCompanyCCPlatform.API.Quality.Domain.Model.Aggregates;
 
 /// <summary>
-///     Represents the Audit aggregate root within the Quality &amp; Compliance bounded context.
+///     An internal or external audit of the quality system.
 /// </summary>
-/// <remarks>
-///     An internal or regulatory audit is scheduled, started, records its findings and observations,
-///     receives the evidence package and is closed.
-/// </remarks>
 public partial class Audit : AggregateRoot
 {
-    private readonly List<AuditFinding> _findings = [];
+    private const string CodeNotBlankMessageKey = "quality.audit.error.code.notBlank";
+    private const string TitleNotBlankMessageKey = "quality.audit.error.title.notBlank";
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="Audit" /> aggregate. Used by Entity Framework Core.
+    ///     Constructor used by Entity Framework Core.
     /// </summary>
     protected Audit()
     {
+        Code = string.Empty;
+        Title = string.Empty;
+        Scope = string.Empty;
+        AuditType = string.Empty;
     }
 
     /// <summary>
-    ///     Initializes a scheduled audit.
+    ///     Creates the audit from its command.
     /// </summary>
-    /// <param name="command">The <see cref="ScheduleAuditCommand" /> with the audit data.</param>
-    public Audit(ScheduleAuditCommand command) : this()
+    /// <param name="command">The data of the audit.</param>
+    /// <exception cref="ArgumentException">Thrown when a required value is blank.</exception>
+    public Audit(CreateAuditCommand command) : this()
     {
-        Type = command.Type;
-        ScheduledDate = command.ScheduledDate;
-        Status = EAuditStatus.Scheduled;
+        if (string.IsNullOrWhiteSpace(command.Code)) throw new ArgumentException(CodeNotBlankMessageKey);
+        Code = command.Code.Trim();
+        if (string.IsNullOrWhiteSpace(command.Title)) throw new ArgumentException(TitleNotBlankMessageKey);
+        Title = command.Title.Trim();
+        Scope = command.Scope?.Trim() ?? string.Empty;
+        AuditType = command.AuditType?.Trim() ?? string.Empty;
+        AuditorId = command.AuditorId;
+        PlannedDate = command.PlannedDate;
+        Status = EAuditStatus.Planned;
     }
 
+    /// <summary>
+    ///     The id of the audit.
+    /// </summary>
     public AuditId Id { get; }
-    public EAuditType Type { get; private set; }
-    public DateOnly ScheduledDate { get; private set; }
+
+    /// <summary>
+    ///     The business code, for example AUD-2026-03.
+    /// </summary>
+    public string Code { get; private set; }
+    /// <summary>
+    ///     The title of the audit.
+    /// </summary>
+    public string Title { get; private set; }
+    /// <summary>
+    ///     What the audit covers.
+    /// </summary>
+    public string Scope { get; private set; }
+    /// <summary>
+    ///     The kind of audit, for example internal.
+    /// </summary>
+    public string AuditType { get; private set; }
+    /// <summary>
+    ///     The id of the auditor.
+    /// </summary>
+    public int? AuditorId { get; private set; }
+    /// <summary>
+    ///     When the audit is planned.
+    /// </summary>
+    public DateOnly? PlannedDate { get; private set; }
+    /// <summary>
+    ///     Where the audit is.
+    /// </summary>
     public EAuditStatus Status { get; private set; }
-    public string? EvidencePackageUrl { get; private set; }
-    public IReadOnlyCollection<AuditFinding> Findings => _findings.AsReadOnly();
+    /// <summary>
+    ///     When the audit started (UTC).
+    /// </summary>
+    public DateTime? StartedAt { get; private set; }
+    /// <summary>
+    ///     When the audit was completed (UTC).
+    /// </summary>
+    public DateTime? CompletedAt { get; private set; }
 
     /// <summary>
-    ///     Starts a scheduled audit.
+    ///     Starts a planned audit.
     /// </summary>
-    public void Start()
+    public bool Start()
     {
-        if (Status != EAuditStatus.Scheduled)
-            throw new InvalidOperationException("Only a scheduled audit can be started.");
+        if (Status != EAuditStatus.Planned) return false;
         Status = EAuditStatus.InProgress;
+        StartedAt = DateTime.UtcNow;
+        return true;
     }
 
     /// <summary>
-    ///     Records a finding or an observation.
+    ///     Completes an audit in progress.
     /// </summary>
-    /// <param name="type">Whether it is a finding or an observation.</param>
-    /// <param name="description">What the auditor found.</param>
-    /// <returns>The new <see cref="AuditFinding" />.</returns>
-    public AuditFinding RegisterFinding(EFindingType type, string description)
+    public bool Complete()
     {
-        EnsureInProgress();
-        var finding = new AuditFinding(type, description);
-        _findings.Add(finding);
-        return finding;
+        if (Status != EAuditStatus.InProgress) return false;
+        Status = EAuditStatus.Completed;
+        CompletedAt = DateTime.UtcNow;
+        return true;
     }
 
     /// <summary>
-    ///     Attaches the evidence package delivered to the auditor.
+    ///     Cancels an audit that is not completed.
     /// </summary>
-    /// <param name="fileUrl">The URL of the evidence package.</param>
-    public void AttachEvidencePackage(string fileUrl)
+    public bool Cancel()
     {
-        ArgumentException.ThrowIfNullOrWhiteSpace(fileUrl);
-        EnsureInProgress();
-        EvidencePackageUrl = fileUrl;
-    }
-
-    /// <summary>
-    ///     Closes the audit.
-    /// </summary>
-    public void Close()
-    {
-        EnsureInProgress();
-        Status = EAuditStatus.Closed;
-    }
-
-    private void EnsureInProgress()
-    {
-        if (Status != EAuditStatus.InProgress)
-            throw new InvalidOperationException("The audit must be in progress.");
+        if (Status == EAuditStatus.Completed) return false;
+        Status = EAuditStatus.Cancelled;
+        return true;
     }
 }

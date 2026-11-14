@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
       <data name="GenericError" xml:space="preserve">
     <value>Ocurrió un error.</value>
@@ -149,5 +149,65 @@
   </data>
   <data name="SubscriptionsError.PaymentGatewayUnavailable" xml:space="preserve">
     <value>Pasarela de pagos no disponible</value>
+  </data>
+  <data name="QualityError.QualityDocumentNotFound" xml:space="preserve">
+    <value>Registro de documento de calidad no encontrado</value>
+  </data>
+  <data name="QualityError.DuplicateQualityDocumentCode" xml:space="preserve">
+    <value>Código de documento de calidad duplicado</value>
+  </data>
+  <data name="QualityError.DeviationNotFound" xml:space="preserve">
+    <value>Registro de desviación no encontrado</value>
+  </data>
+  <data name="QualityError.DuplicateDeviationCode" xml:space="preserve">
+    <value>Código de desviación duplicado</value>
+  </data>
+  <data name="QualityError.EvidenceNotFound" xml:space="preserve">
+    <value>Registro de evidencia no encontrado</value>
+  </data>
+  <data name="QualityError.CapaPlanNotFound" xml:space="preserve">
+    <value>Registro de plan CAPA no encontrado</value>
+  </data>
+  <data name="QualityError.CapaActionNotFound" xml:space="preserve">
+    <value>Registro de acción CAPA no encontrado</value>
+  </data>
+  <data name="QualityError.BatchReleaseNotFound" xml:space="preserve">
+    <value>Registro de liberación de lote no encontrado</value>
+  </data>
+  <data name="QualityError.BatchReleaseAlreadyRequested" xml:space="preserve">
+    <value>Liberación de lote ya solicitada</value>
+  </data>
+  <data name="QualityError.BatchReleaseStateConflict" xml:space="preserve">
+    <value>Conflicto de estado de la liberación de lote</value>
+  </data>
+  <data name="QualityError.AnalyticalResultNotFound" xml:space="preserve">
+    <value>Registro de resultado analítico no encontrado</value>
+  </data>
+  <data name="QualityError.AuditNotFound" xml:space="preserve">
+    <value>Registro de auditoría no encontrado</value>
+  </data>
+  <data name="QualityError.DuplicateAuditCode" xml:space="preserve">
+    <value>Código de auditoría duplicado</value>
+  </data>
+  <data name="QualityError.AuditFindingNotFound" xml:space="preserve">
+    <value>Registro de hallazgo de auditoría no encontrado</value>
+  </data>
+  <data name="QualityError.RegulatoryReportNotFound" xml:space="preserve">
+    <value>Registro de reporte regulatorio no encontrado</value>
+  </data>
+  <data name="QualityError.DuplicateRegulatoryReportCode" xml:space="preserve">
+    <value>Código de reporte regulatorio duplicado</value>
+  </data>
+  <data name="QualityError.CollaborationTaskNotFound" xml:space="preserve">
+    <value>Registro de tarea de colaboración no encontrado</value>
+  </data>
+  <data name="QualityError.TaskCommentNotFound" xml:space="preserve">
+    <value>Registro de comentario no encontrado</value>
+  </data>
+  <data name="QualityError.TraceabilityGapNotFound" xml:space="preserve">
+    <value>Registro de brecha de trazabilidad no encontrado</value>
+  </data>
+  <data name="QualityError.AuditEventNotFound" xml:space="preserve">
+    <value>Registro de evento de auditoría no encontrado</value>
   </data>
 </root>

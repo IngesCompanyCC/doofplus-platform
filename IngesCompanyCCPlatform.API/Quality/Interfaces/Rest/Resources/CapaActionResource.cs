@@ -1,6 +1,14 @@
-namespace IngesCompanyCCPlatform.API.Quality.Interfaces.Rest.Resources;
+﻿namespace IngesCompanyCCPlatform.API.Quality.Interfaces.Rest.Resources;
 
 /// <summary>
-///     Response resource representing a CAPA action.
+///     A capa action, as the API returns it.
 /// </summary>
-public record CapaActionResource(int Id, string Type, string Description, int ResponsibleId, DateOnly DueDate, int Progress, string Status, bool IsOverdue);
+public record CapaActionResource(
+    int Id,
+    int CapaPlanId,
+    string Title,
+    string Description,
+    string AssignedTo,
+    DateOnly DueDate,
+    string Status,
+    DateTime? CompletedAt);

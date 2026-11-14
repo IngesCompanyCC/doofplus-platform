@@ -1,6 +1,13 @@
-namespace IngesCompanyCCPlatform.API.Quality.Interfaces.Rest.Resources;
+﻿namespace IngesCompanyCCPlatform.API.Quality.Interfaces.Rest.Resources;
 
 /// <summary>
-///     Response resource representing a finding or an observation of an audit.
+///     A audit finding, as the API returns it.
 /// </summary>
-public record AuditFindingResource(int Id, string Type, string Description);
+public record AuditFindingResource(
+    int Id,
+    int AuditId,
+    string Title,
+    string Description,
+    string Severity,
+    int? RelatedDeviationId,
+    DateTime IdentifiedAt);

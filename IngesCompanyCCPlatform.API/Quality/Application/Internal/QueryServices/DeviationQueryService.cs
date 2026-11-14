@@ -1,4 +1,4 @@
-using IngesCompanyCCPlatform.API.Quality.Application.QueryServices;
+﻿using IngesCompanyCCPlatform.API.Quality.Application.QueryServices;
 using IngesCompanyCCPlatform.API.Quality.Domain.Model.Aggregates;
 using IngesCompanyCCPlatform.API.Quality.Domain.Model.Queries;
 using IngesCompanyCCPlatform.API.Quality.Domain.Repositories;
@@ -6,7 +6,7 @@ using IngesCompanyCCPlatform.API.Quality.Domain.Repositories;
 namespace IngesCompanyCCPlatform.API.Quality.Application.Internal.QueryServices;
 
 /// <summary>
-///     Implements the deviation query service of the Quality &amp; Compliance bounded context.
+///     Query service of <see cref="Deviation" />.
 /// </summary>
 public class DeviationQueryService(IDeviationRepository deviationRepository) : IDeviationQueryService
 {
@@ -21,11 +21,9 @@ public class DeviationQueryService(IDeviationRepository deviationRepository) : I
     {
         return await deviationRepository.FindByIdAsNoTrackingAsync(query.DeviationId, cancellationToken);
     }
-
     /// <inheritdoc />
-    public async Task<IEnumerable<Deviation>> Handle(GetDeviationsByProductionBatchIdQuery query,
-        CancellationToken cancellationToken)
+    public async Task<IEnumerable<Deviation>> Handle(GetAllDeviationsByBatchIdQuery query, CancellationToken cancellationToken)
     {
-        return await deviationRepository.FindByProductionBatchIdAsync(query.ProductionBatchId, cancellationToken);
+        return await deviationRepository.FindAllByBatchIdAsNoTrackingAsync(query.BatchId, cancellationToken);
     }
 }

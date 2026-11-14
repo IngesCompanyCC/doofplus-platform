@@ -1,8 +1,7 @@
-using IngesCompanyCCPlatform.API.Quality.Domain.Model.ValueObjects;
-
-namespace IngesCompanyCCPlatform.API.Quality.Domain.Model.Queries;
+﻿namespace IngesCompanyCCPlatform.API.Quality.Domain.Model.Queries;
 
 /// <summary>
-///     Query to get an audit by its id.
+///     Query to get a audit by its id.
 /// </summary>
-public record GetAuditByIdQuery(AuditId AuditId);
+/// <param name="AuditId">The id of the audit.</param>
+public record GetAuditByIdQuery(int AuditId);

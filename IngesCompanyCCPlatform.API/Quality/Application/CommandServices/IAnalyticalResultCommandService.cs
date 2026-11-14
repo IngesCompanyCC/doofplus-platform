@@ -1,16 +1,16 @@
-using IngesCompanyCCPlatform.API.Quality.Domain.Model.Aggregates;
+﻿using IngesCompanyCCPlatform.API.Quality.Domain.Model.Aggregates;
 using IngesCompanyCCPlatform.API.Quality.Domain.Model.Commands;
 using IngesCompanyCCPlatform.API.Shared.Application.Model;
 
 namespace IngesCompanyCCPlatform.API.Quality.Application.CommandServices;
 
 /// <summary>
-///     Represents the analytical result command service of the Quality &amp; Compliance bounded context.
+///     Command service of <see cref="AnalyticalResult" />.
 /// </summary>
 public interface IAnalyticalResultCommandService
 {
     /// <summary>
-    ///     Registers an analytical result. An out-of-specification result also registers its deviation.
+    ///     Creates a analytical result.
     /// </summary>
-    Task<Result<AnalyticalResult>> Handle(RegisterAnalyticalResultCommand command, CancellationToken cancellationToken);
+    Task<Result<AnalyticalResult>> Handle(CreateAnalyticalResultCommand command, CancellationToken cancellationToken);
 }

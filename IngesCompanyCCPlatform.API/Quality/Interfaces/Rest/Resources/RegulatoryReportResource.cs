@@ -1,6 +1,16 @@
-namespace IngesCompanyCCPlatform.API.Quality.Interfaces.Rest.Resources;
+﻿namespace IngesCompanyCCPlatform.API.Quality.Interfaces.Rest.Resources;
 
 /// <summary>
-///     Response resource representing a regulatory report.
+///     A regulatory report, as the API returns it.
 /// </summary>
-public record RegulatoryReportResource(int Id, int OrganizationId, string Period, string FileUrl, DateTime GeneratedAt);
+public record RegulatoryReportResource(
+    int Id,
+    string Code,
+    string Title,
+    string Description,
+    string RegulatoryAuthority,
+    string FileReference,
+    DateOnly? DueDate,
+    int? PreparedBy,
+    string Status,
+    DateTime? SubmittedAt);

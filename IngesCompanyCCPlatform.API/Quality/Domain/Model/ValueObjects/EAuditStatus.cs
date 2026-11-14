@@ -1,11 +1,15 @@
-namespace IngesCompanyCCPlatform.API.Quality.Domain.Model.ValueObjects;
+﻿namespace IngesCompanyCCPlatform.API.Quality.Domain.Model.ValueObjects;
 
 /// <summary>
-///     Represents the status of an audit.
+///     Where an audit is.
 /// </summary>
+/// <remarks>
+///     Stored as text in PascalCase, like the other enums of the project.
+/// </remarks>
 public enum EAuditStatus
 {
-    Scheduled,
+    Planned,
     InProgress,
-    Closed
+    Completed,
+    Cancelled
 }

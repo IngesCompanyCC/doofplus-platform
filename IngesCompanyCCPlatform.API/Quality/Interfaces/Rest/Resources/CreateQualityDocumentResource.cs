@@ -1,6 +1,13 @@
-namespace IngesCompanyCCPlatform.API.Quality.Interfaces.Rest.Resources;
+﻿namespace IngesCompanyCCPlatform.API.Quality.Interfaces.Rest.Resources;
 
 /// <summary>
-///     Request resource to create a quality document. Type: Protocol, Sop or Specification.
+///     Data to create a quality document.
 /// </summary>
-public record CreateQualityDocumentResource(string Code, string Title, string Type, string FileUrl, int AuthorId);
+public record CreateQualityDocumentResource(
+    string Code,
+    string Title,
+    string? Description,
+    string? DocumentType,
+    string? FileReference,
+    string? Version,
+    int? OwnerId);

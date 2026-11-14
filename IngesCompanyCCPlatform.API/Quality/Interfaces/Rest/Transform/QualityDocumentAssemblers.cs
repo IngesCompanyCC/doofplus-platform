@@ -1,64 +1,58 @@
-using IngesCompanyCCPlatform.API.Quality.Domain.Model.Aggregates;
+﻿using IngesCompanyCCPlatform.API.Quality.Domain.Model.Aggregates;
 using IngesCompanyCCPlatform.API.Quality.Domain.Model.Commands;
-using IngesCompanyCCPlatform.API.Quality.Domain.Model.Entities;
 using IngesCompanyCCPlatform.API.Quality.Domain.Model.ValueObjects;
 using IngesCompanyCCPlatform.API.Quality.Interfaces.Rest.Resources;
 
 namespace IngesCompanyCCPlatform.API.Quality.Interfaces.Rest.Transform;
 
 /// <summary>
-///     Converts a <see cref="QualityDocument" /> aggregate into a <see cref="QualityDocumentResource" />.
+///     Builds the commands of <c>QualityDocument</c> from the resources.
 /// </summary>
-public static class QualityDocumentResourceFromEntityAssembler
+public static class QualityDocumentCommandFromResourceAssembler
 {
-    public static QualityDocumentResource ToResourceFromEntity(QualityDocument entity)
-    {
-        return new QualityDocumentResource(
-            entity.Id,
-            entity.Code,
-            entity.Title,
-            entity.Type.ToString(),
-            entity.Status.ToString(),
-            entity.CurrentVersion.VersionNumber,
-            entity.Versions.OrderBy(version => version.Id).Select(ToResourceFromEntity));
-    }
 
-    private static DocumentVersionResource ToResourceFromEntity(DocumentVersion entity)
+
+    /// <summary>
+    ///     Builds the command to create a quality document.
+    /// </summary>
+    /// <param name="resource">The data sent by the client.</param>
+    /// <returns>The command.</returns>
+    /// <exception cref="ArgumentException">Thrown when an enum value is not valid.</exception>
+    public static CreateQualityDocumentCommand ToCommandFromResource(CreateQualityDocumentResource resource)
     {
-        return new DocumentVersionResource(entity.Id, entity.VersionNumber, entity.FileUrl, entity.ChangeReason,
-            entity.AuthorId, entity.ApprovalSignatureId?.Value);
+        return new CreateQualityDocumentCommand(
+            resource.Code,
+            resource.Title,
+            resource.Description ?? string.Empty,
+            resource.DocumentType ?? string.Empty,
+            resource.FileReference ?? string.Empty,
+            resource.Version ?? string.Empty,
+            resource.OwnerId);
     }
 }
 
 /// <summary>
-///     Converts the request resources of the quality documents into commands.
+///     Builds the resource of a quality document.
 /// </summary>
-public static class QualityDocumentCommandFromResourceAssembler
+public static class QualityDocumentResourceFromEntityAssembler
 {
-    public static CreateQualityDocumentCommand ToCommandFromResource(CreateQualityDocumentResource resource)
+    /// <summary>
+    ///     Builds the resource from the aggregate.
+    /// </summary>
+    /// <param name="entity">The quality document.</param>
+    /// <returns>The resource.</returns>
+    public static QualityDocumentResource ToResourceFromEntity(QualityDocument entity)
     {
-        return new CreateQualityDocumentCommand(resource.Code, resource.Title,
-            QualityEnumParser.Parse<EDocumentType>(resource.Type, "document type"), resource.FileUrl,
-            new UserId(resource.AuthorId));
-    }
-
-    public static ApproveQualityDocumentCommand ToCommandFromResource(int qualityDocumentId,
-        ApproveQualityDocumentResource resource)
-    {
-        return new ApproveQualityDocumentCommand(qualityDocumentId, new UserId(resource.ApproverId),
-            new ElectronicSignatureId(resource.SignatureId));
-    }
-
-    public static RejectQualityDocumentCommand ToCommandFromResource(int qualityDocumentId,
-        RejectQualityDocumentResource resource)
-    {
-        return new RejectQualityDocumentCommand(qualityDocumentId, resource.Reason);
-    }
-
-    public static PublishDocumentVersionCommand ToCommandFromResource(int qualityDocumentId,
-        PublishDocumentVersionResource resource)
-    {
-        return new PublishDocumentVersionCommand(qualityDocumentId, resource.FileUrl, resource.ChangeReason,
-            new UserId(resource.AuthorId));
+        return new QualityDocumentResource(
+            entity.Id.Value,
+            entity.Code,
+            entity.Title,
+            entity.Description,
+            entity.DocumentType,
+            entity.FileReference,
+            entity.Version,
+            entity.OwnerId,
+            entity.Status.ToString(),
+            entity.ApprovedAt is null ? null : DateTime.SpecifyKind(entity.ApprovedAt.Value, DateTimeKind.Utc));
     }
 }

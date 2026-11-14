@@ -1,9 +1,15 @@
-using IngesCompanyCCPlatform.API.Quality.Domain.Model.Aggregates;
+﻿using IngesCompanyCCPlatform.API.Quality.Domain.Model.Aggregates;
 using IngesCompanyCCPlatform.API.Shared.Domain.Repositories;
 
 namespace IngesCompanyCCPlatform.API.Quality.Domain.Repositories;
 
 /// <summary>
-///     Represents the audit repository of the Quality &amp; Compliance bounded context.
+///     Repository of <see cref="Audit" />.
 /// </summary>
-public interface IAuditRepository : IBaseRepository<Audit>;
+public interface IAuditRepository : IBaseRepository<Audit>
+{
+    /// <summary>
+    ///     Checks whether a audit already has the code.
+    /// </summary>
+    Task<bool> ExistsByCodeAsync(string code, CancellationToken cancellationToken = default);
+}
