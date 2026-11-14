@@ -1,0 +1,153 @@
+﻿using IngesCompanyCCPlatform.API.Manufacturing.Domain.Model.Commands;
+using IngesCompanyCCPlatform.API.Manufacturing.Domain.Model.Entities;
+using IngesCompanyCCPlatform.API.Manufacturing.Domain.Model.ValueObjects;
+using IngesCompanyCCPlatform.API.Shared.Domain.Model.Aggregates.Internal;
+using IngesCompanyCCPlatform.API.Shared.Domain.Model.Entities;
+
+namespace IngesCompanyCCPlatform.API.Manufacturing.Domain.Model.Aggregates;
+
+/// <summary>
+///     Aggregate root representing a pharmaceutical production batch.
+/// </summary>
+public class ProductionBatch : AggregateRoot, IAuditableEntity
+{
+    private const string ProgressInvalidMessageKey = "manufacturing.batch.error.progress.invalid";
+
+    private readonly List<MaterialConsumption> _consumptions = [];
+    private readonly List<Incident> _incidents = [];
+    private readonly List<BatchEvent> _events = [];
+
+    public int Id { get; private set; }
+    public BatchNumber BatchNumber { get; private set; } = null!;
+    public int ProductionOrderId { get; private set; }
+    public BatchStatus Status { get; private set; }
+    public Quantity PlannedQuantity { get; private set; } = null!;
+    public string? Line { get; private set; }
+    public string? Owner { get; private set; }
+    public int Progress { get; private set; }
+    public Quantity? ManufacturedQuantity { get; private set; }
+    public DateTime? StartedAt { get; private set; }
+    public DateTime? FinishedAt { get; private set; }
+
+    public IReadOnlyCollection<MaterialConsumption> Consumptions => _consumptions.AsReadOnly();
+    public IReadOnlyCollection<Incident> Incidents => _incidents.AsReadOnly();
+    public IReadOnlyCollection<BatchEvent> Events => _events.AsReadOnly();
+
+    public DateTimeOffset? CreatedAt { get; set; }
+    public DateTimeOffset? UpdatedAt { get; set; }
+
+    // Required by EF Core
+    protected ProductionBatch()
+    {
+    }
+
+    public ProductionBatch(CreateBatchCommand command)
+    {
+        ArgumentNullException.ThrowIfNull(command);
+        BatchNumber = command.BatchNumber;
+        ProductionOrderId = command.ProductionOrderId;
+        PlannedQuantity = command.PlannedQuantity;
+        Line = string.IsNullOrWhiteSpace(command.Line) ? null : command.Line.Trim();
+        Owner = string.IsNullOrWhiteSpace(command.Owner) ? null : command.Owner.Trim();
+        Progress = 0;
+        Status = BatchStatus.Planned;
+        RecordEvent("BATCH_CREATED", "Production batch created in PLANNED status");
+    }
+
+    public void Start()
+    {
+        if (Status != BatchStatus.Planned)
+            throw new InvalidOperationException($"Cannot start batch in status {Status}. Only Planned batches can be started.");
+
+        Status = BatchStatus.InProgress;
+        StartedAt = DateTime.UtcNow;
+        RecordEvent("BATCH_STARTED", "Batch manufacturing execution started");
+    }
+
+    public void Close(CloseBatchCommand command)
+    {
+        ArgumentNullException.ThrowIfNull(command);
+
+        if (Status != BatchStatus.InProgress)
+            throw new InvalidOperationException($"Cannot close batch in status {Status}. Only InProgress batches can be closed.");
+
+        ManufacturedQuantity = command.ManufacturedQuantity;
+        Status = BatchStatus.ReleaseRequested;
+        Progress = 100;
+        FinishedAt = DateTime.UtcNow;
+        RecordEvent("RELEASE_REQUESTED", $"Production finished with {ManufacturedQuantity}; release requested to QA");
+    }
+
+    /// <summary>
+    ///     Resumes a batch that was on hold.
+    /// </summary>
+    /// <exception cref="InvalidOperationException">When the batch is not on hold.</exception>
+    public void Resume()
+    {
+        if (Status != BatchStatus.OnHold)
+            throw new InvalidOperationException($"Cannot resume batch in status {Status}. Only OnHold batches can be resumed.");
+        Status = BatchStatus.InProgress;
+        RecordEvent("BATCH_RESUMED", "Batch manufacturing resumed");
+    }
+
+    /// <summary>
+    ///     Releases the batch after the QA electronic signature.
+    /// </summary>
+    /// <param name="releasedBy">Who signs the release.</param>
+    /// <exception cref="InvalidOperationException">When the release was not requested.</exception>
+    public void Release(string releasedBy)
+    {
+        if (Status != BatchStatus.ReleaseRequested)
+            throw new InvalidOperationException($"Cannot release batch in status {Status}. Only ReleaseRequested batches can be released.");
+        Status = BatchStatus.Released;
+        RecordEvent("BATCH_RELEASED", string.IsNullOrWhiteSpace(releasedBy)
+            ? "Released for distribution"
+            : $"Released for distribution by {releasedBy.Trim()}");
+    }
+
+    public Incident RegisterIncident(RegisterIncidentCommand command)
+    {
+        ArgumentNullException.ThrowIfNull(command);
+
+        var incident = new Incident(command.Description, command.Severity);
+        _incidents.Add(incident);
+
+        if (command.Severity == IncidentSeverity.Critical)
+        {
+            Status = BatchStatus.OnHold;
+        }
+
+        var tone = command.Severity switch
+        {
+            IncidentSeverity.Critical => EventTone.Danger,
+            IncidentSeverity.Major => EventTone.Warning,
+            _ => EventTone.Normal
+        };
+        RecordEvent("INCIDENT_REGISTERED", $"Incident registered ({command.Severity}): {command.Description}", tone);
+        return incident;
+    }
+
+    public void ConsumeMaterial(int rawMaterialLotId, Quantity quantity)
+    {
+        ArgumentNullException.ThrowIfNull(quantity);
+        var consumption = new MaterialConsumption(rawMaterialLotId, quantity);
+        _consumptions.Add(consumption);
+        RecordEvent("MATERIAL_CONSUMED", $"Raw material lot {rawMaterialLotId} consumed ({quantity})");
+    }
+
+    /// <summary>
+    ///     Records the progress of the batch shown in the Web App.
+    /// </summary>
+    /// <param name="progress">The progress, from 0 to 100.</param>
+    /// <exception cref="ArgumentException">When the progress is outside 0 to 100.</exception>
+    public void UpdateProgress(int progress)
+    {
+        if (progress is < 0 or > 100) throw new ArgumentException(ProgressInvalidMessageKey);
+        Progress = progress;
+    }
+
+    private void RecordEvent(string type, string description, EventTone tone = EventTone.Normal, long? performedBy = null)
+    {
+        _events.Add(new BatchEvent(type, description, tone, performedBy));
+    }
+}

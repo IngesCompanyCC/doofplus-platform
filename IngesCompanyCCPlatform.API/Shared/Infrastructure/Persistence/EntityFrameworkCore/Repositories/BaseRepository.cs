@@ -33,13 +33,13 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
     }
 
     // inheritedDoc
-    public async Task<TEntity?> FindByIdAsync(int id, CancellationToken cancellationToken = default)
+    public virtual async Task<TEntity?> FindByIdAsync(int id, CancellationToken cancellationToken = default)
     {
         return await Context.Set<TEntity>().FindAsync(new object[] { id }, cancellationToken);
     }
 
     // inheritedDoc
-    public async Task<TEntity?> FindByIdAsNoTrackingAsync(int id, CancellationToken cancellationToken = default)
+    public virtual async Task<TEntity?> FindByIdAsNoTrackingAsync(int id, CancellationToken cancellationToken = default)
     {
         return await Context.Set<TEntity>()
             .AsNoTracking()
@@ -59,13 +59,13 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
     }
 
     // inheritedDoc
-    public async Task<IEnumerable<TEntity>> ListAsync(CancellationToken cancellationToken = default)
+    public virtual async Task<IEnumerable<TEntity>> ListAsync(CancellationToken cancellationToken = default)
     {
         return await Context.Set<TEntity>().ToListAsync(cancellationToken);
     }
 
     // inheritedDoc
-    public async Task<IEnumerable<TEntity>> ListAsNoTrackingAsync(CancellationToken cancellationToken = default)
+    public virtual async Task<IEnumerable<TEntity>> ListAsNoTrackingAsync(CancellationToken cancellationToken = default)
     {
         return await Context.Set<TEntity>()
             .AsNoTracking()

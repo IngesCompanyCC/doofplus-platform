@@ -1,23 +1,47 @@
-using IngesCompanyCCPlatform.API.Quality.Application.Acl;
-using IngesCompanyCCPlatform.API.Quality.Application.CommandServices;
-using IngesCompanyCCPlatform.API.Quality.Application.Internal.CommandServices;
-using IngesCompanyCCPlatform.API.Quality.Application.Internal.QueryServices;
-using IngesCompanyCCPlatform.API.Quality.Application.QueryServices;
-using IngesCompanyCCPlatform.API.Quality.Domain.Repositories;
-using IngesCompanyCCPlatform.API.Quality.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
-using IngesCompanyCCPlatform.API.Quality.Interfaces.Acl;
+﻿using IngesCompanyCCPlatform.API.Manufacturing.Application.CommandServices;
+using IngesCompanyCCPlatform.API.Manufacturing.Application.Internal.CommandServices;
+using IngesCompanyCCPlatform.API.Manufacturing.Application.Internal.QueryServices;
+using IngesCompanyCCPlatform.API.Manufacturing.Application.QueryServices;
+using IngesCompanyCCPlatform.API.Manufacturing.Domain.Repositories;
+using IngesCompanyCCPlatform.API.Manufacturing.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using IngesCompanyCCPlatform.API.Manufacturing.Resources;
 using IngesCompanyCCPlatform.API.Shared.Domain.Repositories;
 using IngesCompanyCCPlatform.API.Shared.Infrastructure.Interfaces.Asp.Configuration;
 using IngesCompanyCCPlatform.API.Shared.Infrastructure.Interfaces.Asp.OpenApi;
+using IngesCompanyCCPlatform.API.Shared.Infrastructure.Localization.Extensions;
 using IngesCompanyCCPlatform.API.Shared.Infrastructure.Mediator.Cortex.Configuration;
 using IngesCompanyCCPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
 using IngesCompanyCCPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.Interceptors;
 using IngesCompanyCCPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using IngesCompanyCCPlatform.API.Monitoring.Application.CommandServices;
+using IngesCompanyCCPlatform.API.Monitoring.Application.Internal.CommandServices;
+using IngesCompanyCCPlatform.API.Monitoring.Application.Internal.QueryServices;
+using IngesCompanyCCPlatform.API.Monitoring.Application.QueryServices;
+using IngesCompanyCCPlatform.API.Monitoring.Domain.Repositories;
+using IngesCompanyCCPlatform.API.Monitoring.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using IngesCompanyCCPlatform.API.Monitoring.Resources;
+using IngesCompanyCCPlatform.API.Organizations.Application.CommandServices;
+using IngesCompanyCCPlatform.API.Organizations.Application.Internal.CommandServices;
+using IngesCompanyCCPlatform.API.Organizations.Application.Internal.QueryServices;
+using IngesCompanyCCPlatform.API.Organizations.Application.QueryServices;
+using IngesCompanyCCPlatform.API.Organizations.Domain.Repositories;
+using IngesCompanyCCPlatform.API.Organizations.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using IngesCompanyCCPlatform.API.Shared.Infrastructure.Pipeline.Middleware.Components;
+using IngesCompanyCCPlatform.API.Shared.Resources;
+using IngesCompanyCCPlatform.API.Subscriptions.Application.CommandServices;
+using IngesCompanyCCPlatform.API.Subscriptions.Application.Internal.CommandServices;
+using IngesCompanyCCPlatform.API.Subscriptions.Application.Internal.QueryServices;
+using IngesCompanyCCPlatform.API.Subscriptions.Application.QueryServices;
+using IngesCompanyCCPlatform.API.Subscriptions.Domain.Repositories;
+using IngesCompanyCCPlatform.API.Subscriptions.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using IngesCompanyCCPlatform.API.Subscriptions.Resources;
 using Cortex.Mediator.Commands;
 using Cortex.Mediator.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 using Scalar.AspNetCore;
+using IngesCompanyCCPlatform.API.Subscriptions.Application.OutboundServices.PaymentGateway;
+using IngesCompanyCCPlatform.API.Subscriptions.Infrastructure.PaymentGateway.Niubiz;
 using ProblemDetailsFactory = IngesCompanyCCPlatform.API.Shared.Interfaces.Rest.ProblemDetails.ProblemDetailsFactory;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -80,36 +104,75 @@ builder.Services.AddSingleton<ProblemDetailsFactory>();
 
 // Configure Dependency Injection
 
+// Organizations Bounded Context
+builder.Services.AddScoped<IOrganizationRepository, OrganizationRepository>();
+builder.Services.AddScoped<IUserProfileRepository, UserProfileRepository>();
+builder.Services.AddScoped<IFacilityRepository, FacilityRepository>();
+builder.Services.AddScoped<IContactInquiryRepository, ContactInquiryRepository>();
+builder.Services.AddScoped<IAdministrativeActivityRepository, AdministrativeActivityRepository>();
+
+builder.Services.AddScoped<IOrganizationCommandService, OrganizationCommandService>();
+builder.Services.AddScoped<IUserProfileCommandService, UserProfileCommandService>();
+builder.Services.AddScoped<IContactInquiryCommandService, ContactInquiryCommandService>();
+builder.Services.AddScoped<IOrganizationQueryService, OrganizationQueryService>();
+builder.Services.AddScoped<IUserProfileQueryService, UserProfileQueryService>();
+builder.Services.AddScoped<IContactInquiryQueryService, ContactInquiryQueryService>();
+builder.Services.AddScoped<IFacilityQueryService, FacilityQueryService>();
+builder.Services.AddScoped<IAdministrativeActivityQueryService, AdministrativeActivityQueryService>();
+
 // Shared Bounded Context Injection Configuration
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<DispatchDomainEventsInterceptor>();
 
-// Quality & Compliance Bounded Context Injection Configuration
-builder.Services.AddScoped<IQualityDocumentRepository, QualityDocumentRepository>();
-builder.Services.AddScoped<IMaterialApprovalRepository, MaterialApprovalRepository>();
-builder.Services.AddScoped<IAnalyticalResultRepository, AnalyticalResultRepository>();
-builder.Services.AddScoped<IBatchReviewRepository, BatchReviewRepository>();
-builder.Services.AddScoped<IDeviationRepository, DeviationRepository>();
-builder.Services.AddScoped<IAuditRepository, AuditRepository>();
-builder.Services.AddScoped<IAuditTrailEntryRepository, AuditTrailEntryRepository>();
-builder.Services.AddScoped<IRegulatoryReportRepository, RegulatoryReportRepository>();
-builder.Services.AddScoped<IQualityDocumentCommandService, QualityDocumentCommandService>();
-builder.Services.AddScoped<IMaterialApprovalCommandService, MaterialApprovalCommandService>();
-builder.Services.AddScoped<IAnalyticalResultCommandService, AnalyticalResultCommandService>();
-builder.Services.AddScoped<IBatchReviewCommandService, BatchReviewCommandService>();
-builder.Services.AddScoped<IDeviationCommandService, DeviationCommandService>();
-builder.Services.AddScoped<IAuditCommandService, AuditCommandService>();
-builder.Services.AddScoped<IAuditTrailEntryCommandService, AuditTrailEntryCommandService>();
-builder.Services.AddScoped<IRegulatoryReportCommandService, RegulatoryReportCommandService>();
-builder.Services.AddScoped<IQualityDocumentQueryService, QualityDocumentQueryService>();
-builder.Services.AddScoped<IMaterialApprovalQueryService, MaterialApprovalQueryService>();
-builder.Services.AddScoped<IAnalyticalResultQueryService, AnalyticalResultQueryService>();
-builder.Services.AddScoped<IBatchReviewQueryService, BatchReviewQueryService>();
-builder.Services.AddScoped<IDeviationQueryService, DeviationQueryService>();
-builder.Services.AddScoped<IAuditQueryService, AuditQueryService>();
-builder.Services.AddScoped<IAuditTrailEntryQueryService, AuditTrailEntryQueryService>();
-builder.Services.AddScoped<IRegulatoryReportQueryService, RegulatoryReportQueryService>();
-builder.Services.AddScoped<IQualityContextFacade, QualityContextFacade>();
+// Subscriptions Bounded Context Injection Configuration
+builder.Services.AddScoped<IPlanRepository, PlanRepository>();
+builder.Services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
+builder.Services.AddScoped<IPlanCommandService, PlanCommandService>();
+builder.Services.AddScoped<IPlanQueryService, PlanQueryService>();
+builder.Services.AddScoped<ISubscriptionCommandService, SubscriptionCommandService>();
+builder.Services.Configure<NiubizSettings>(builder.Configuration.GetSection("Niubiz"));
+builder.Services.AddHttpClient<IPaymentGateway, NiubizPaymentGateway>(client => client.Timeout = TimeSpan.FromSeconds(30));
+builder.Services.AddScoped<ISubscriptionQueryService, SubscriptionQueryService>();
+builder.Services.AddSingleton<IStringLocalizer<SubscriptionsMessages>, StringLocalizer<SubscriptionsMessages>>();
+
+// Localized messages of the bounded contexts. Each bounded context adds one line with its marker class;
+// the global exception handler uses them to translate the message keys of the value objects.
+// Example: builder.Services.AddBoundedContextMessages<SubscriptionsMessages>();
+builder.Services.AddBoundedContextMessages<CommonMessages>();
+builder.Services.AddBoundedContextMessages<SubscriptionsMessages>();
+builder.Services.AddBoundedContextMessages<ManufacturingMessages>();
+builder.Services.AddBoundedContextMessages<MonitoringMessages>();
+
+// Manufacturing Bounded Context Injection Configuration
+builder.Services.AddScoped<IProductionBatchRepository, ProductionBatchRepository>();
+builder.Services.AddScoped<IProductionBatchCommandService, ProductionBatchCommandService>();
+builder.Services.AddScoped<IProductionBatchQueryService, ProductionBatchQueryService>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IMasterFormulaRepository, MasterFormulaRepository>();
+builder.Services.AddScoped<IProductionOrderRepository, ProductionOrderRepository>();
+builder.Services.AddScoped<IRawMaterialLotRepository, RawMaterialLotRepository>();
+builder.Services.AddScoped<IProductCommandService, ProductCommandService>();
+builder.Services.AddScoped<IProductQueryService, ProductQueryService>();
+builder.Services.AddScoped<IMasterFormulaCommandService, MasterFormulaCommandService>();
+builder.Services.AddScoped<IMasterFormulaQueryService, MasterFormulaQueryService>();
+builder.Services.AddScoped<IProductionOrderCommandService, ProductionOrderCommandService>();
+builder.Services.AddScoped<IProductionOrderQueryService, ProductionOrderQueryService>();
+builder.Services.AddScoped<IRawMaterialLotCommandService, RawMaterialLotCommandService>();
+builder.Services.AddScoped<IRawMaterialLotQueryService, RawMaterialLotQueryService>();
+
+// Monitoring Bounded Context Injection Configuration
+builder.Services.AddScoped<IEquipmentRepository, EquipmentRepository>();
+builder.Services.AddScoped<ISensorRepository, SensorRepository>();
+builder.Services.AddScoped<IReadingRepository, ReadingRepository>();
+builder.Services.AddScoped<IAlertRepository, AlertRepository>();
+builder.Services.AddScoped<IEquipmentCommandService, EquipmentCommandService>();
+builder.Services.AddScoped<IEquipmentQueryService, EquipmentQueryService>();
+builder.Services.AddScoped<ISensorCommandService, SensorCommandService>();
+builder.Services.AddScoped<ISensorQueryService, SensorQueryService>();
+builder.Services.AddScoped<IReadingCommandService, ReadingCommandService>();
+builder.Services.AddScoped<IReadingQueryService, ReadingQueryService>();
+builder.Services.AddScoped<IAlertCommandService, AlertCommandService>();
+builder.Services.AddScoped<IAlertQueryService, AlertQueryService>();
 
 // Mediator Configuration
 builder.Services.AddScoped(typeof(ICommandPipelineBehavior<>), typeof(LoggingCommandBehavior<>));
@@ -142,10 +205,8 @@ app.UseRequestLocalization(localizationOptions);
 
 app.UseExceptionHandler();
 
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-}
+// The OpenAPI document is served in every environment, so the Scalar reference also works once deployed.
+app.MapOpenApi();
 
 // Apply CORS Policy
 app.UseCors("AllowAllPolicy");
