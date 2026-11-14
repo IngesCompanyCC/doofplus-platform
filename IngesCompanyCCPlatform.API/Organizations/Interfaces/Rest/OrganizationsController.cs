@@ -41,6 +41,25 @@ public class OrganizationsController(
                 OrganizationResourceFromEntityAssembler.ToResourceFromEntity(organization)));
     }
 
+    [HttpGet]
+    [EndpointSummary("Get every organization, or the one registered with a RUC")]
+    [ProducesResponseType(typeof(IEnumerable<OrganizationResource>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetAllOrganizations(
+        [FromQuery] string? ruc,
+        CancellationToken cancellationToken)
+    {
+        if (string.IsNullOrWhiteSpace(ruc))
+        {
+            var organizations = await organizationQueryService.Handle(new GetAllOrganizationsQuery(), cancellationToken);
+            return Ok(organizations.Select(OrganizationResourceFromEntityAssembler.ToResourceFromEntity));
+        }
+
+        var organization = await organizationQueryService.Handle(new GetOrganizationByRucQuery(ruc), cancellationToken);
+        return Ok(organization is null
+            ? []
+            : new[] { OrganizationResourceFromEntityAssembler.ToResourceFromEntity(organization) });
+    }
+
     [HttpGet("{organizationId:int}")]
     [EndpointSummary("Get organization by id")]
     [ProducesResponseType(typeof(OrganizationResource), StatusCodes.Status200OK)]

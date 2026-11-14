@@ -2,6 +2,7 @@ using System.Net.Mime;
 using IngesCompanyCCPlatform.API.Organizations.Application.CommandServices;
 using IngesCompanyCCPlatform.API.Organizations.Application.QueryServices;
 using IngesCompanyCCPlatform.API.Organizations.Domain.Model;
+using IngesCompanyCCPlatform.API.Organizations.Domain.Model.Commands;
 using IngesCompanyCCPlatform.API.Organizations.Domain.Model.Queries;
 using IngesCompanyCCPlatform.API.Organizations.Interfaces.Rest.Resources;
 using IngesCompanyCCPlatform.API.Organizations.Interfaces.Rest.Transform;
@@ -63,15 +64,36 @@ public class UserProfilesController(
         return Ok(UserProfileResourceFromEntityAssembler.ToResourceFromEntity(profile));
     }
 
-    [HttpGet]
-    [EndpointSummary("Get user profiles by organization id")]
-    [ProducesResponseType(typeof(IEnumerable<UserProfileResource>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetUserProfilesByOrganizationId(
-        [FromQuery] int organizationId,
+    [HttpPut("{profileId:int}")]
+    [EndpointSummary("Update the notification preferences and the language of a user profile")]
+    [ProducesResponseType(typeof(UserProfileResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UpdateUserProfile(
+        int profileId,
+        [FromBody] UpdateUserProfileResource resource,
         CancellationToken cancellationToken)
     {
-        var query = new GetUserProfilesByOrganizationIdQuery(organizationId);
-        var profiles = await userProfileQueryService.Handle(query, cancellationToken);
+        var command = new UpdateUserProfilePreferencesCommand(profileId,
+            resource.EmailNotifications, resource.InAppNotifications, resource.Language);
+        var result = await userProfileCommandService.Handle(command, cancellationToken);
+        return OrganizationsActionResultAssembler.ToActionResult(
+            this,
+            result,
+            problemDetailsFactory,
+            profile => Ok(UserProfileResourceFromEntityAssembler.ToResourceFromEntity(profile)));
+    }
+
+    [HttpGet]
+    [EndpointSummary("Get every user profile, or the ones of an organization")]
+    [ProducesResponseType(typeof(IEnumerable<UserProfileResource>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetUserProfilesByOrganizationId(
+        [FromQuery] int? organizationId,
+        CancellationToken cancellationToken)
+    {
+        var profiles = organizationId is null
+            ? await userProfileQueryService.Handle(new GetAllUserProfilesQuery(), cancellationToken)
+            : await userProfileQueryService.Handle(new GetUserProfilesByOrganizationIdQuery(organizationId.Value),
+                cancellationToken);
 
         var resources = profiles.Select(UserProfileResourceFromEntityAssembler.ToResourceFromEntity);
         return Ok(resources);
