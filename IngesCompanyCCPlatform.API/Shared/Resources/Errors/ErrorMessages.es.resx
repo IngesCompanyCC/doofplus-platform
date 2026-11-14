@@ -126,4 +126,10 @@
   <data name="MonitoringError.DuplicateAlertCode" xml:space="preserve">
     <value>Código de alerta duplicado</value>
   </data>
+  <data name="SubscriptionsError.InvalidArgument" xml:space="preserve">
+    <value>Solicitud no válida</value>
+  </data>
+  <data name="MonitoringError.InvalidApiKey" xml:space="preserve">
+    <value>Clave de API no válida</value>
+  </data>
 </root>

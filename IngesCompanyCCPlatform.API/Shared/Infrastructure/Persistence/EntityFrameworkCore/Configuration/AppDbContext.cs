@@ -5,6 +5,7 @@ using IngesCompanyCCPlatform.API.Monitoring.Infrastructure.Persistence.EntityFra
 using IngesCompanyCCPlatform.API.Organizations.Domain.Model.Aggregates;
 using IngesCompanyCCPlatform.API.Organizations.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
 using IngesCompanyCCPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
+using IngesCompanyCCPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration.ValueConverters;
 using IngesCompanyCCPlatform.API.Shared.Infrastructure.Persistence.EntityFrameworkCore.Interceptors;
 using IngesCompanyCCPlatform.API.Subscriptions.Infrastructure.Persistence.EntityFrameworkCore.Configuration.Extensions;
 using Microsoft.EntityFrameworkCore;
@@ -29,6 +30,16 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         // Apply audit timestamps for all IAuditableEntity implementations
         builder.AddInterceptors(new AuditableEntityInterceptor());
         base.OnConfiguring(builder);
+    }
+
+    /// <summary>
+    ///     Stores every <see cref="DateOnly" /> as a MySQL <c>date</c> through <see cref="DateOnlyConverter" />.
+    /// </summary>
+    /// <param name="configurationBuilder">The conventions of the model.</param>
+    protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+    {
+        configurationBuilder.Properties<DateOnly>().HaveConversion<DateOnlyConverter>().HaveColumnType("date");
+        base.ConfigureConventions(configurationBuilder);
     }
 
     /// <summary>
