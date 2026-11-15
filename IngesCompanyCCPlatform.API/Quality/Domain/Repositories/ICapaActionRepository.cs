@@ -9,7 +9,7 @@ namespace IngesCompanyCCPlatform.API.Quality.Domain.Repositories;
 public interface ICapaActionRepository : IBaseRepository<CapaAction>
 {
     /// <summary>
-    ///     Gets the capa actions filtered by capa plan id.
+    ///     Gets the capa actions with the capa code.
     /// </summary>
-    Task<IEnumerable<CapaAction>> FindAllByCapaPlanIdAsNoTrackingAsync(int capaPlanId, CancellationToken cancellationToken = default);
+    Task<IEnumerable<CapaAction>> FindAllByCapaCodeAsNoTrackingAsync(string capaCode, CancellationToken cancellationToken = default);
 }

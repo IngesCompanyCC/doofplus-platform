@@ -9,7 +9,7 @@ namespace IngesCompanyCCPlatform.API.Quality.Application.QueryServices;
 public interface IAuditQueryService
 {
     /// <summary>
-    ///     Gets all the audits.
+    ///     Gets the audits.
     /// </summary>
     Task<IEnumerable<Audit>> Handle(GetAllAuditsQuery query, CancellationToken cancellationToken);
 

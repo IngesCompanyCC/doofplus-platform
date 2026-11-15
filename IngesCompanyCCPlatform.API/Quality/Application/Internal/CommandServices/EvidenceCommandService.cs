@@ -24,4 +24,32 @@ public class EvidenceCommandService(
         await unitOfWork.CompleteAsync(cancellationToken);
         return Result<Evidence>.Success(evidence);
     }
+
+    /// <inheritdoc />
+    public async Task<Result<Evidence>> Handle(UpdateEvidenceCommand command, CancellationToken cancellationToken)
+    {
+        var evidence = await evidenceRepository.FindByIdAsync(command.EvidenceId, cancellationToken);
+        if (evidence is null)
+            return Result<Evidence>.Failure(EvidenceErrors.NotFoundById(command.EvidenceId), QualityError.EvidenceNotFound);
+
+        evidence.Update(command);
+        evidenceRepository.Update(evidence);
+        await unitOfWork.CompleteAsync(cancellationToken);
+        return Result<Evidence>.Success(evidence);
+    }
+
+    /// <inheritdoc />
+    public async Task<Result<Evidence>> Handle(DeleteEvidenceCommand command, CancellationToken cancellationToken)
+    {
+        var evidence = await evidenceRepository.FindByIdAsync(command.EvidenceId, cancellationToken);
+        if (evidence is null)
+            return Result<Evidence>.Failure(EvidenceErrors.NotFoundById(command.EvidenceId), QualityError.EvidenceNotFound);
+
+        if (!evidence.CanBeRemoved())
+            return Result<Evidence>.Failure(EvidenceErrors.Reviewed, QualityError.EvidenceReviewed);
+
+        evidenceRepository.Remove(evidence);
+        await unitOfWork.CompleteAsync(cancellationToken);
+        return Result<Evidence>.Success(evidence);
+    }
 }

@@ -2,6 +2,7 @@
 using IngesCompanyCCPlatform.API.Quality.Application.CommandServices;
 using IngesCompanyCCPlatform.API.Quality.Application.QueryServices;
 using IngesCompanyCCPlatform.API.Quality.Domain.Model;
+using IngesCompanyCCPlatform.API.Quality.Domain.Model.Commands;
 using IngesCompanyCCPlatform.API.Quality.Domain.Model.Errors;
 using IngesCompanyCCPlatform.API.Quality.Domain.Model.Queries;
 using IngesCompanyCCPlatform.API.Quality.Interfaces.Rest.Resources;
@@ -32,7 +33,6 @@ public class DeviationsController(
     [EndpointDescription("Creates a deviation.")]
     [ProducesResponseType(typeof(DeviationResource), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<IActionResult> CreateDeviation([FromBody] CreateDeviationResource resource, CancellationToken cancellationToken)
     {
@@ -42,15 +42,17 @@ public class DeviationsController(
             created => CreatedAtAction(nameof(GetDeviationById), new { deviationId = created.Id.Value },
                 DeviationResourceFromEntityAssembler.ToResourceFromEntity(created)));
     }
+
     [HttpGet]
     [EndpointSummary("Get the deviations")]
-    [EndpointDescription("Gets all the deviations.")]
+    [EndpointDescription("Gets the deviations; with batchCode, only the ones with that batch code.")]
     [ProducesResponseType(typeof(IEnumerable<DeviationResource>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetDeviations(CancellationToken cancellationToken)
+    public async Task<IActionResult> GetDeviations([FromQuery] string? batchCode, CancellationToken cancellationToken)
     {
-        var items = await deviationQueryService.Handle(new GetAllDeviationsQuery(), cancellationToken);
+        var items = await deviationQueryService.Handle(new GetAllDeviationsQuery(batchCode), cancellationToken);
         return Ok(items.Select(DeviationResourceFromEntityAssembler.ToResourceFromEntity));
     }
+
     [HttpGet("{deviationId:int}")]
     [EndpointSummary("Get a deviation by its id")]
     [EndpointDescription("Gets a deviation by the provided id.")]
@@ -63,13 +65,18 @@ public class DeviationsController(
             QualityError.DeviationNotFound, messages, problemDetailsFactory,
             found => Ok(DeviationResourceFromEntityAssembler.ToResourceFromEntity(found)), deviationId);
     }
-    [HttpGet("by-batch/{batchId:int}")]
-    [EndpointSummary("Get the deviations of a batch")]
-    [EndpointDescription("Gets the deviations of the batch with the provided id.")]
-    [ProducesResponseType(typeof(IEnumerable<DeviationResource>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetDeviationsByBatchId([FromRoute] int batchId, CancellationToken cancellationToken)
+
+    [HttpPut("{deviationId:int}")]
+    [EndpointSummary("Update a deviation")]
+    [EndpointDescription("Replaces the data of the deviation with the provided id.")]
+    [ProducesResponseType(typeof(DeviationResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UpdateDeviation([FromRoute] int deviationId, [FromBody] UpdateDeviationResource resource, CancellationToken cancellationToken)
     {
-        var items = await deviationQueryService.Handle(new GetAllDeviationsByBatchIdQuery(batchId), cancellationToken);
-        return Ok(items.Select(DeviationResourceFromEntityAssembler.ToResourceFromEntity));
+        var command = DeviationCommandFromResourceAssembler.ToCommandFromResource(deviationId, resource);
+        var result = await deviationCommandService.Handle(command, cancellationToken);
+        return QualityActionResultAssembler.ToActionResultFromCommandResult(this, result, messages, problemDetailsFactory,
+            updated => Ok(DeviationResourceFromEntityAssembler.ToResourceFromEntity(updated)), deviationId);
     }
 }

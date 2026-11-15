@@ -9,7 +9,7 @@ namespace IngesCompanyCCPlatform.API.Quality.Domain.Repositories;
 public interface ITaskCommentRepository : IBaseRepository<TaskComment>
 {
     /// <summary>
-    ///     Gets the task comments filtered by task id.
+    ///     Gets the task comments with the record code.
     /// </summary>
-    Task<IEnumerable<TaskComment>> FindAllByTaskIdAsNoTrackingAsync(int taskId, CancellationToken cancellationToken = default);
+    Task<IEnumerable<TaskComment>> FindAllByRecordCodeAsNoTrackingAsync(string recordCode, CancellationToken cancellationToken = default);
 }

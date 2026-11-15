@@ -14,17 +14,26 @@ namespace IngesCompanyCCPlatform.API.Quality.Application.Internal.CommandService
 /// </summary>
 public class CapaActionCommandService(
     ICapaActionRepository capaActionRepository,
-    ICapaPlanRepository capaPlanRepository,
     IUnitOfWork unitOfWork) : ICapaActionCommandService
 {
     /// <inheritdoc />
     public async Task<Result<CapaAction>> Handle(CreateCapaActionCommand command, CancellationToken cancellationToken)
     {
-        if (await capaPlanRepository.FindByIdAsNoTrackingAsync(command.CapaPlanId, cancellationToken) is null)
-            return Result<CapaAction>.Failure(CapaPlanErrors.NotFoundById(command.CapaPlanId), QualityError.CapaPlanNotFound);
-
         var capaAction = new CapaAction(command);
         await capaActionRepository.AddAsync(capaAction, cancellationToken);
+        await unitOfWork.CompleteAsync(cancellationToken);
+        return Result<CapaAction>.Success(capaAction);
+    }
+
+    /// <inheritdoc />
+    public async Task<Result<CapaAction>> Handle(UpdateCapaActionCommand command, CancellationToken cancellationToken)
+    {
+        var capaAction = await capaActionRepository.FindByIdAsync(command.CapaActionId, cancellationToken);
+        if (capaAction is null)
+            return Result<CapaAction>.Failure(CapaActionErrors.NotFoundById(command.CapaActionId), QualityError.CapaActionNotFound);
+
+        capaAction.Update(command);
+        capaActionRepository.Update(capaAction);
         await unitOfWork.CompleteAsync(cancellationToken);
         return Result<CapaAction>.Success(capaAction);
     }

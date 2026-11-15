@@ -6,12 +6,10 @@ using IngesCompanyCCPlatform.API.Quality.Interfaces.Rest.Resources;
 namespace IngesCompanyCCPlatform.API.Quality.Interfaces.Rest.Transform;
 
 /// <summary>
-///     Builds the commands of <c>AnalyticalResult</c> from the resources.
+///     Builds the commands of <c>AnalyticalResult</c> from the resources. Enums are accepted in any case and with hyphens.
 /// </summary>
 public static class AnalyticalResultCommandFromResourceAssembler
 {
-
-
     /// <summary>
     ///     Builds the command to create a analytical result.
     /// </summary>
@@ -21,14 +19,39 @@ public static class AnalyticalResultCommandFromResourceAssembler
     public static CreateAnalyticalResultCommand ToCommandFromResource(CreateAnalyticalResultResource resource)
     {
         return new CreateAnalyticalResultCommand(
-            resource.BatchId,
-            resource.TestName,
-            resource.Parameter ?? string.Empty,
-            resource.MeasuredValue,
-            resource.MinimumValue,
-            resource.MaximumValue,
-            resource.Unit ?? string.Empty,
-            resource.TestedAt);
+            resource.BatchCode ?? string.Empty,
+            resource.SampleCode ?? string.Empty,
+            resource.ReportCode ?? string.Empty,
+            resource.Test ?? string.Empty,
+            resource.Protocol ?? string.Empty,
+            resource.Result ?? string.Empty,
+            resource.Specification ?? string.Empty,
+            resource.Analyst ?? string.Empty,
+            resource.Status is null ? EResultStatus.Pending : EnumParser.Parse<EResultStatus>(resource.Status, "quality.analyticalResult.error.status.invalid"),
+            resource.Approval is null ? EApprovalState.Requested : EnumParser.Parse<EApprovalState>(resource.Approval, "quality.analyticalResult.error.approval.invalid"));
+    }
+
+    /// <summary>
+    ///     Builds the command to replace a analytical result.
+    /// </summary>
+    /// <param name="analyticalResultId">The id of the analytical result.</param>
+    /// <param name="resource">The data sent by the client.</param>
+    /// <returns>The command.</returns>
+    /// <exception cref="ArgumentException">Thrown when an enum value is not valid.</exception>
+    public static UpdateAnalyticalResultCommand ToCommandFromResource(int analyticalResultId, UpdateAnalyticalResultResource resource)
+    {
+        return new UpdateAnalyticalResultCommand(
+            analyticalResultId,
+            resource.BatchCode ?? string.Empty,
+            resource.SampleCode ?? string.Empty,
+            resource.ReportCode ?? string.Empty,
+            resource.Test ?? string.Empty,
+            resource.Protocol ?? string.Empty,
+            resource.Result ?? string.Empty,
+            resource.Specification ?? string.Empty,
+            resource.Analyst ?? string.Empty,
+            resource.Status is null ? EResultStatus.Pending : EnumParser.Parse<EResultStatus>(resource.Status, "quality.analyticalResult.error.status.invalid"),
+            resource.Approval is null ? EApprovalState.Requested : EnumParser.Parse<EApprovalState>(resource.Approval, "quality.analyticalResult.error.approval.invalid"));
     }
 }
 
@@ -46,16 +69,15 @@ public static class AnalyticalResultResourceFromEntityAssembler
     {
         return new AnalyticalResultResource(
             entity.Id.Value,
-            entity.BatchId,
-            entity.TestName,
-            entity.Parameter,
-            entity.MeasuredValue,
-            entity.MinimumValue,
-            entity.MaximumValue,
-            entity.Unit,
+            entity.BatchCode,
+            entity.SampleCode,
+            entity.ReportCode,
+            entity.Test,
+            entity.Protocol,
+            entity.Result,
+            entity.Specification,
+            entity.Analyst,
             entity.Status.ToString(),
-            entity.ReviewedBy,
-            entity.TestedAt is null ? null : DateTime.SpecifyKind(entity.TestedAt.Value, DateTimeKind.Utc),
-            entity.ReviewedAt is null ? null : DateTime.SpecifyKind(entity.ReviewedAt.Value, DateTimeKind.Utc));
+            entity.Approval.ToString());
     }
 }

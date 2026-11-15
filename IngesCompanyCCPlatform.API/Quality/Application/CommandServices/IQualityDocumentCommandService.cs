@@ -13,4 +13,9 @@ public interface IQualityDocumentCommandService
     ///     Creates a quality document.
     /// </summary>
     Task<Result<QualityDocument>> Handle(CreateQualityDocumentCommand command, CancellationToken cancellationToken);
+
+    /// <summary>
+    ///     Replaces the data of a quality document.
+    /// </summary>
+    Task<Result<QualityDocument>> Handle(UpdateQualityDocumentCommand command, CancellationToken cancellationToken);
 }

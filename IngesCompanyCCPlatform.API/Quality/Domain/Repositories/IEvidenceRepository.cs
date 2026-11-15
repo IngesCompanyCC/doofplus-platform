@@ -9,7 +9,7 @@ namespace IngesCompanyCCPlatform.API.Quality.Domain.Repositories;
 public interface IEvidenceRepository : IBaseRepository<Evidence>
 {
     /// <summary>
-    ///     Gets the evidence filtered by deviation id.
+    ///     Gets the evidence with the record code.
     /// </summary>
-    Task<IEnumerable<Evidence>> FindAllByDeviationIdAsNoTrackingAsync(int deviationId, CancellationToken cancellationToken = default);
+    Task<IEnumerable<Evidence>> FindAllByRecordCodeAsNoTrackingAsync(string recordCode, CancellationToken cancellationToken = default);
 }

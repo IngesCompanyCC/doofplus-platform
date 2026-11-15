@@ -13,6 +13,7 @@ public static class RegulatoryReportErrors
     /// <param name="id">The id that was looked for.</param>
     public static Error NotFoundById(int id) =>
         Error.NotFound("quality.regulatoryReport.error.notFoundById", $"Regulatory report not found for id {id}.");
+
     /// <summary>
     ///     Another regulatory report already has the code.
     /// </summary>

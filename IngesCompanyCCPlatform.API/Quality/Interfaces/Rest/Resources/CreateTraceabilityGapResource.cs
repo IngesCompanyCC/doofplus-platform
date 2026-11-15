@@ -1,10 +1,11 @@
 ﻿namespace IngesCompanyCCPlatform.API.Quality.Interfaces.Rest.Resources;
 
 /// <summary>
-///     Data to create a traceability gap.
+///     Data to create a traceability gap. Missing optional values take their default.
 /// </summary>
 public record CreateTraceabilityGapResource(
-    int BatchId,
-    string Description,
-    string? MissingReference,
-    string? AffectedProcess);
+    string? BatchCode,
+    string? Product,
+    string? MissingRecord,
+    string? Detail,
+    string? Status);

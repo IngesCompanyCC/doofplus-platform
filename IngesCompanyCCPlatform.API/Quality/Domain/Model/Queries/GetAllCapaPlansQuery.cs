@@ -1,6 +1,6 @@
 ﻿namespace IngesCompanyCCPlatform.API.Quality.Domain.Model.Queries;
 
 /// <summary>
-///     Query to get all the capa plans.
+///     Query of the capa plans, optionally filtered by source deviation.
 /// </summary>
-public record GetAllCapaPlansQuery;
+public record GetAllCapaPlansQuery(string? SourceDeviation = null);

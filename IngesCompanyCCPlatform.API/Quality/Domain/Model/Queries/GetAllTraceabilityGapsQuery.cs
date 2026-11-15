@@ -1,6 +1,6 @@
 ﻿namespace IngesCompanyCCPlatform.API.Quality.Domain.Model.Queries;
 
 /// <summary>
-///     Query to get all the traceability gaps.
+///     Query of the traceability gaps, optionally filtered by batch code.
 /// </summary>
-public record GetAllTraceabilityGapsQuery;
+public record GetAllTraceabilityGapsQuery(string? BatchCode = null);

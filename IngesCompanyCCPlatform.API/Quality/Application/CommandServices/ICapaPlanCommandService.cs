@@ -13,4 +13,9 @@ public interface ICapaPlanCommandService
     ///     Creates a capa plan.
     /// </summary>
     Task<Result<CapaPlan>> Handle(CreateCapaPlanCommand command, CancellationToken cancellationToken);
+
+    /// <summary>
+    ///     Replaces the data of a capa plan.
+    /// </summary>
+    Task<Result<CapaPlan>> Handle(UpdateCapaPlanCommand command, CancellationToken cancellationToken);
 }

@@ -5,12 +5,11 @@ using IngesCompanyCCPlatform.API.Shared.Domain.Model.Aggregates.Internal;
 namespace IngesCompanyCCPlatform.API.Quality.Domain.Model.Aggregates;
 
 /// <summary>
-///     A report for a regulatory authority, for example DIGEMID.
+///     Regulatory report of the Quality &amp; Compliance bounded context, as in <c>class-06-quality</c>.
 /// </summary>
 public partial class RegulatoryReport : AggregateRoot
 {
     private const string CodeNotBlankMessageKey = "quality.regulatoryReport.error.code.notBlank";
-    private const string TitleNotBlankMessageKey = "quality.regulatoryReport.error.title.notBlank";
 
     /// <summary>
     ///     Constructor used by Entity Framework Core.
@@ -18,10 +17,10 @@ public partial class RegulatoryReport : AggregateRoot
     protected RegulatoryReport()
     {
         Code = string.Empty;
-        Title = string.Empty;
-        Description = string.Empty;
-        RegulatoryAuthority = string.Empty;
-        FileReference = string.Empty;
+        Scope = string.Empty;
+        Owner = string.Empty;
+        Template = string.Empty;
+        Format = string.Empty;
     }
 
     /// <summary>
@@ -29,19 +28,7 @@ public partial class RegulatoryReport : AggregateRoot
     /// </summary>
     /// <param name="command">The data of the regulatory report.</param>
     /// <exception cref="ArgumentException">Thrown when a required value is blank.</exception>
-    public RegulatoryReport(CreateRegulatoryReportCommand command) : this()
-    {
-        if (string.IsNullOrWhiteSpace(command.Code)) throw new ArgumentException(CodeNotBlankMessageKey);
-        Code = command.Code.Trim();
-        if (string.IsNullOrWhiteSpace(command.Title)) throw new ArgumentException(TitleNotBlankMessageKey);
-        Title = command.Title.Trim();
-        Description = command.Description?.Trim() ?? string.Empty;
-        RegulatoryAuthority = command.RegulatoryAuthority?.Trim() ?? string.Empty;
-        FileReference = command.FileReference?.Trim() ?? string.Empty;
-        DueDate = command.DueDate;
-        PreparedBy = command.PreparedBy;
-        Status = ERegulatoryReportStatus.Draft;
-    }
+    public RegulatoryReport(CreateRegulatoryReportCommand command) : this() => Apply(command.Code, command.Type, command.Scope, command.Owner, command.Status, command.Template, command.Format, command.CreatedOn);
 
     /// <summary>
     ///     The id of the regulatory report.
@@ -49,80 +36,55 @@ public partial class RegulatoryReport : AggregateRoot
     public RegulatoryReportId Id { get; }
 
     /// <summary>
-    ///     The business code, for example RR-2026-04.
+    ///     The code.
     /// </summary>
     public string Code { get; private set; }
-    /// <summary>
-    ///     The title of the report.
-    /// </summary>
-    public string Title { get; private set; }
-    /// <summary>
-    ///     What the report contains.
-    /// </summary>
-    public string Description { get; private set; }
-    /// <summary>
-    ///     The authority that receives the report.
-    /// </summary>
-    public string RegulatoryAuthority { get; private set; }
-    /// <summary>
-    ///     Where the file of the report is.
-    /// </summary>
-    public string FileReference { get; private set; }
-    /// <summary>
-    ///     When the report has to be submitted.
-    /// </summary>
-    public DateOnly? DueDate { get; private set; }
-    /// <summary>
-    ///     The id of the user who prepared it.
-    /// </summary>
-    public int? PreparedBy { get; private set; }
-    /// <summary>
-    ///     Where the report is.
-    /// </summary>
-    public ERegulatoryReportStatus Status { get; private set; }
-    /// <summary>
-    ///     When the report was submitted (UTC).
-    /// </summary>
-    public DateTime? SubmittedAt { get; private set; }
 
     /// <summary>
-    ///     Sends a draft to review.
+    ///     The type.
     /// </summary>
-    public bool SubmitForReview()
-    {
-        if (Status != ERegulatoryReportStatus.Draft) return false;
-        Status = ERegulatoryReportStatus.UnderReview;
-        return true;
-    }
+    public EReportType Type { get; private set; }
 
     /// <summary>
-    ///     Approves a report under review.
+    ///     The scope.
     /// </summary>
-    public bool Approve()
-    {
-        if (Status != ERegulatoryReportStatus.UnderReview) return false;
-        Status = ERegulatoryReportStatus.Approved;
-        return true;
-    }
+    public string Scope { get; private set; }
 
     /// <summary>
-    ///     Submits an approved report to the authority.
+    ///     The owner.
     /// </summary>
-    public bool Submit()
-    {
-        if (Status != ERegulatoryReportStatus.Approved) return false;
-        Status = ERegulatoryReportStatus.Submitted;
-        SubmittedAt = DateTime.UtcNow;
-        return true;
-    }
+    public string Owner { get; private set; }
 
     /// <summary>
-    ///     Rejects a report under review.
+    ///     The status.
     /// </summary>
-    public bool Reject()
+    public EReportStatus Status { get; private set; }
+
+    /// <summary>
+    ///     The template.
+    /// </summary>
+    public string Template { get; private set; }
+
+    /// <summary>
+    ///     The format.
+    /// </summary>
+    public string Format { get; private set; }
+
+    /// <summary>
+    ///     The created at.
+    /// </summary>
+    public DateOnly? CreatedOn { get; private set; }
+
+    private void Apply(string code, EReportType type, string scope, string owner, EReportStatus status, string template, string format, DateOnly? createdAt)
     {
-        if (Status != ERegulatoryReportStatus.UnderReview) return false;
-        Status = ERegulatoryReportStatus.Rejected;
-        return true;
+        if (string.IsNullOrWhiteSpace(code)) throw new ArgumentException(CodeNotBlankMessageKey);
+        Code = code?.Trim() ?? string.Empty;
+        Type = type;
+        Scope = scope?.Trim() ?? string.Empty;
+        Owner = owner?.Trim() ?? string.Empty;
+        Status = status;
+        Template = template?.Trim() ?? string.Empty;
+        Format = format?.Trim() ?? string.Empty;
+        CreatedOn = createdAt ?? DateOnly.FromDateTime(DateTime.UtcNow);
     }
 }

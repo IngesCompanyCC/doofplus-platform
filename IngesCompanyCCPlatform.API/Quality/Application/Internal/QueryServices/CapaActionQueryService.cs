@@ -13,17 +13,14 @@ public class CapaActionQueryService(ICapaActionRepository capaActionRepository) 
     /// <inheritdoc />
     public async Task<IEnumerable<CapaAction>> Handle(GetAllCapaActionsQuery query, CancellationToken cancellationToken)
     {
-        return await capaActionRepository.ListAsNoTrackingAsync(cancellationToken);
+        return string.IsNullOrWhiteSpace(query.CapaCode)
+            ? await capaActionRepository.ListAsNoTrackingAsync(cancellationToken)
+            : await capaActionRepository.FindAllByCapaCodeAsNoTrackingAsync(query.CapaCode.Trim(), cancellationToken);
     }
 
     /// <inheritdoc />
     public async Task<CapaAction?> Handle(GetCapaActionByIdQuery query, CancellationToken cancellationToken)
     {
         return await capaActionRepository.FindByIdAsNoTrackingAsync(query.CapaActionId, cancellationToken);
-    }
-    /// <inheritdoc />
-    public async Task<IEnumerable<CapaAction>> Handle(GetAllCapaActionsByCapaPlanIdQuery query, CancellationToken cancellationToken)
-    {
-        return await capaActionRepository.FindAllByCapaPlanIdAsNoTrackingAsync(query.CapaPlanId, cancellationToken);
     }
 }

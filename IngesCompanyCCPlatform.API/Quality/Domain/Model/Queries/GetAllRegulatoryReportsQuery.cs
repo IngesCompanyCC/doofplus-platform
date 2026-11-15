@@ -1,6 +1,6 @@
 ﻿namespace IngesCompanyCCPlatform.API.Quality.Domain.Model.Queries;
 
 /// <summary>
-///     Query to get all the regulatory reports.
+///     Query of the regulatory reports.
 /// </summary>
-public record GetAllRegulatoryReportsQuery;
+public record GetAllRegulatoryReportsQuery();

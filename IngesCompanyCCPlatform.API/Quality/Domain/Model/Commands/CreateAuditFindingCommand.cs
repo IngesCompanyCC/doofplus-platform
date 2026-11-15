@@ -6,8 +6,13 @@ namespace IngesCompanyCCPlatform.API.Quality.Domain.Model.Commands;
 ///     Command to create a audit finding.
 /// </summary>
 public record CreateAuditFindingCommand(
-    int AuditId,
+    string AuditCode,
+    string Code,
     string Title,
-    string Description,
-    EAuditFindingSeverity Severity,
-    int? RelatedDeviationId);
+    EClassification Classification,
+    string Owner,
+    DateOnly? DueAt,
+    EFindingStatus Status,
+    string Observation,
+    string Response,
+    string ClosureRequirement);

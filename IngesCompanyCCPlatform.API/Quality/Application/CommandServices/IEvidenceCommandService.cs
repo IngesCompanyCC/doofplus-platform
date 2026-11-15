@@ -13,4 +13,14 @@ public interface IEvidenceCommandService
     ///     Creates a evidence.
     /// </summary>
     Task<Result<Evidence>> Handle(CreateEvidenceCommand command, CancellationToken cancellationToken);
+
+    /// <summary>
+    ///     Replaces the data of a evidence.
+    /// </summary>
+    Task<Result<Evidence>> Handle(UpdateEvidenceCommand command, CancellationToken cancellationToken);
+
+    /// <summary>
+    ///     Removes a evidence.
+    /// </summary>
+    Task<Result<Evidence>> Handle(DeleteEvidenceCommand command, CancellationToken cancellationToken);
 }

@@ -9,7 +9,7 @@ namespace IngesCompanyCCPlatform.API.Quality.Domain.Repositories;
 public interface IAuditFindingRepository : IBaseRepository<AuditFinding>
 {
     /// <summary>
-    ///     Gets the audit findings filtered by audit id.
+    ///     Gets the audit findings with the audit code.
     /// </summary>
-    Task<IEnumerable<AuditFinding>> FindAllByAuditIdAsNoTrackingAsync(int auditId, CancellationToken cancellationToken = default);
+    Task<IEnumerable<AuditFinding>> FindAllByAuditCodeAsNoTrackingAsync(string auditCode, CancellationToken cancellationToken = default);
 }

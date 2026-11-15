@@ -29,11 +29,11 @@ public class AnalyticalResultRepository(AppDbContext context) : BaseRepository<A
     }
 
     /// <inheritdoc />
-    public async Task<IEnumerable<AnalyticalResult>> FindAllByBatchIdAsNoTrackingAsync(int batchId, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<AnalyticalResult>> FindAllByBatchCodeAsNoTrackingAsync(string batchCode, CancellationToken cancellationToken = default)
     {
         return await Context.Set<AnalyticalResult>()
             .AsNoTracking()
-            .Where(analyticalResult => analyticalResult.BatchId == batchId)
+            .Where(analyticalResult => analyticalResult.BatchCode == batchCode)
             .ToListAsync(cancellationToken);
     }
 }

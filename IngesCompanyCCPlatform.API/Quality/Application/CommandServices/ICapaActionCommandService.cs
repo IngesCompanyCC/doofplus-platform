@@ -13,4 +13,9 @@ public interface ICapaActionCommandService
     ///     Creates a capa action.
     /// </summary>
     Task<Result<CapaAction>> Handle(CreateCapaActionCommand command, CancellationToken cancellationToken);
+
+    /// <summary>
+    ///     Replaces the data of a capa action.
+    /// </summary>
+    Task<Result<CapaAction>> Handle(UpdateCapaActionCommand command, CancellationToken cancellationToken);
 }

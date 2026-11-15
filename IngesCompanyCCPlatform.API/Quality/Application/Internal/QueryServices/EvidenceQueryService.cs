@@ -13,17 +13,14 @@ public class EvidenceQueryService(IEvidenceRepository evidenceRepository) : IEvi
     /// <inheritdoc />
     public async Task<IEnumerable<Evidence>> Handle(GetAllEvidenceQuery query, CancellationToken cancellationToken)
     {
-        return await evidenceRepository.ListAsNoTrackingAsync(cancellationToken);
+        return string.IsNullOrWhiteSpace(query.RecordCode)
+            ? await evidenceRepository.ListAsNoTrackingAsync(cancellationToken)
+            : await evidenceRepository.FindAllByRecordCodeAsNoTrackingAsync(query.RecordCode.Trim(), cancellationToken);
     }
 
     /// <inheritdoc />
     public async Task<Evidence?> Handle(GetEvidenceByIdQuery query, CancellationToken cancellationToken)
     {
         return await evidenceRepository.FindByIdAsNoTrackingAsync(query.EvidenceId, cancellationToken);
-    }
-    /// <inheritdoc />
-    public async Task<IEnumerable<Evidence>> Handle(GetAllEvidenceByDeviationIdQuery query, CancellationToken cancellationToken)
-    {
-        return await evidenceRepository.FindAllByDeviationIdAsNoTrackingAsync(query.DeviationId, cancellationToken);
     }
 }

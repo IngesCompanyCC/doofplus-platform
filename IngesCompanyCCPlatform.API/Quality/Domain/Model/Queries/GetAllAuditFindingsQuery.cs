@@ -1,6 +1,6 @@
 ﻿namespace IngesCompanyCCPlatform.API.Quality.Domain.Model.Queries;
 
 /// <summary>
-///     Query to get all the audit findings.
+///     Query of the audit findings, optionally filtered by audit code.
 /// </summary>
-public record GetAllAuditFindingsQuery;
+public record GetAllAuditFindingsQuery(string? AuditCode = null);

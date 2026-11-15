@@ -9,7 +9,7 @@ namespace IngesCompanyCCPlatform.API.Quality.Domain.Repositories;
 public interface IAuditEventRepository : IBaseRepository<AuditEvent>
 {
     /// <summary>
-    ///     Gets the audit events filtered by aggregate type and aggregate id.
+    ///     Gets the audit events with the record.
     /// </summary>
-    Task<IEnumerable<AuditEvent>> FindAllByAggregateTypeAggregateIdAsNoTrackingAsync(string? aggregateType, int? aggregateId, CancellationToken cancellationToken = default);
+    Task<IEnumerable<AuditEvent>> FindAllByRecordAsNoTrackingAsync(string record, CancellationToken cancellationToken = default);
 }

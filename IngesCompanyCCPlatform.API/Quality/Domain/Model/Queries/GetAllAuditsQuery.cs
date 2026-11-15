@@ -1,6 +1,6 @@
 ﻿namespace IngesCompanyCCPlatform.API.Quality.Domain.Model.Queries;
 
 /// <summary>
-///     Query to get all the audits.
+///     Query of the audits.
 /// </summary>
-public record GetAllAuditsQuery;
+public record GetAllAuditsQuery();

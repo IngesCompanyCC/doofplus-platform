@@ -1,15 +1,13 @@
 ﻿namespace IngesCompanyCCPlatform.API.Quality.Interfaces.Rest.Resources;
 
 /// <summary>
-///     A collaboration task, as the API returns it.
+///     A collaboration task, with the fields of <c>contratos/quality-api.json</c>.
 /// </summary>
 public record CollaborationTaskResource(
     int Id,
     string Title,
-    string Description,
-    int? AssignedTo,
-    int? CreatedBy,
-    int? RelatedDeviationId,
-    DateOnly? DueDate,
-    string Status,
-    DateTime? CompletedAt);
+    string RecordCode,
+    string Detail,
+    string Owner,
+    DateTime? DueAt,
+    string Status);

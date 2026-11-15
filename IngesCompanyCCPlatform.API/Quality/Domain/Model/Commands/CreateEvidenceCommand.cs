@@ -6,10 +6,7 @@ namespace IngesCompanyCCPlatform.API.Quality.Domain.Model.Commands;
 ///     Command to create a evidence.
 /// </summary>
 public record CreateEvidenceCommand(
-    string Title,
-    string Description,
-    EEvidenceType Type,
-    string FileReference,
-    int? DeviationId,
-    int? DocumentId,
-    int? UploadedBy);
+    string RecordCode,
+    string FileName,
+    string Detail,
+    EEvidenceStatus Status);

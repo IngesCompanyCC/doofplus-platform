@@ -9,7 +9,7 @@ namespace IngesCompanyCCPlatform.API.Quality.Application.QueryServices;
 public interface ICapaActionQueryService
 {
     /// <summary>
-    ///     Gets all the capa actions.
+    ///     Gets the capa actions, filtered by capa code when it is sent.
     /// </summary>
     Task<IEnumerable<CapaAction>> Handle(GetAllCapaActionsQuery query, CancellationToken cancellationToken);
 
@@ -17,8 +17,4 @@ public interface ICapaActionQueryService
     ///     Gets a capa action by its id, or <c>null</c>.
     /// </summary>
     Task<CapaAction?> Handle(GetCapaActionByIdQuery query, CancellationToken cancellationToken);
-    /// <summary>
-    ///     Gets the capa actions filtered by capa plan id.
-    /// </summary>
-    Task<IEnumerable<CapaAction>> Handle(GetAllCapaActionsByCapaPlanIdQuery query, CancellationToken cancellationToken);
 }

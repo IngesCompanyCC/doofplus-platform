@@ -13,6 +13,7 @@ public static class DeviationErrors
     /// <param name="id">The id that was looked for.</param>
     public static Error NotFoundById(int id) =>
         Error.NotFound("quality.deviation.error.notFoundById", $"Deviation not found for id {id}.");
+
     /// <summary>
     ///     Another deviation already has the code.
     /// </summary>

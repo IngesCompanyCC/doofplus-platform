@@ -1,6 +1,6 @@
 ﻿namespace IngesCompanyCCPlatform.API.Quality.Domain.Model.Queries;
 
 /// <summary>
-///     Query to get all the quality documents.
+///     Query of the quality documents, optionally filtered by code.
 /// </summary>
-public record GetAllQualityDocumentsQuery;
+public record GetAllQualityDocumentsQuery(string? Code = null);

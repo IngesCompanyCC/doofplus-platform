@@ -1,13 +1,10 @@
 ﻿namespace IngesCompanyCCPlatform.API.Quality.Interfaces.Rest.Resources;
 
 /// <summary>
-///     Data to create a evidence.
+///     Data to create a evidence. Missing optional values take their default.
 /// </summary>
 public record CreateEvidenceResource(
-    string Title,
-    string? Description,
-    string Type,
-    string FileReference,
-    int? DeviationId,
-    int? DocumentId,
-    int? UploadedBy);
+    string? RecordCode,
+    string? FileName,
+    string? Detail,
+    string? Status);

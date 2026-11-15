@@ -5,21 +5,21 @@ using IngesCompanyCCPlatform.API.Shared.Domain.Model.Aggregates.Internal;
 namespace IngesCompanyCCPlatform.API.Quality.Domain.Model.Aggregates;
 
 /// <summary>
-///     A piece of evidence attached to a deviation or a document.
+///     Evidence of the Quality &amp; Compliance bounded context, as in <c>class-06-quality</c>.
 /// </summary>
 public partial class Evidence : AggregateRoot
 {
-    private const string TitleNotBlankMessageKey = "quality.evidence.error.title.notBlank";
-    private const string FileReferenceNotBlankMessageKey = "quality.evidence.error.fileReference.notBlank";
+    private const string RecordCodeNotBlankMessageKey = "quality.evidence.error.recordCode.notBlank";
+    private const string FileNameNotBlankMessageKey = "quality.evidence.error.fileName.notBlank";
 
     /// <summary>
     ///     Constructor used by Entity Framework Core.
     /// </summary>
     protected Evidence()
     {
-        Title = string.Empty;
-        Description = string.Empty;
-        FileReference = string.Empty;
+        RecordCode = string.Empty;
+        FileName = string.Empty;
+        Detail = string.Empty;
     }
 
     /// <summary>
@@ -27,20 +27,7 @@ public partial class Evidence : AggregateRoot
     /// </summary>
     /// <param name="command">The data of the evidence.</param>
     /// <exception cref="ArgumentException">Thrown when a required value is blank.</exception>
-    public Evidence(CreateEvidenceCommand command) : this()
-    {
-        if (string.IsNullOrWhiteSpace(command.Title)) throw new ArgumentException(TitleNotBlankMessageKey);
-        Title = command.Title.Trim();
-        Description = command.Description?.Trim() ?? string.Empty;
-        Type = command.Type;
-        if (string.IsNullOrWhiteSpace(command.FileReference)) throw new ArgumentException(FileReferenceNotBlankMessageKey);
-        FileReference = command.FileReference.Trim();
-        DeviationId = command.DeviationId;
-        DocumentId = command.DocumentId;
-        UploadedBy = command.UploadedBy;
-        Status = EEvidenceStatus.Pending;
-        UploadedAt = DateTime.UtcNow;
-    }
+    public Evidence(CreateEvidenceCommand command) : this() => Apply(command.RecordCode, command.FileName, command.Detail, command.Status);
 
     /// <summary>
     ///     The id of the evidence.
@@ -48,64 +35,44 @@ public partial class Evidence : AggregateRoot
     public EvidenceId Id { get; }
 
     /// <summary>
-    ///     The title of the evidence.
+    ///     The record code.
     /// </summary>
-    public string Title { get; private set; }
+    public string RecordCode { get; private set; }
+
     /// <summary>
-    ///     What the evidence shows.
+    ///     The file name.
     /// </summary>
-    public string Description { get; private set; }
+    public string FileName { get; private set; }
+
     /// <summary>
-    ///     The kind of evidence.
+    ///     The detail.
     /// </summary>
-    public EEvidenceType Type { get; private set; }
+    public string Detail { get; private set; }
+
     /// <summary>
-    ///     Where the file of the evidence is.
-    /// </summary>
-    public string FileReference { get; private set; }
-    /// <summary>
-    ///     The id of the related deviation.
-    /// </summary>
-    public int? DeviationId { get; private set; }
-    /// <summary>
-    ///     The id of the related quality document.
-    /// </summary>
-    public int? DocumentId { get; private set; }
-    /// <summary>
-    ///     The id of the user who uploaded it.
-    /// </summary>
-    public int? UploadedBy { get; private set; }
-    /// <summary>
-    ///     Where the evidence is in its verification.
+    ///     The status.
     /// </summary>
     public EEvidenceStatus Status { get; private set; }
-    /// <summary>
-    ///     When the evidence was uploaded (UTC).
-    /// </summary>
-    public DateTime UploadedAt { get; private set; }
-    /// <summary>
-    ///     When the evidence was verified (UTC).
-    /// </summary>
-    public DateTime? VerifiedAt { get; private set; }
 
     /// <summary>
-    ///     Verifies pending evidence.
+    ///     Replaces the data of the evidence with the data of the command.
     /// </summary>
-    public bool Verify()
-    {
-        if (Status != EEvidenceStatus.Pending) return false;
-        Status = EEvidenceStatus.Verified;
-        VerifiedAt = DateTime.UtcNow;
-        return true;
-    }
+    /// <param name="command">The new data.</param>
+    /// <exception cref="ArgumentException">Thrown when a required value is blank.</exception>
+    public void Update(UpdateEvidenceCommand command) => Apply(command.RecordCode, command.FileName, command.Detail, command.Status);
 
     /// <summary>
-    ///     Rejects pending evidence.
+    ///     Reviewed evidence cannot be removed, so the investigation keeps its integrity.
     /// </summary>
-    public bool Reject()
+    public bool CanBeRemoved() => Status != EEvidenceStatus.Reviewed;
+
+    private void Apply(string recordCode, string fileName, string detail, EEvidenceStatus status)
     {
-        if (Status != EEvidenceStatus.Pending) return false;
-        Status = EEvidenceStatus.Rejected;
-        return true;
+        if (string.IsNullOrWhiteSpace(recordCode)) throw new ArgumentException(RecordCodeNotBlankMessageKey);
+        RecordCode = recordCode?.Trim() ?? string.Empty;
+        if (string.IsNullOrWhiteSpace(fileName)) throw new ArgumentException(FileNameNotBlankMessageKey);
+        FileName = fileName?.Trim() ?? string.Empty;
+        Detail = detail?.Trim() ?? string.Empty;
+        Status = status;
     }
 }

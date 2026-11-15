@@ -9,7 +9,7 @@ namespace IngesCompanyCCPlatform.API.Quality.Application.QueryServices;
 public interface IAuditFindingQueryService
 {
     /// <summary>
-    ///     Gets all the audit findings.
+    ///     Gets the audit findings, filtered by audit code when it is sent.
     /// </summary>
     Task<IEnumerable<AuditFinding>> Handle(GetAllAuditFindingsQuery query, CancellationToken cancellationToken);
 
@@ -17,8 +17,4 @@ public interface IAuditFindingQueryService
     ///     Gets a audit finding by its id, or <c>null</c>.
     /// </summary>
     Task<AuditFinding?> Handle(GetAuditFindingByIdQuery query, CancellationToken cancellationToken);
-    /// <summary>
-    ///     Gets the audit findings filtered by audit id.
-    /// </summary>
-    Task<IEnumerable<AuditFinding>> Handle(GetAllAuditFindingsByAuditIdQuery query, CancellationToken cancellationToken);
 }

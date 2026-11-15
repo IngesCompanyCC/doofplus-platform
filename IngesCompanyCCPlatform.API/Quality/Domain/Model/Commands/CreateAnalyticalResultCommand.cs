@@ -6,11 +6,13 @@ namespace IngesCompanyCCPlatform.API.Quality.Domain.Model.Commands;
 ///     Command to create a analytical result.
 /// </summary>
 public record CreateAnalyticalResultCommand(
-    int BatchId,
-    string TestName,
-    string Parameter,
-    decimal MeasuredValue,
-    decimal MinimumValue,
-    decimal MaximumValue,
-    string Unit,
-    DateTime? TestedAt);
+    string BatchCode,
+    string SampleCode,
+    string ReportCode,
+    string Test,
+    string Protocol,
+    string Result,
+    string Specification,
+    string Analyst,
+    EResultStatus Status,
+    EApprovalState Approval);

@@ -1,11 +1,12 @@
 ﻿namespace IngesCompanyCCPlatform.API.Quality.Interfaces.Rest.Resources;
 
 /// <summary>
-///     A task comment, as the API returns it.
+///     A task comment, with the fields of <c>contratos/quality-api.json</c>.
 /// </summary>
 public record TaskCommentResource(
     int Id,
-    int TaskId,
-    int AuthorId,
-    string Content,
-    DateTimeOffset? CreatedAt);
+    string RecordCode,
+    string Author,
+    string Initials,
+    DateTime? PostedAt,
+    string Text);

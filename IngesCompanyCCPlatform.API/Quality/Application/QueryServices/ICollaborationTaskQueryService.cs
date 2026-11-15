@@ -9,7 +9,7 @@ namespace IngesCompanyCCPlatform.API.Quality.Application.QueryServices;
 public interface ICollaborationTaskQueryService
 {
     /// <summary>
-    ///     Gets all the collaboration tasks.
+    ///     Gets the collaboration tasks, filtered by record code when it is sent.
     /// </summary>
     Task<IEnumerable<CollaborationTask>> Handle(GetAllCollaborationTasksQuery query, CancellationToken cancellationToken);
 

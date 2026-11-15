@@ -9,7 +9,7 @@ namespace IngesCompanyCCPlatform.API.Quality.Application.QueryServices;
 public interface IAuditEventQueryService
 {
     /// <summary>
-    ///     Gets all the audit events.
+    ///     Gets the audit events, filtered by record when it is sent.
     /// </summary>
     Task<IEnumerable<AuditEvent>> Handle(GetAllAuditEventsQuery query, CancellationToken cancellationToken);
 
@@ -17,8 +17,4 @@ public interface IAuditEventQueryService
     ///     Gets a audit event by its id, or <c>null</c>.
     /// </summary>
     Task<AuditEvent?> Handle(GetAuditEventByIdQuery query, CancellationToken cancellationToken);
-    /// <summary>
-    ///     Gets the audit events filtered by aggregate type and aggregate id.
-    /// </summary>
-    Task<IEnumerable<AuditEvent>> Handle(GetAllAuditEventsByAggregateTypeAggregateIdQuery query, CancellationToken cancellationToken);
 }

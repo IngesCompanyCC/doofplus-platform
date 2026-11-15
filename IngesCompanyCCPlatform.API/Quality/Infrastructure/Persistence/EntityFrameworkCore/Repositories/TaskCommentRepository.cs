@@ -29,11 +29,11 @@ public class TaskCommentRepository(AppDbContext context) : BaseRepository<TaskCo
     }
 
     /// <inheritdoc />
-    public async Task<IEnumerable<TaskComment>> FindAllByTaskIdAsNoTrackingAsync(int taskId, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<TaskComment>> FindAllByRecordCodeAsNoTrackingAsync(string recordCode, CancellationToken cancellationToken = default)
     {
         return await Context.Set<TaskComment>()
             .AsNoTracking()
-            .Where(taskComment => taskComment.TaskId == taskId)
+            .Where(taskComment => taskComment.RecordCode == recordCode)
             .ToListAsync(cancellationToken);
     }
 }

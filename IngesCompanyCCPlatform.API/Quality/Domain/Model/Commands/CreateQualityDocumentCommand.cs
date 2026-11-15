@@ -7,9 +7,15 @@ namespace IngesCompanyCCPlatform.API.Quality.Domain.Model.Commands;
 /// </summary>
 public record CreateQualityDocumentCommand(
     string Code,
-    string Title,
-    string Description,
-    string DocumentType,
-    string FileReference,
     string Version,
-    int? OwnerId);
+    string Title,
+    EDocumentStatus Status,
+    string Author,
+    string TechnicalReviewer,
+    string Approver,
+    DateOnly? ChangedAt,
+    string Purpose,
+    string Scope,
+    string Procedure,
+    string RevisionSummary,
+    int ReviewCycleMonths);

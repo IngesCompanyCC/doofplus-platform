@@ -1,6 +1,6 @@
 ﻿namespace IngesCompanyCCPlatform.API.Quality.Domain.Model.Queries;
 
 /// <summary>
-///     Query to get all the evidence.
+///     Query of the evidence, optionally filtered by record code.
 /// </summary>
-public record GetAllEvidenceQuery;
+public record GetAllEvidenceQuery(string? RecordCode = null);

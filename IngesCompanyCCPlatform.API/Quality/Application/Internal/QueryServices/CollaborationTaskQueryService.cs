@@ -13,7 +13,9 @@ public class CollaborationTaskQueryService(ICollaborationTaskRepository collabor
     /// <inheritdoc />
     public async Task<IEnumerable<CollaborationTask>> Handle(GetAllCollaborationTasksQuery query, CancellationToken cancellationToken)
     {
-        return await collaborationTaskRepository.ListAsNoTrackingAsync(cancellationToken);
+        return string.IsNullOrWhiteSpace(query.RecordCode)
+            ? await collaborationTaskRepository.ListAsNoTrackingAsync(cancellationToken)
+            : await collaborationTaskRepository.FindAllByRecordCodeAsNoTrackingAsync(query.RecordCode.Trim(), cancellationToken);
     }
 
     /// <inheritdoc />

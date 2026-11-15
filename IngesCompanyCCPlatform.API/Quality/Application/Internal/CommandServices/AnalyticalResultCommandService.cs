@@ -24,4 +24,17 @@ public class AnalyticalResultCommandService(
         await unitOfWork.CompleteAsync(cancellationToken);
         return Result<AnalyticalResult>.Success(analyticalResult);
     }
+
+    /// <inheritdoc />
+    public async Task<Result<AnalyticalResult>> Handle(UpdateAnalyticalResultCommand command, CancellationToken cancellationToken)
+    {
+        var analyticalResult = await analyticalResultRepository.FindByIdAsync(command.AnalyticalResultId, cancellationToken);
+        if (analyticalResult is null)
+            return Result<AnalyticalResult>.Failure(AnalyticalResultErrors.NotFoundById(command.AnalyticalResultId), QualityError.AnalyticalResultNotFound);
+
+        analyticalResult.Update(command);
+        analyticalResultRepository.Update(analyticalResult);
+        await unitOfWork.CompleteAsync(cancellationToken);
+        return Result<AnalyticalResult>.Success(analyticalResult);
+    }
 }

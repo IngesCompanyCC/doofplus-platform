@@ -2,6 +2,7 @@
 using IngesCompanyCCPlatform.API.Quality.Application.CommandServices;
 using IngesCompanyCCPlatform.API.Quality.Application.QueryServices;
 using IngesCompanyCCPlatform.API.Quality.Domain.Model;
+using IngesCompanyCCPlatform.API.Quality.Domain.Model.Commands;
 using IngesCompanyCCPlatform.API.Quality.Domain.Model.Errors;
 using IngesCompanyCCPlatform.API.Quality.Domain.Model.Queries;
 using IngesCompanyCCPlatform.API.Quality.Interfaces.Rest.Resources;
@@ -32,8 +33,6 @@ public class CollaborationTasksController(
     [EndpointDescription("Creates a collaboration task.")]
     [ProducesResponseType(typeof(CollaborationTaskResource), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<IActionResult> CreateCollaborationTask([FromBody] CreateCollaborationTaskResource resource, CancellationToken cancellationToken)
     {
         var command = CollaborationTaskCommandFromResourceAssembler.ToCommandFromResource(resource);
@@ -42,15 +41,17 @@ public class CollaborationTasksController(
             created => CreatedAtAction(nameof(GetCollaborationTaskById), new { collaborationTaskId = created.Id.Value },
                 CollaborationTaskResourceFromEntityAssembler.ToResourceFromEntity(created)));
     }
+
     [HttpGet]
     [EndpointSummary("Get the collaboration tasks")]
-    [EndpointDescription("Gets all the collaboration tasks.")]
+    [EndpointDescription("Gets the collaboration tasks; with recordCode, only the ones with that record code.")]
     [ProducesResponseType(typeof(IEnumerable<CollaborationTaskResource>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetCollaborationTasks(CancellationToken cancellationToken)
+    public async Task<IActionResult> GetCollaborationTasks([FromQuery] string? recordCode, CancellationToken cancellationToken)
     {
-        var items = await collaborationTaskQueryService.Handle(new GetAllCollaborationTasksQuery(), cancellationToken);
+        var items = await collaborationTaskQueryService.Handle(new GetAllCollaborationTasksQuery(recordCode), cancellationToken);
         return Ok(items.Select(CollaborationTaskResourceFromEntityAssembler.ToResourceFromEntity));
     }
+
     [HttpGet("{collaborationTaskId:int}")]
     [EndpointSummary("Get a collaboration task by its id")]
     [EndpointDescription("Gets a collaboration task by the provided id.")]

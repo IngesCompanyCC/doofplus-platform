@@ -6,12 +6,10 @@ using IngesCompanyCCPlatform.API.Quality.Interfaces.Rest.Resources;
 namespace IngesCompanyCCPlatform.API.Quality.Interfaces.Rest.Transform;
 
 /// <summary>
-///     Builds the commands of <c>RegulatoryReport</c> from the resources.
+///     Builds the commands of <c>RegulatoryReport</c> from the resources. Enums are accepted in any case and with hyphens.
 /// </summary>
 public static class RegulatoryReportCommandFromResourceAssembler
 {
-
-
     /// <summary>
     ///     Builds the command to create a regulatory report.
     /// </summary>
@@ -21,13 +19,14 @@ public static class RegulatoryReportCommandFromResourceAssembler
     public static CreateRegulatoryReportCommand ToCommandFromResource(CreateRegulatoryReportResource resource)
     {
         return new CreateRegulatoryReportCommand(
-            resource.Code,
-            resource.Title,
-            resource.Description ?? string.Empty,
-            resource.RegulatoryAuthority ?? string.Empty,
-            resource.FileReference ?? string.Empty,
-            resource.DueDate,
-            resource.PreparedBy);
+            resource.Code ?? string.Empty,
+            resource.Type is null ? EReportType.QualityReview : EnumParser.Parse<EReportType>(resource.Type, "quality.regulatoryReport.error.type.invalid"),
+            resource.Scope ?? string.Empty,
+            resource.Owner ?? string.Empty,
+            resource.Status is null ? EReportStatus.Draft : EnumParser.Parse<EReportStatus>(resource.Status, "quality.regulatoryReport.error.status.invalid"),
+            resource.Template ?? string.Empty,
+            resource.Format ?? string.Empty,
+            resource.CreatedAt);
     }
 }
 
@@ -46,13 +45,12 @@ public static class RegulatoryReportResourceFromEntityAssembler
         return new RegulatoryReportResource(
             entity.Id.Value,
             entity.Code,
-            entity.Title,
-            entity.Description,
-            entity.RegulatoryAuthority,
-            entity.FileReference,
-            entity.DueDate,
-            entity.PreparedBy,
+            entity.Type.ToString(),
+            entity.Scope,
+            entity.Owner,
             entity.Status.ToString(),
-            entity.SubmittedAt is null ? null : DateTime.SpecifyKind(entity.SubmittedAt.Value, DateTimeKind.Utc));
+            entity.Template,
+            entity.Format,
+            entity.CreatedOn);
     }
 }

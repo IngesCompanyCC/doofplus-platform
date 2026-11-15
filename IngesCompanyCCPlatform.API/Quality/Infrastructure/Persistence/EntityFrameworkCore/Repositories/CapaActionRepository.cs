@@ -29,11 +29,11 @@ public class CapaActionRepository(AppDbContext context) : BaseRepository<CapaAct
     }
 
     /// <inheritdoc />
-    public async Task<IEnumerable<CapaAction>> FindAllByCapaPlanIdAsNoTrackingAsync(int capaPlanId, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<CapaAction>> FindAllByCapaCodeAsNoTrackingAsync(string capaCode, CancellationToken cancellationToken = default)
     {
         return await Context.Set<CapaAction>()
             .AsNoTracking()
-            .Where(capaAction => capaAction.CapaPlanId == capaPlanId)
+            .Where(capaAction => capaAction.CapaCode == capaCode)
             .ToListAsync(cancellationToken);
     }
 }

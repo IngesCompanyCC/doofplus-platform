@@ -13,17 +13,14 @@ public class AuditFindingQueryService(IAuditFindingRepository auditFindingReposi
     /// <inheritdoc />
     public async Task<IEnumerable<AuditFinding>> Handle(GetAllAuditFindingsQuery query, CancellationToken cancellationToken)
     {
-        return await auditFindingRepository.ListAsNoTrackingAsync(cancellationToken);
+        return string.IsNullOrWhiteSpace(query.AuditCode)
+            ? await auditFindingRepository.ListAsNoTrackingAsync(cancellationToken)
+            : await auditFindingRepository.FindAllByAuditCodeAsNoTrackingAsync(query.AuditCode.Trim(), cancellationToken);
     }
 
     /// <inheritdoc />
     public async Task<AuditFinding?> Handle(GetAuditFindingByIdQuery query, CancellationToken cancellationToken)
     {
         return await auditFindingRepository.FindByIdAsNoTrackingAsync(query.AuditFindingId, cancellationToken);
-    }
-    /// <inheritdoc />
-    public async Task<IEnumerable<AuditFinding>> Handle(GetAllAuditFindingsByAuditIdQuery query, CancellationToken cancellationToken)
-    {
-        return await auditFindingRepository.FindAllByAuditIdAsNoTrackingAsync(query.AuditId, cancellationToken);
     }
 }

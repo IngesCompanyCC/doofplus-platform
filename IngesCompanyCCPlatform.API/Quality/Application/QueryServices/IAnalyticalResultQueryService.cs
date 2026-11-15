@@ -9,7 +9,7 @@ namespace IngesCompanyCCPlatform.API.Quality.Application.QueryServices;
 public interface IAnalyticalResultQueryService
 {
     /// <summary>
-    ///     Gets all the analytical results.
+    ///     Gets the analytical results, filtered by batch code when it is sent.
     /// </summary>
     Task<IEnumerable<AnalyticalResult>> Handle(GetAllAnalyticalResultsQuery query, CancellationToken cancellationToken);
 
@@ -17,8 +17,4 @@ public interface IAnalyticalResultQueryService
     ///     Gets a analytical result by its id, or <c>null</c>.
     /// </summary>
     Task<AnalyticalResult?> Handle(GetAnalyticalResultByIdQuery query, CancellationToken cancellationToken);
-    /// <summary>
-    ///     Gets the analytical results filtered by batch id.
-    /// </summary>
-    Task<IEnumerable<AnalyticalResult>> Handle(GetAllAnalyticalResultsByBatchIdQuery query, CancellationToken cancellationToken);
 }

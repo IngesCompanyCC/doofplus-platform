@@ -9,7 +9,7 @@ namespace IngesCompanyCCPlatform.API.Quality.Application.QueryServices;
 public interface IEvidenceQueryService
 {
     /// <summary>
-    ///     Gets all the evidence.
+    ///     Gets the evidence, filtered by record code when it is sent.
     /// </summary>
     Task<IEnumerable<Evidence>> Handle(GetAllEvidenceQuery query, CancellationToken cancellationToken);
 
@@ -17,8 +17,4 @@ public interface IEvidenceQueryService
     ///     Gets a evidence by its id, or <c>null</c>.
     /// </summary>
     Task<Evidence?> Handle(GetEvidenceByIdQuery query, CancellationToken cancellationToken);
-    /// <summary>
-    ///     Gets the evidence filtered by deviation id.
-    /// </summary>
-    Task<IEnumerable<Evidence>> Handle(GetAllEvidenceByDeviationIdQuery query, CancellationToken cancellationToken);
 }

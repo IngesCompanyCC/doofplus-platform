@@ -29,11 +29,11 @@ public class AuditFindingRepository(AppDbContext context) : BaseRepository<Audit
     }
 
     /// <inheritdoc />
-    public async Task<IEnumerable<AuditFinding>> FindAllByAuditIdAsNoTrackingAsync(int auditId, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<AuditFinding>> FindAllByAuditCodeAsNoTrackingAsync(string auditCode, CancellationToken cancellationToken = default)
     {
         return await Context.Set<AuditFinding>()
             .AsNoTracking()
-            .Where(auditFinding => auditFinding.AuditId == auditId)
+            .Where(auditFinding => auditFinding.AuditCode == auditCode)
             .ToListAsync(cancellationToken);
     }
 }

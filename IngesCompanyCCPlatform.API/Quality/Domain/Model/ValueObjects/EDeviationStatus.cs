@@ -1,16 +1,12 @@
 ﻿namespace IngesCompanyCCPlatform.API.Quality.Domain.Model.ValueObjects;
 
 /// <summary>
-///     Where a deviation is in its investigation.
+///     Deviation status values of the Quality &amp; Compliance bounded context.
 /// </summary>
-/// <remarks>
-///     Stored as text in PascalCase, like the other enums of the project.
-/// </remarks>
 public enum EDeviationStatus
 {
     Open,
-    UnderInvestigation,
-    CapaRequired,
+    Submitted,
     Dispositioned,
     Closed
 }

@@ -2,6 +2,7 @@
 using IngesCompanyCCPlatform.API.Quality.Application.CommandServices;
 using IngesCompanyCCPlatform.API.Quality.Application.QueryServices;
 using IngesCompanyCCPlatform.API.Quality.Domain.Model;
+using IngesCompanyCCPlatform.API.Quality.Domain.Model.Commands;
 using IngesCompanyCCPlatform.API.Quality.Domain.Model.Errors;
 using IngesCompanyCCPlatform.API.Quality.Domain.Model.Queries;
 using IngesCompanyCCPlatform.API.Quality.Interfaces.Rest.Resources;
@@ -32,7 +33,6 @@ public class RegulatoryReportsController(
     [EndpointDescription("Creates a regulatory report.")]
     [ProducesResponseType(typeof(RegulatoryReportResource), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<IActionResult> CreateRegulatoryReport([FromBody] CreateRegulatoryReportResource resource, CancellationToken cancellationToken)
     {
@@ -42,15 +42,17 @@ public class RegulatoryReportsController(
             created => CreatedAtAction(nameof(GetRegulatoryReportById), new { regulatoryReportId = created.Id.Value },
                 RegulatoryReportResourceFromEntityAssembler.ToResourceFromEntity(created)));
     }
+
     [HttpGet]
     [EndpointSummary("Get the regulatory reports")]
-    [EndpointDescription("Gets all the regulatory reports.")]
+    [EndpointDescription("Gets the regulatory reports.")]
     [ProducesResponseType(typeof(IEnumerable<RegulatoryReportResource>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetRegulatoryReports(CancellationToken cancellationToken)
     {
         var items = await regulatoryReportQueryService.Handle(new GetAllRegulatoryReportsQuery(), cancellationToken);
         return Ok(items.Select(RegulatoryReportResourceFromEntityAssembler.ToResourceFromEntity));
     }
+
     [HttpGet("{regulatoryReportId:int}")]
     [EndpointSummary("Get a regulatory report by its id")]
     [EndpointDescription("Gets a regulatory report by the provided id.")]

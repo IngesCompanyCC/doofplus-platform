@@ -5,21 +5,26 @@ using IngesCompanyCCPlatform.API.Shared.Domain.Model.Aggregates.Internal;
 namespace IngesCompanyCCPlatform.API.Quality.Domain.Model.Aggregates;
 
 /// <summary>
-///     The result of a laboratory test of a production batch.
+///     Analytical result of the Quality &amp; Compliance bounded context, as in <c>class-06-quality</c>.
 /// </summary>
 public partial class AnalyticalResult : AggregateRoot
 {
-    private const string TestNameNotBlankMessageKey = "quality.analyticalResult.error.testName.notBlank";
-    private const string RangeInvalidMessageKey = "quality.analyticalResult.error.minimumValue.range";
+    private const string BatchCodeNotBlankMessageKey = "quality.analyticalResult.error.batchCode.notBlank";
+    private const string TestNotBlankMessageKey = "quality.analyticalResult.error.test.notBlank";
 
     /// <summary>
     ///     Constructor used by Entity Framework Core.
     /// </summary>
     protected AnalyticalResult()
     {
-        TestName = string.Empty;
-        Parameter = string.Empty;
-        Unit = string.Empty;
+        BatchCode = string.Empty;
+        SampleCode = string.Empty;
+        ReportCode = string.Empty;
+        Test = string.Empty;
+        Protocol = string.Empty;
+        Result = string.Empty;
+        Specification = string.Empty;
+        Analyst = string.Empty;
     }
 
     /// <summary>
@@ -27,24 +32,7 @@ public partial class AnalyticalResult : AggregateRoot
     /// </summary>
     /// <param name="command">The data of the analytical result.</param>
     /// <exception cref="ArgumentException">Thrown when a required value is blank.</exception>
-    public AnalyticalResult(CreateAnalyticalResultCommand command) : this()
-    {
-        BatchId = command.BatchId;
-        if (string.IsNullOrWhiteSpace(command.TestName)) throw new ArgumentException(TestNameNotBlankMessageKey);
-        TestName = command.TestName.Trim();
-        Parameter = command.Parameter?.Trim() ?? string.Empty;
-        MeasuredValue = command.MeasuredValue;
-        MinimumValue = command.MinimumValue;
-        MaximumValue = command.MaximumValue;
-        Unit = command.Unit?.Trim() ?? string.Empty;
-        Status = EAnalyticalResultStatus.Pending;
-        TestedAt = command.TestedAt;
-        if (command.MinimumValue > command.MaximumValue) throw new ArgumentException(RangeInvalidMessageKey);
-        Status = command.MeasuredValue >= command.MinimumValue && command.MeasuredValue <= command.MaximumValue
-            ? EAnalyticalResultStatus.WithinSpecification
-            : EAnalyticalResultStatus.OutOfSpecification;
-
-    }
+    public AnalyticalResult(CreateAnalyticalResultCommand command) : this() => Apply(command.BatchCode, command.SampleCode, command.ReportCode, command.Test, command.Protocol, command.Result, command.Specification, command.Analyst, command.Status, command.Approval);
 
     /// <summary>
     ///     The id of the analytical result.
@@ -52,71 +40,75 @@ public partial class AnalyticalResult : AggregateRoot
     public AnalyticalResultId Id { get; }
 
     /// <summary>
-    ///     The id of the tested production batch.
+    ///     The batch code.
     /// </summary>
-    public int BatchId { get; private set; }
-    /// <summary>
-    ///     The name of the test, for example Assay.
-    /// </summary>
-    public string TestName { get; private set; }
-    /// <summary>
-    ///     The measured parameter.
-    /// </summary>
-    public string Parameter { get; private set; }
-    /// <summary>
-    ///     The measured value.
-    /// </summary>
-    public decimal MeasuredValue { get; private set; }
-    /// <summary>
-    ///     The lowest accepted value.
-    /// </summary>
-    public decimal MinimumValue { get; private set; }
-    /// <summary>
-    ///     The highest accepted value.
-    /// </summary>
-    public decimal MaximumValue { get; private set; }
-    /// <summary>
-    ///     The unit of the values.
-    /// </summary>
-    public string Unit { get; private set; }
-    /// <summary>
-    ///     Where the result is in its review.
-    /// </summary>
-    public EAnalyticalResultStatus Status { get; private set; }
-    /// <summary>
-    ///     The id of the user who reviewed the result.
-    /// </summary>
-    public int? ReviewedBy { get; private set; }
-    /// <summary>
-    ///     When the test was done (UTC).
-    /// </summary>
-    public DateTime? TestedAt { get; private set; }
-    /// <summary>
-    ///     When the result was reviewed (UTC).
-    /// </summary>
-    public DateTime? ReviewedAt { get; private set; }
+    public string BatchCode { get; private set; }
 
     /// <summary>
-    ///     Approves a result within specification.
+    ///     The sample code.
     /// </summary>
-    public bool Approve(int reviewerId)
-    {
-        if (Status != EAnalyticalResultStatus.WithinSpecification) return false;
-        Status = EAnalyticalResultStatus.Approved;
-        ReviewedBy = reviewerId;
-        ReviewedAt = DateTime.UtcNow;
-        return true;
-    }
+    public string SampleCode { get; private set; }
 
     /// <summary>
-    ///     Rejects a result that is not approved.
+    ///     The report code.
     /// </summary>
-    public bool Reject(int reviewerId)
+    public string ReportCode { get; private set; }
+
+    /// <summary>
+    ///     The test.
+    /// </summary>
+    public string Test { get; private set; }
+
+    /// <summary>
+    ///     The protocol.
+    /// </summary>
+    public string Protocol { get; private set; }
+
+    /// <summary>
+    ///     The result.
+    /// </summary>
+    public string Result { get; private set; }
+
+    /// <summary>
+    ///     The specification.
+    /// </summary>
+    public string Specification { get; private set; }
+
+    /// <summary>
+    ///     The analyst.
+    /// </summary>
+    public string Analyst { get; private set; }
+
+    /// <summary>
+    ///     The status.
+    /// </summary>
+    public EResultStatus Status { get; private set; }
+
+    /// <summary>
+    ///     The approval.
+    /// </summary>
+    public EApprovalState Approval { get; private set; }
+
+    /// <summary>
+    ///     Replaces the data of the analytical result with the data of the command.
+    /// </summary>
+    /// <param name="command">The new data.</param>
+    /// <exception cref="ArgumentException">Thrown when a required value is blank.</exception>
+    public void Update(UpdateAnalyticalResultCommand command) => Apply(command.BatchCode, command.SampleCode, command.ReportCode, command.Test, command.Protocol, command.Result, command.Specification, command.Analyst, command.Status, command.Approval);
+
+    private void Apply(string batchCode, string sampleCode, string reportCode, string test, string protocol, string result, string specification, string analyst, EResultStatus status, EApprovalState approval)
     {
-        if (Status == EAnalyticalResultStatus.Approved) return false;
-        Status = EAnalyticalResultStatus.Rejected;
-        ReviewedBy = reviewerId;
-        ReviewedAt = DateTime.UtcNow;
-        return true;
+        if (string.IsNullOrWhiteSpace(batchCode)) throw new ArgumentException(BatchCodeNotBlankMessageKey);
+        BatchCode = batchCode?.Trim() ?? string.Empty;
+        SampleCode = sampleCode?.Trim() ?? string.Empty;
+        ReportCode = reportCode?.Trim() ?? string.Empty;
+        if (string.IsNullOrWhiteSpace(test)) throw new ArgumentException(TestNotBlankMessageKey);
+        Test = test?.Trim() ?? string.Empty;
+        Protocol = protocol?.Trim() ?? string.Empty;
+        Result = result?.Trim() ?? string.Empty;
+        Specification = specification?.Trim() ?? string.Empty;
+        Analyst = analyst?.Trim() ?? string.Empty;
+        Status = status;
+        Approval = approval;
     }
 }

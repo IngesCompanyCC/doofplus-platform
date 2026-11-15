@@ -1,17 +1,11 @@
 ﻿namespace IngesCompanyCCPlatform.API.Quality.Interfaces.Rest.Resources;
 
 /// <summary>
-///     A evidence, as the API returns it.
+///     A evidence, with the fields of <c>contratos/quality-api.json</c>.
 /// </summary>
 public record EvidenceResource(
     int Id,
-    string Title,
-    string Description,
-    string Type,
-    string FileReference,
-    int? DeviationId,
-    int? DocumentId,
-    int? UploadedBy,
-    string Status,
-    DateTime UploadedAt,
-    DateTime? VerifiedAt);
+    string RecordCode,
+    string FileName,
+    string Detail,
+    string Status);

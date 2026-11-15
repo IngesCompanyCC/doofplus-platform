@@ -6,8 +6,12 @@ namespace IngesCompanyCCPlatform.API.Quality.Domain.Model.Commands;
 ///     Command to create a capa plan.
 /// </summary>
 public record CreateCapaPlanCommand(
-    int DeviationId,
+    string Code,
     string Title,
-    string Description,
-    DateOnly DueDate,
-    string Responsible);
+    string SourceDeviation,
+    string Owner,
+    string Reviewer,
+    string RootCause,
+    string AcceptanceCriterion,
+    DateOnly? EffectivenessCheckAt,
+    ECapaStatus Status);

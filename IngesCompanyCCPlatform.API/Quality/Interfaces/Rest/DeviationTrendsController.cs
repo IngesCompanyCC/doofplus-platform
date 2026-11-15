@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace IngesCompanyCCPlatform.API.Quality.Interfaces.Rest;
 
 /// <summary>
-///     REST controller of the monthly trend of deviations.
+///     REST controller of the monthly trend of deviations by root cause.
 /// </summary>
 [ApiController]
 [Route("api/v1/[controller]")]
@@ -17,11 +17,11 @@ public class DeviationTrendsController(IDeviationTrendQueryService deviationTren
 {
     [HttpGet]
     [EndpointSummary("Get the deviation trend")]
-    [EndpointDescription("Counts the deviations registered each month, oldest first.")]
+    [EndpointDescription("Counts the deviations by month and root cause, oldest month first; id is the position in the list.")]
     [ProducesResponseType(typeof(IEnumerable<DeviationTrendResource>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetDeviationTrends(CancellationToken cancellationToken)
     {
         var trends = await deviationTrendQueryService.Handle(new GetDeviationTrendsQuery(), cancellationToken);
-        return Ok(trends.Select(trend => new DeviationTrendResource(trend.Month, trend.TotalDeviations)));
+        return Ok(trends.Select((trend, index) => new DeviationTrendResource(index + 1, trend.RootCause, trend.Month, trend.Count)));
     }
 }

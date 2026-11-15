@@ -214,6 +214,7 @@ builder.Services.AddScoped<ITaskCommentCommandService, TaskCommentCommandService
 builder.Services.AddScoped<ITaskCommentQueryService, TaskCommentQueryService>();
 builder.Services.AddScoped<ITraceabilityGapCommandService, TraceabilityGapCommandService>();
 builder.Services.AddScoped<ITraceabilityGapQueryService, TraceabilityGapQueryService>();
+builder.Services.AddScoped<IAuditEventCommandService, AuditEventCommandService>();
 builder.Services.AddScoped<IAuditEventQueryService, AuditEventQueryService>();
 builder.Services.AddScoped<IDeviationTrendQueryService, DeviationTrendQueryService>();
 

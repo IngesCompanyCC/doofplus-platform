@@ -8,7 +8,7 @@ namespace IngesCompanyCCPlatform.API.Quality.Domain.Model.Commands;
 public record CreateAuditCommand(
     string Code,
     string Title,
-    string Scope,
-    string AuditType,
-    int? AuditorId,
-    DateOnly? PlannedDate);
+    string Period,
+    int AreasReviewed,
+    int AreasTotal,
+    EAuditStatus Status);

@@ -1,6 +1,6 @@
 ﻿namespace IngesCompanyCCPlatform.API.Quality.Domain.Model.Queries;
 
 /// <summary>
-///     Query to count the deviations registered each month.
+///     Query of the deviations counted by month and root cause.
 /// </summary>
 public record GetDeviationTrendsQuery;

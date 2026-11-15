@@ -6,12 +6,10 @@ using IngesCompanyCCPlatform.API.Quality.Interfaces.Rest.Resources;
 namespace IngesCompanyCCPlatform.API.Quality.Interfaces.Rest.Transform;
 
 /// <summary>
-///     Builds the commands of <c>AuditFinding</c> from the resources.
+///     Builds the commands of <c>AuditFinding</c> from the resources. Enums are accepted in any case and with hyphens.
 /// </summary>
 public static class AuditFindingCommandFromResourceAssembler
 {
-    private const string SeverityInvalidMessageKey = "quality.auditFinding.error.severity.invalid";
-
     /// <summary>
     ///     Builds the command to create a audit finding.
     /// </summary>
@@ -21,11 +19,16 @@ public static class AuditFindingCommandFromResourceAssembler
     public static CreateAuditFindingCommand ToCommandFromResource(CreateAuditFindingResource resource)
     {
         return new CreateAuditFindingCommand(
-            resource.AuditId,
-            resource.Title,
-            resource.Description ?? string.Empty,
-            EnumParser.Parse<EAuditFindingSeverity>(resource.Severity, SeverityInvalidMessageKey),
-            resource.RelatedDeviationId);
+            resource.AuditCode ?? string.Empty,
+            resource.Code ?? string.Empty,
+            resource.Title ?? string.Empty,
+            resource.Classification is null ? EClassification.Minor : EnumParser.Parse<EClassification>(resource.Classification, "quality.auditFinding.error.classification.invalid"),
+            resource.Owner ?? string.Empty,
+            resource.DueAt,
+            resource.Status is null ? EFindingStatus.EvidencePending : EnumParser.Parse<EFindingStatus>(resource.Status, "quality.auditFinding.error.status.invalid"),
+            resource.Observation ?? string.Empty,
+            resource.Response ?? string.Empty,
+            resource.ClosureRequirement ?? string.Empty);
     }
 }
 
@@ -43,11 +46,15 @@ public static class AuditFindingResourceFromEntityAssembler
     {
         return new AuditFindingResource(
             entity.Id.Value,
-            entity.AuditId,
+            entity.AuditCode,
+            entity.Code,
             entity.Title,
-            entity.Description,
-            entity.Severity.ToString(),
-            entity.RelatedDeviationId,
-            DateTime.SpecifyKind(entity.IdentifiedAt, DateTimeKind.Utc));
+            entity.Classification.ToString(),
+            entity.Owner,
+            entity.DueAt,
+            entity.Status.ToString(),
+            entity.Observation,
+            entity.Response,
+            entity.ClosureRequirement);
     }
 }

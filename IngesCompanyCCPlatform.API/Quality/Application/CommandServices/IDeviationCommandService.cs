@@ -13,4 +13,9 @@ public interface IDeviationCommandService
     ///     Creates a deviation.
     /// </summary>
     Task<Result<Deviation>> Handle(CreateDeviationCommand command, CancellationToken cancellationToken);
+
+    /// <summary>
+    ///     Replaces the data of a deviation.
+    /// </summary>
+    Task<Result<Deviation>> Handle(UpdateDeviationCommand command, CancellationToken cancellationToken);
 }

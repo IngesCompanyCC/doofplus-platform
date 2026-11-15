@@ -9,7 +9,7 @@ namespace IngesCompanyCCPlatform.API.Quality.Domain.Repositories;
 public interface IQualityDocumentRepository : IBaseRepository<QualityDocument>
 {
     /// <summary>
-    ///     Checks whether a quality document already has the code.
+    ///     Gets the quality documents with the code.
     /// </summary>
-    Task<bool> ExistsByCodeAsync(string code, CancellationToken cancellationToken = default);
+    Task<IEnumerable<QualityDocument>> FindAllByCodeAsNoTrackingAsync(string code, CancellationToken cancellationToken = default);
 }

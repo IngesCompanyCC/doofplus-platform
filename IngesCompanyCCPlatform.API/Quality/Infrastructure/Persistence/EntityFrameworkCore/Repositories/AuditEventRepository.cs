@@ -29,11 +29,11 @@ public class AuditEventRepository(AppDbContext context) : BaseRepository<AuditEv
     }
 
     /// <inheritdoc />
-    public async Task<IEnumerable<AuditEvent>> FindAllByAggregateTypeAggregateIdAsNoTrackingAsync(string? aggregateType, int? aggregateId, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<AuditEvent>> FindAllByRecordAsNoTrackingAsync(string record, CancellationToken cancellationToken = default)
     {
-        var query = Context.Set<AuditEvent>().AsNoTracking();
-        if (aggregateType != null) query = query.Where(auditEvent => auditEvent.AggregateType == aggregateType);
-        if (aggregateId is not null) query = query.Where(auditEvent => auditEvent.AggregateId == aggregateId);
-        return await query.OrderByDescending(auditEvent => auditEvent.OccurredAt).ToListAsync(cancellationToken);
+        return await Context.Set<AuditEvent>()
+            .AsNoTracking()
+            .Where(auditEvent => auditEvent.Record == record)
+            .ToListAsync(cancellationToken);
     }
 }

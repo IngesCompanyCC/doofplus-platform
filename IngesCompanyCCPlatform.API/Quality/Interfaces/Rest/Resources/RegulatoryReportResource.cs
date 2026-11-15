@@ -1,16 +1,15 @@
 ﻿namespace IngesCompanyCCPlatform.API.Quality.Interfaces.Rest.Resources;
 
 /// <summary>
-///     A regulatory report, as the API returns it.
+///     A regulatory report, with the fields of <c>contratos/quality-api.json</c>.
 /// </summary>
 public record RegulatoryReportResource(
     int Id,
     string Code,
-    string Title,
-    string Description,
-    string RegulatoryAuthority,
-    string FileReference,
-    DateOnly? DueDate,
-    int? PreparedBy,
+    string Type,
+    string Scope,
+    string Owner,
     string Status,
-    DateTime? SubmittedAt);
+    string Template,
+    string Format,
+    DateOnly? CreatedAt);

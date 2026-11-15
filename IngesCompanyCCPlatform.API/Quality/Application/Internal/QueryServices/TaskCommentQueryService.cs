@@ -13,17 +13,14 @@ public class TaskCommentQueryService(ITaskCommentRepository taskCommentRepositor
     /// <inheritdoc />
     public async Task<IEnumerable<TaskComment>> Handle(GetAllTaskCommentsQuery query, CancellationToken cancellationToken)
     {
-        return await taskCommentRepository.ListAsNoTrackingAsync(cancellationToken);
+        return string.IsNullOrWhiteSpace(query.RecordCode)
+            ? await taskCommentRepository.ListAsNoTrackingAsync(cancellationToken)
+            : await taskCommentRepository.FindAllByRecordCodeAsNoTrackingAsync(query.RecordCode.Trim(), cancellationToken);
     }
 
     /// <inheritdoc />
     public async Task<TaskComment?> Handle(GetTaskCommentByIdQuery query, CancellationToken cancellationToken)
     {
         return await taskCommentRepository.FindByIdAsNoTrackingAsync(query.TaskCommentId, cancellationToken);
-    }
-    /// <inheritdoc />
-    public async Task<IEnumerable<TaskComment>> Handle(GetAllTaskCommentsByTaskIdQuery query, CancellationToken cancellationToken)
-    {
-        return await taskCommentRepository.FindAllByTaskIdAsNoTrackingAsync(query.TaskId, cancellationToken);
     }
 }

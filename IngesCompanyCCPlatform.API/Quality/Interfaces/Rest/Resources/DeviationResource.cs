@@ -1,16 +1,24 @@
 ﻿namespace IngesCompanyCCPlatform.API.Quality.Interfaces.Rest.Resources;
 
 /// <summary>
-///     A deviation, as the API returns it.
+///     A deviation, with the fields of <c>contratos/quality-api.json</c>.
 /// </summary>
 public record DeviationResource(
     int Id,
     string Code,
     string Title,
-    string Description,
-    string Severity,
-    int BatchId,
-    int? AssignedTo,
+    string BatchCode,
+    string OrderCode,
+    string Summary,
+    string Classification,
+    string Containment,
+    int Severity,
+    int Likelihood,
+    int Detectability,
     string Status,
-    DateTime DetectedAt,
-    DateTime? ClosedAt);
+    string RootCause,
+    string CapaCode,
+    string ReportedBy,
+    DateTime? ReportedAt,
+    string Owner,
+    DateTime? DueAt);

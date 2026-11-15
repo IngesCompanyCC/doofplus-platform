@@ -23,25 +23,26 @@ public static class QualityActionResultAssembler
         return error switch
         {
             QualityError.QualityDocumentNotFound => StatusCodes.Status404NotFound,
-            QualityError.DuplicateQualityDocumentCode => StatusCodes.Status409Conflict,
             QualityError.DeviationNotFound => StatusCodes.Status404NotFound,
             QualityError.DuplicateDeviationCode => StatusCodes.Status409Conflict,
             QualityError.EvidenceNotFound => StatusCodes.Status404NotFound,
             QualityError.CapaPlanNotFound => StatusCodes.Status404NotFound,
+            QualityError.DuplicateCapaPlanCode => StatusCodes.Status409Conflict,
             QualityError.CapaActionNotFound => StatusCodes.Status404NotFound,
-            QualityError.BatchReleaseNotFound => StatusCodes.Status404NotFound,
-            QualityError.BatchReleaseAlreadyRequested => StatusCodes.Status409Conflict,
-            QualityError.BatchReleaseStateConflict => StatusCodes.Status409Conflict,
             QualityError.AnalyticalResultNotFound => StatusCodes.Status404NotFound,
             QualityError.AuditNotFound => StatusCodes.Status404NotFound,
             QualityError.DuplicateAuditCode => StatusCodes.Status409Conflict,
             QualityError.AuditFindingNotFound => StatusCodes.Status404NotFound,
+            QualityError.AuditEventNotFound => StatusCodes.Status404NotFound,
             QualityError.RegulatoryReportNotFound => StatusCodes.Status404NotFound,
             QualityError.DuplicateRegulatoryReportCode => StatusCodes.Status409Conflict,
             QualityError.CollaborationTaskNotFound => StatusCodes.Status404NotFound,
             QualityError.TaskCommentNotFound => StatusCodes.Status404NotFound,
             QualityError.TraceabilityGapNotFound => StatusCodes.Status404NotFound,
-            QualityError.AuditEventNotFound => StatusCodes.Status404NotFound,
+            QualityError.EvidenceReviewed => StatusCodes.Status409Conflict,
+            QualityError.BatchReleaseNotFound => StatusCodes.Status404NotFound,
+            QualityError.BatchReleaseAlreadyRequested => StatusCodes.Status409Conflict,
+            QualityError.BatchReleaseStateConflict => StatusCodes.Status409Conflict,
             _ => StatusCodes.Status400BadRequest
         };
     }

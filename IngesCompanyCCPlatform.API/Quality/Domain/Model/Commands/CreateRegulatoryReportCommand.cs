@@ -7,9 +7,10 @@ namespace IngesCompanyCCPlatform.API.Quality.Domain.Model.Commands;
 /// </summary>
 public record CreateRegulatoryReportCommand(
     string Code,
-    string Title,
-    string Description,
-    string RegulatoryAuthority,
-    string FileReference,
-    DateOnly? DueDate,
-    int? PreparedBy);
+    EReportType Type,
+    string Scope,
+    string Owner,
+    EReportStatus Status,
+    string Template,
+    string Format,
+    DateOnly? CreatedOn);

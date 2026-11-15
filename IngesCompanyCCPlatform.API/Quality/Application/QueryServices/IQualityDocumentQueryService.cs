@@ -9,7 +9,7 @@ namespace IngesCompanyCCPlatform.API.Quality.Application.QueryServices;
 public interface IQualityDocumentQueryService
 {
     /// <summary>
-    ///     Gets all the quality documents.
+    ///     Gets the quality documents, filtered by code when it is sent.
     /// </summary>
     Task<IEnumerable<QualityDocument>> Handle(GetAllQualityDocumentsQuery query, CancellationToken cancellationToken);
 

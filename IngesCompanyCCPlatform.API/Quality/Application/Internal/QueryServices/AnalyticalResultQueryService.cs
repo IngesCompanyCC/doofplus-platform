@@ -13,17 +13,14 @@ public class AnalyticalResultQueryService(IAnalyticalResultRepository analytical
     /// <inheritdoc />
     public async Task<IEnumerable<AnalyticalResult>> Handle(GetAllAnalyticalResultsQuery query, CancellationToken cancellationToken)
     {
-        return await analyticalResultRepository.ListAsNoTrackingAsync(cancellationToken);
+        return string.IsNullOrWhiteSpace(query.BatchCode)
+            ? await analyticalResultRepository.ListAsNoTrackingAsync(cancellationToken)
+            : await analyticalResultRepository.FindAllByBatchCodeAsNoTrackingAsync(query.BatchCode.Trim(), cancellationToken);
     }
 
     /// <inheritdoc />
     public async Task<AnalyticalResult?> Handle(GetAnalyticalResultByIdQuery query, CancellationToken cancellationToken)
     {
         return await analyticalResultRepository.FindByIdAsNoTrackingAsync(query.AnalyticalResultId, cancellationToken);
-    }
-    /// <inheritdoc />
-    public async Task<IEnumerable<AnalyticalResult>> Handle(GetAllAnalyticalResultsByBatchIdQuery query, CancellationToken cancellationToken)
-    {
-        return await analyticalResultRepository.FindAllByBatchIdAsNoTrackingAsync(query.BatchId, cancellationToken);
     }
 }

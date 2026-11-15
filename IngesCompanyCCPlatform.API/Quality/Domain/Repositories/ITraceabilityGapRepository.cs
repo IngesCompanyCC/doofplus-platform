@@ -9,7 +9,7 @@ namespace IngesCompanyCCPlatform.API.Quality.Domain.Repositories;
 public interface ITraceabilityGapRepository : IBaseRepository<TraceabilityGap>
 {
     /// <summary>
-    ///     Gets the traceability gaps filtered by batch id.
+    ///     Gets the traceability gaps with the batch code.
     /// </summary>
-    Task<IEnumerable<TraceabilityGap>> FindAllByBatchIdAsNoTrackingAsync(int batchId, CancellationToken cancellationToken = default);
+    Task<IEnumerable<TraceabilityGap>> FindAllByBatchCodeAsNoTrackingAsync(string batchCode, CancellationToken cancellationToken = default);
 }

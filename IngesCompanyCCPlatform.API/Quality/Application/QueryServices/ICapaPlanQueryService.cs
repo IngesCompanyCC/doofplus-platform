@@ -9,7 +9,7 @@ namespace IngesCompanyCCPlatform.API.Quality.Application.QueryServices;
 public interface ICapaPlanQueryService
 {
     /// <summary>
-    ///     Gets all the capa plans.
+    ///     Gets the capa plans, filtered by source deviation when it is sent.
     /// </summary>
     Task<IEnumerable<CapaPlan>> Handle(GetAllCapaPlansQuery query, CancellationToken cancellationToken);
 

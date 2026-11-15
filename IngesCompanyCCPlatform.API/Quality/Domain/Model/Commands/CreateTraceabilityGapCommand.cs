@@ -6,7 +6,8 @@ namespace IngesCompanyCCPlatform.API.Quality.Domain.Model.Commands;
 ///     Command to create a traceability gap.
 /// </summary>
 public record CreateTraceabilityGapCommand(
-    int BatchId,
-    string Description,
-    string MissingReference,
-    string AffectedProcess);
+    string BatchCode,
+    string Product,
+    string MissingRecord,
+    string Detail,
+    EGapStatus Status);

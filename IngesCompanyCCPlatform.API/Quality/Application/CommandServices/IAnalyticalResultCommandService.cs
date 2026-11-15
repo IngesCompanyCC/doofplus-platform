@@ -13,4 +13,9 @@ public interface IAnalyticalResultCommandService
     ///     Creates a analytical result.
     /// </summary>
     Task<Result<AnalyticalResult>> Handle(CreateAnalyticalResultCommand command, CancellationToken cancellationToken);
+
+    /// <summary>
+    ///     Replaces the data of a analytical result.
+    /// </summary>
+    Task<Result<AnalyticalResult>> Handle(UpdateAnalyticalResultCommand command, CancellationToken cancellationToken);
 }
