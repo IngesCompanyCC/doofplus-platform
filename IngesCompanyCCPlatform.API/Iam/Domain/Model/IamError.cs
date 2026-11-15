@@ -1,4 +1,4 @@
-namespace IngesCompanyCCPlatform.API.Iam.Domain.Model;
+﻿namespace IngesCompanyCCPlatform.API.Iam.Domain.Model;
 
 /// <summary>
 ///     Errors of the IAM bounded context. Their titles are in ErrorMessages (IamError.Case).
@@ -11,6 +11,7 @@ public enum IamError
     InvalidTwoFactorCode,
     EmailAlreadyTaken,
     UserNotFound,
+    InvitationNotFound,
     InvalidUserData,
     DatabaseError,
     InternalServerError

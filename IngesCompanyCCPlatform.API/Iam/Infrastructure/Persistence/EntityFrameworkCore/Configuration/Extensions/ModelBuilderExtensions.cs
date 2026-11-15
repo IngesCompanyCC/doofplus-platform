@@ -1,4 +1,4 @@
-using IngesCompanyCCPlatform.API.Iam.Domain.Model.Aggregates;
+﻿using IngesCompanyCCPlatform.API.Iam.Domain.Model.Aggregates;
 using IngesCompanyCCPlatform.API.Iam.Domain.Model.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 
@@ -28,6 +28,22 @@ public static class ModelBuilderExtensions
         user.Property(u => u.TwoFactorCodeHash).HasMaxLength(120);
         user.Ignore(u => u.HasTwoFactor);
         user.Ignore(u => u.Initials);
+
+        // Invitations, as in db-01-iam: the facility is stored by its name and the role by its name (ROLE_...).
+        var invitation = builder.Entity<Invitation>();
+        invitation.HasKey(i => i.Id);
+        invitation.Property(i => i.Id).IsRequired().ValueGeneratedOnAdd();
+        invitation.Property(i => i.OrganizationId).IsRequired();
+        invitation.HasIndex(i => i.OrganizationId);
+        invitation.Property(i => i.Facility).IsRequired().HasMaxLength(100);
+        invitation.Property(i => i.Role).IsRequired().HasMaxLength(40)
+            .HasConversion(role => role.ToName(), name => FromName(name));
+        invitation.Property(i => i.FullName).IsRequired().HasMaxLength(150);
+        invitation.Property(i => i.Email).IsRequired().HasMaxLength(255);
+        invitation.HasIndex(i => i.Email);
+        invitation.Property(i => i.Note).IsRequired().HasMaxLength(500);
+        invitation.Property(i => i.Status).HasConversion<string>().HasMaxLength(20).IsRequired();
+        invitation.Property(i => i.SentAt).IsRequired();
     }
 
     private static Roles FromName(string name) =>

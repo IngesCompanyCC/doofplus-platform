@@ -1,4 +1,4 @@
-using IngesCompanyCCPlatform.API.Iam.Domain.Model;
+﻿using IngesCompanyCCPlatform.API.Iam.Domain.Model;
 using IngesCompanyCCPlatform.API.Shared.Application.Model;
 using IngesCompanyCCPlatform.API.Shared.Interfaces.Rest.ProblemDetails;
 using Microsoft.AspNetCore.Mvc;
@@ -18,6 +18,7 @@ public static class IamActionResultAssembler
         IamError.InvalidTwoFactorCode => StatusCodes.Status401Unauthorized,
         IamError.EmailAlreadyTaken => StatusCodes.Status409Conflict,
         IamError.UserNotFound => StatusCodes.Status404NotFound,
+        IamError.InvitationNotFound => StatusCodes.Status404NotFound,
         IamError.InvalidUserData => StatusCodes.Status400BadRequest,
         IamError.DatabaseError => StatusCodes.Status500InternalServerError,
         IamError.InternalServerError => StatusCodes.Status500InternalServerError,
