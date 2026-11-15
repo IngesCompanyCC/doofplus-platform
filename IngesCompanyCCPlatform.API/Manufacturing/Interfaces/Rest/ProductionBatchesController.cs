@@ -50,11 +50,15 @@ public class ProductionBatchesController(
     }
 
     [HttpGet]
-    [EndpointSummary("Get all production batches")]
-    [EndpointDescription("Retrieves all production batches registered in the manufacturing system.")]
+    [EndpointSummary("Get all production batches or filter by batch number")]
+    [EndpointDescription("Retrieves all production batches, or the batch with the given batch number (e.g. B-26041).")]
     [ProducesResponseType(typeof(IEnumerable<ProductionBatchResource>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetAllBatches(CancellationToken cancellationToken)
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetAllBatches([FromQuery] string? batchNumber, CancellationToken cancellationToken)
     {
+        if (!string.IsNullOrWhiteSpace(batchNumber))
+            return await GetBatchByNumber(batchNumber, cancellationToken);
+
         var batches = await queryService.Handle(new GetAllBatchesQuery(), cancellationToken);
         var resources = batches.Select(ProductionBatchResourceFromEntityAssembler.ToResourceFromEntity);
         return Ok(resources);
