@@ -11,11 +11,7 @@ public static class RegisterOrganizationCommandFromResourceAssembler
         return new RegisterOrganizationCommand(
             resource.LegalName,
             resource.Ruc,
-            resource.FacilityName,
-            resource.PlanKey,
-            resource.BillingCycle,
-            resource.AdministratorName,
-            resource.AdministratorEmail,
-            resource.Password);
+            resource.Region,
+            resource.OwnerName);
     }
 }

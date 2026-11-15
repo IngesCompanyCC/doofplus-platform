@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <data name="GenericError" xml:space="preserve">
     <value>An error occurred.</value>
@@ -149,5 +149,89 @@
   </data>
   <data name="SubscriptionsError.PaymentGatewayUnavailable" xml:space="preserve">
     <value>Payment gateway unavailable</value>
+  </data>
+  <data name="QualityError.QualityDocumentNotFound" xml:space="preserve">
+    <value>Quality document not found</value>
+  </data>
+  <data name="QualityError.DuplicateQualityDocumentCode" xml:space="preserve">
+    <value>Duplicate quality document code</value>
+  </data>
+  <data name="QualityError.DeviationNotFound" xml:space="preserve">
+    <value>Deviation not found</value>
+  </data>
+  <data name="QualityError.DuplicateDeviationCode" xml:space="preserve">
+    <value>Duplicate deviation code</value>
+  </data>
+  <data name="QualityError.EvidenceNotFound" xml:space="preserve">
+    <value>Evidence not found</value>
+  </data>
+  <data name="QualityError.CapaPlanNotFound" xml:space="preserve">
+    <value>Capa plan not found</value>
+  </data>
+  <data name="QualityError.CapaActionNotFound" xml:space="preserve">
+    <value>Capa action not found</value>
+  </data>
+  <data name="QualityError.BatchReleaseNotFound" xml:space="preserve">
+    <value>Batch release not found</value>
+  </data>
+  <data name="QualityError.BatchReleaseAlreadyRequested" xml:space="preserve">
+    <value>Batch release already requested</value>
+  </data>
+  <data name="QualityError.BatchReleaseStateConflict" xml:space="preserve">
+    <value>Batch release state conflict</value>
+  </data>
+  <data name="QualityError.AnalyticalResultNotFound" xml:space="preserve">
+    <value>Analytical result not found</value>
+  </data>
+  <data name="QualityError.AuditNotFound" xml:space="preserve">
+    <value>Audit not found</value>
+  </data>
+  <data name="QualityError.DuplicateAuditCode" xml:space="preserve">
+    <value>Duplicate audit code</value>
+  </data>
+  <data name="QualityError.AuditFindingNotFound" xml:space="preserve">
+    <value>Audit finding not found</value>
+  </data>
+  <data name="QualityError.RegulatoryReportNotFound" xml:space="preserve">
+    <value>Regulatory report not found</value>
+  </data>
+  <data name="QualityError.DuplicateRegulatoryReportCode" xml:space="preserve">
+    <value>Duplicate regulatory report code</value>
+  </data>
+  <data name="QualityError.CollaborationTaskNotFound" xml:space="preserve">
+    <value>Collaboration task not found</value>
+  </data>
+  <data name="QualityError.TaskCommentNotFound" xml:space="preserve">
+    <value>Task comment not found</value>
+  </data>
+  <data name="QualityError.TraceabilityGapNotFound" xml:space="preserve">
+    <value>Traceability gap not found</value>
+  </data>
+  <data name="QualityError.AuditEventNotFound" xml:space="preserve">
+    <value>Audit event not found</value>
+  </data>
+  <data name="IamError.InvalidCredentials" xml:space="preserve">
+    <value>Invalid credentials</value>
+  </data>
+  <data name="IamError.TwoFactorRequired" xml:space="preserve">
+    <value>Two-factor code required</value>
+  </data>
+  <data name="IamError.InvalidTwoFactorCode" xml:space="preserve">
+    <value>Invalid two-factor code</value>
+  </data>
+  <data name="IamError.EmailAlreadyTaken" xml:space="preserve">
+    <value>Email already registered</value>
+  </data>
+  <data name="IamError.UserNotFound" xml:space="preserve">
+    <value>User not found</value>
+  </data>
+  <data name="IamError.InvalidUserData" xml:space="preserve">
+    <value>Invalid user data</value>
+  </data>
+  <data name="IamError.DatabaseError" xml:space="preserve">
+    <value>Database error</value>
+  </data>
+  <data name="IamError.InternalServerError" xml:space="preserve">
+    <value>Internal server error</value>
   </data>
 </root>

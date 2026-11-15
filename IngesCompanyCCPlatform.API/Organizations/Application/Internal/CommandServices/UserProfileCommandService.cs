@@ -57,4 +57,22 @@ public class UserProfileCommandService(
 
         return Result<UserProfile>.Success(profile);
     }
+
+    /// <inheritdoc />
+    public async Task<Result<UserProfile>> Handle(
+        UpdateUserProfilePreferencesCommand command,
+        CancellationToken cancellationToken = default)
+    {
+        var profile = await userProfileRepository.FindByIdAsync(command.ProfileId, cancellationToken);
+        if (profile is null)
+            return Result<UserProfile>.Failure(OrganizationsError.UserProfileNotFound,
+                $"User profile with ID {command.ProfileId} was not found.");
+
+        profile.UpdatePreferences(
+            command.EmailNotifications ?? profile.EmailNotifications,
+            command.InAppNotifications ?? profile.InAppNotifications,
+            command.Language ?? string.Empty);
+        await unitOfWork.CompleteAsync(cancellationToken);
+        return Result<UserProfile>.Success(profile);
+    }
 }

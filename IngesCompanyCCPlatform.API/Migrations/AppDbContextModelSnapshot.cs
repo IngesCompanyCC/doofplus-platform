@@ -20,6 +20,174 @@ namespace IngesCompanyCCPlatform.API.Migrations
                 .HasAnnotation("ProductVersion", "10.0.13")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
+            modelBuilder.Entity("IngesCompanyCCPlatform.API.Iam.Domain.Model.Aggregates.Invitation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<DateTimeOffset?>("CreatedAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("created_at");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("email");
+
+                    b.Property<string>("Facility")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("facility");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("varchar(150)")
+                        .HasColumnName("full_name");
+
+                    b.Property<string>("Note")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)")
+                        .HasColumnName("note");
+
+                    b.Property<int>("OrganizationId")
+                        .HasColumnType("int")
+                        .HasColumnName("organization_id");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnName("role");
+
+                    b.Property<DateTime>("SentAt")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("sent_at");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)")
+                        .HasColumnName("status");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("Id")
+                        .HasName("p_k_invitations");
+
+                    b.HasIndex("Email")
+                        .HasDatabaseName("i_x_invitations_email");
+
+                    b.HasIndex("OrganizationId")
+                        .HasDatabaseName("i_x_invitations_organization_id");
+
+                    b.ToTable("invitations");
+                });
+
+            modelBuilder.Entity("IngesCompanyCCPlatform.API.Iam.Domain.Model.Aggregates.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<DateTimeOffset?>("CreatedAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("created_at");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("varchar(120)")
+                        .HasColumnName("email");
+
+                    b.Property<string>("Environment")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)")
+                        .HasColumnName("environment");
+
+                    b.Property<string>("Facility")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("facility");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("varchar(120)")
+                        .HasColumnName("full_name");
+
+                    b.Property<int>("OrganizationId")
+                        .HasColumnType("int")
+                        .HasColumnName("organization_id");
+
+                    b.Property<string>("OrganizationName")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("varchar(150)")
+                        .HasColumnName("organization_name");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("varchar(120)")
+                        .HasColumnName("password_hash");
+
+                    b.Property<string>("Plant")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("plant");
+
+                    b.Property<string>("Privilege")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(30)")
+                        .HasColumnName("privilege");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnName("role");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)")
+                        .HasColumnName("status");
+
+                    b.Property<string>("TwoFactorCodeHash")
+                        .HasMaxLength(120)
+                        .HasColumnType("varchar(120)")
+                        .HasColumnName("two_factor_code_hash");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("Id")
+                        .HasName("p_k_users");
+
+                    b.HasIndex("Email")
+                        .IsUnique()
+                        .HasDatabaseName("i_x_users_email");
+
+                    b.HasIndex("OrganizationId")
+                        .HasDatabaseName("i_x_users_organization_id");
+
+                    b.ToTable("users");
+                });
+
             modelBuilder.Entity("IngesCompanyCCPlatform.API.Manufacturing.Domain.Model.Aggregates.MasterFormula", b =>
                 {
                     b.Property<int>("Id")
@@ -1194,6 +1362,1027 @@ namespace IngesCompanyCCPlatform.API.Migrations
                         .HasDatabaseName("i_x_user_profiles_user_id");
 
                     b.ToTable("user_profiles", (string)null);
+                });
+
+            modelBuilder.Entity("IngesCompanyCCPlatform.API.Quality.Domain.Model.Aggregates.AnalyticalResult", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Analyst")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("analyst");
+
+                    b.Property<string>("Approval")
+                        .IsRequired()
+                        .HasMaxLength(24)
+                        .HasColumnType("varchar(24)")
+                        .HasColumnName("approval");
+
+                    b.Property<string>("BatchCode")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(30)")
+                        .HasColumnName("batch_code");
+
+                    b.Property<DateTimeOffset?>("CreatedAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("created_at");
+
+                    b.Property<string>("Protocol")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("protocol");
+
+                    b.Property<string>("ReportCode")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(30)")
+                        .HasColumnName("report_code");
+
+                    b.Property<string>("Result")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(30)")
+                        .HasColumnName("result");
+
+                    b.Property<string>("SampleCode")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(30)")
+                        .HasColumnName("sample_code");
+
+                    b.Property<string>("Specification")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("specification");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(24)
+                        .HasColumnType("varchar(24)")
+                        .HasColumnName("status");
+
+                    b.Property<string>("Test")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("test_name");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("Id")
+                        .HasName("p_k_analytical_results");
+
+                    b.HasIndex("BatchCode")
+                        .HasDatabaseName("i_x_analytical_results_batch_code");
+
+                    b.ToTable("analytical_results");
+                });
+
+            modelBuilder.Entity("IngesCompanyCCPlatform.API.Quality.Domain.Model.Aggregates.Audit", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<int>("AreasReviewed")
+                        .HasColumnType("int")
+                        .HasColumnName("areas_reviewed");
+
+                    b.Property<int>("AreasTotal")
+                        .HasColumnType("int")
+                        .HasColumnName("areas_total");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(30)")
+                        .HasColumnName("code");
+
+                    b.Property<DateTimeOffset?>("CreatedAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("created_at");
+
+                    b.Property<string>("Period")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnName("period");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(24)
+                        .HasColumnType("varchar(24)")
+                        .HasColumnName("status");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("title");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("Id")
+                        .HasName("p_k_audits");
+
+                    b.HasIndex("Code")
+                        .IsUnique()
+                        .HasDatabaseName("i_x_audits_code");
+
+                    b.ToTable("audits");
+                });
+
+            modelBuilder.Entity("IngesCompanyCCPlatform.API.Quality.Domain.Model.Aggregates.AuditEvent", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Actor")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("actor");
+
+                    b.Property<string>("ActorRole")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnName("actor_role");
+
+                    b.Property<string>("After")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("after_value");
+
+                    b.Property<string>("Before")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("before_value");
+
+                    b.Property<DateTimeOffset?>("CreatedAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("created_at");
+
+                    b.Property<string>("Event")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("event");
+
+                    b.Property<string>("EventCode")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(30)")
+                        .HasColumnName("event_code");
+
+                    b.Property<string>("Field")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("field");
+
+                    b.Property<DateTime?>("OccurredAt")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("occurred_at");
+
+                    b.Property<string>("Reason")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("reason");
+
+                    b.Property<string>("Record")
+                        .IsRequired()
+                        .HasMaxLength(60)
+                        .HasColumnType("varchar(60)")
+                        .HasColumnName("record_code");
+
+                    b.Property<string>("Result")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnName("result");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("Id")
+                        .HasName("p_k_audit_events");
+
+                    b.HasIndex("Record")
+                        .HasDatabaseName("i_x_audit_events_record_code");
+
+                    b.ToTable("audit_events");
+                });
+
+            modelBuilder.Entity("IngesCompanyCCPlatform.API.Quality.Domain.Model.Aggregates.AuditFinding", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<string>("AuditCode")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(30)")
+                        .HasColumnName("audit_code");
+
+                    b.Property<string>("Classification")
+                        .IsRequired()
+                        .HasMaxLength(24)
+                        .HasColumnType("varchar(24)")
+                        .HasColumnName("classification");
+
+                    b.Property<string>("ClosureRequirement")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("closure_requirement");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("varchar(10)")
+                        .HasColumnName("code");
+
+                    b.Property<DateTimeOffset?>("CreatedAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("created_at");
+
+                    b.Property<DateTime?>("DueAt")
+                        .HasColumnType("date")
+                        .HasColumnName("due_at");
+
+                    b.Property<string>("Observation")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("observation");
+
+                    b.Property<string>("Owner")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("owner");
+
+                    b.Property<string>("Response")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("response");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(24)
+                        .HasColumnType("varchar(24)")
+                        .HasColumnName("status");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("title");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("Id")
+                        .HasName("p_k_audit_findings");
+
+                    b.HasIndex("AuditCode")
+                        .HasDatabaseName("i_x_audit_findings_audit_code");
+
+                    b.ToTable("audit_findings");
+                });
+
+            modelBuilder.Entity("IngesCompanyCCPlatform.API.Quality.Domain.Model.Aggregates.BatchRelease", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<string>("BatchCode")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(30)")
+                        .HasColumnName("batch_code");
+
+                    b.Property<int>("BatchId")
+                        .HasColumnType("int")
+                        .HasColumnName("batch_id");
+
+                    b.Property<DateTimeOffset?>("CreatedAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("created_at");
+
+                    b.Property<string>("Decision")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)")
+                        .HasColumnName("decision");
+
+                    b.Property<string>("RequestedBy")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("requested_by");
+
+                    b.Property<string>("SignatureReference")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("signature_reference");
+
+                    b.Property<DateTime?>("SignedAt")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("signed_at");
+
+                    b.Property<string>("SignedBy")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("signed_by");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(24)
+                        .HasColumnType("varchar(24)")
+                        .HasColumnName("status");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("Id")
+                        .HasName("p_k_batch_releases");
+
+                    b.HasIndex("BatchId")
+                        .HasDatabaseName("i_x_batch_releases_batch_id");
+
+                    b.ToTable("batch_releases");
+                });
+
+            modelBuilder.Entity("IngesCompanyCCPlatform.API.Quality.Domain.Model.Aggregates.CapaAction", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<string>("CapaCode")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(30)")
+                        .HasColumnName("capa_code");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("varchar(10)")
+                        .HasColumnName("code");
+
+                    b.Property<DateTimeOffset?>("CreatedAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("created_at");
+
+                    b.Property<DateTime?>("DueAt")
+                        .HasColumnType("date")
+                        .HasColumnName("due_at");
+
+                    b.Property<string>("Evidence")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("varchar(150)")
+                        .HasColumnName("evidence");
+
+                    b.Property<bool>("EvidenceAttached")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("evidence_attached");
+
+                    b.Property<string>("Owner")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("owner");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(24)
+                        .HasColumnType("varchar(24)")
+                        .HasColumnName("status");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("title");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(24)
+                        .HasColumnType("varchar(24)")
+                        .HasColumnName("type");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("Id")
+                        .HasName("p_k_capa_actions");
+
+                    b.HasIndex("CapaCode")
+                        .HasDatabaseName("i_x_capa_actions_capa_code");
+
+                    b.ToTable("capa_actions");
+                });
+
+            modelBuilder.Entity("IngesCompanyCCPlatform.API.Quality.Domain.Model.Aggregates.CapaPlan", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<string>("AcceptanceCriterion")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)")
+                        .HasColumnName("acceptance_criterion");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(30)")
+                        .HasColumnName("code");
+
+                    b.Property<DateTimeOffset?>("CreatedAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("created_at");
+
+                    b.Property<DateTime?>("EffectivenessCheckAt")
+                        .HasColumnType("date")
+                        .HasColumnName("effectiveness_check_at");
+
+                    b.Property<string>("Owner")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("owner");
+
+                    b.Property<string>("Reviewer")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("reviewer");
+
+                    b.Property<string>("RootCause")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("varchar(150)")
+                        .HasColumnName("root_cause");
+
+                    b.Property<string>("SourceDeviation")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(30)")
+                        .HasColumnName("source_deviation");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(24)
+                        .HasColumnType("varchar(24)")
+                        .HasColumnName("status");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("title");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("Id")
+                        .HasName("p_k_capa_plans");
+
+                    b.HasIndex("Code")
+                        .IsUnique()
+                        .HasDatabaseName("i_x_capa_plans_code");
+
+                    b.HasIndex("SourceDeviation")
+                        .HasDatabaseName("i_x_capa_plans_source_deviation");
+
+                    b.ToTable("capa_plans");
+                });
+
+            modelBuilder.Entity("IngesCompanyCCPlatform.API.Quality.Domain.Model.Aggregates.CollaborationTask", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<DateTimeOffset?>("CreatedAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("created_at");
+
+                    b.Property<string>("Detail")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("detail");
+
+                    b.Property<DateTime?>("DueAt")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("due_at");
+
+                    b.Property<string>("Owner")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("owner");
+
+                    b.Property<string>("RecordCode")
+                        .IsRequired()
+                        .HasMaxLength(60)
+                        .HasColumnType("varchar(60)")
+                        .HasColumnName("record_code");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(24)
+                        .HasColumnType("varchar(24)")
+                        .HasColumnName("status");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("title");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("Id")
+                        .HasName("p_k_collaboration_tasks");
+
+                    b.HasIndex("RecordCode")
+                        .HasDatabaseName("i_x_collaboration_tasks_record_code");
+
+                    b.ToTable("collaboration_tasks");
+                });
+
+            modelBuilder.Entity("IngesCompanyCCPlatform.API.Quality.Domain.Model.Aggregates.Deviation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<string>("BatchCode")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(30)")
+                        .HasColumnName("batch_code");
+
+                    b.Property<string>("CapaCode")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(30)")
+                        .HasColumnName("capa_code");
+
+                    b.Property<string>("Classification")
+                        .IsRequired()
+                        .HasMaxLength(24)
+                        .HasColumnType("varchar(24)")
+                        .HasColumnName("classification");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(30)")
+                        .HasColumnName("code");
+
+                    b.Property<string>("Containment")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("containment");
+
+                    b.Property<DateTimeOffset?>("CreatedAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("created_at");
+
+                    b.Property<int>("Detectability")
+                        .HasColumnType("int")
+                        .HasColumnName("detectability");
+
+                    b.Property<DateTime?>("DueAt")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("due_at");
+
+                    b.Property<int>("Likelihood")
+                        .HasColumnType("int")
+                        .HasColumnName("likelihood");
+
+                    b.Property<string>("OrderCode")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(30)")
+                        .HasColumnName("order_code");
+
+                    b.Property<string>("Owner")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("owner");
+
+                    b.Property<DateTime?>("ReportedAt")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("reported_at");
+
+                    b.Property<string>("ReportedBy")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("reported_by");
+
+                    b.Property<string>("RootCause")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("varchar(150)")
+                        .HasColumnName("root_cause");
+
+                    b.Property<int>("Severity")
+                        .HasColumnType("int")
+                        .HasColumnName("severity");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(24)
+                        .HasColumnType("varchar(24)")
+                        .HasColumnName("status");
+
+                    b.Property<string>("Summary")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("summary");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("title");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("Id")
+                        .HasName("p_k_deviations");
+
+                    b.HasIndex("BatchCode")
+                        .HasDatabaseName("i_x_deviations_batch_code");
+
+                    b.HasIndex("Code")
+                        .IsUnique()
+                        .HasDatabaseName("i_x_deviations_code");
+
+                    b.ToTable("deviations");
+                });
+
+            modelBuilder.Entity("IngesCompanyCCPlatform.API.Quality.Domain.Model.Aggregates.Evidence", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<DateTimeOffset?>("CreatedAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("created_at");
+
+                    b.Property<string>("Detail")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("detail");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("file_name");
+
+                    b.Property<string>("RecordCode")
+                        .IsRequired()
+                        .HasMaxLength(60)
+                        .HasColumnType("varchar(60)")
+                        .HasColumnName("record_code");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(24)
+                        .HasColumnType("varchar(24)")
+                        .HasColumnName("status");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("Id")
+                        .HasName("p_k_evidences");
+
+                    b.HasIndex("RecordCode")
+                        .HasDatabaseName("i_x_evidences_record_code");
+
+                    b.ToTable("evidences");
+                });
+
+            modelBuilder.Entity("IngesCompanyCCPlatform.API.Quality.Domain.Model.Aggregates.QualityDocument", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Approver")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("approver");
+
+                    b.Property<string>("Author")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("author");
+
+                    b.Property<DateTime?>("ChangedAt")
+                        .HasColumnType("date")
+                        .HasColumnName("changed_at");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(30)")
+                        .HasColumnName("code");
+
+                    b.Property<DateTimeOffset?>("CreatedAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("created_at");
+
+                    b.Property<string>("Procedure")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("procedure_text");
+
+                    b.Property<string>("Purpose")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("purpose");
+
+                    b.Property<int>("ReviewCycleMonths")
+                        .HasColumnType("int")
+                        .HasColumnName("review_cycle_months");
+
+                    b.Property<string>("RevisionSummary")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("revision_summary");
+
+                    b.Property<string>("Scope")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("scope");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(24)
+                        .HasColumnType("varchar(24)")
+                        .HasColumnName("status");
+
+                    b.Property<string>("TechnicalReviewer")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("technical_reviewer");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("title");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("updated_at");
+
+                    b.Property<string>("Version")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("varchar(10)")
+                        .HasColumnName("version");
+
+                    b.HasKey("Id")
+                        .HasName("p_k_quality_documents");
+
+                    b.ToTable("quality_documents");
+                });
+
+            modelBuilder.Entity("IngesCompanyCCPlatform.API.Quality.Domain.Model.Aggregates.RegulatoryReport", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(30)")
+                        .HasColumnName("code");
+
+                    b.Property<DateTimeOffset?>("CreatedAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("created_at");
+
+                    b.Property<DateTime?>("CreatedOn")
+                        .HasColumnType("date")
+                        .HasColumnName("created_on");
+
+                    b.Property<string>("Format")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("format");
+
+                    b.Property<string>("Owner")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("owner");
+
+                    b.Property<string>("Scope")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("scope");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(24)
+                        .HasColumnType("varchar(24)")
+                        .HasColumnName("status");
+
+                    b.Property<string>("Template")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("template");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(24)
+                        .HasColumnType("varchar(24)")
+                        .HasColumnName("type");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("Id")
+                        .HasName("p_k_regulatory_reports");
+
+                    b.HasIndex("Code")
+                        .IsUnique()
+                        .HasDatabaseName("i_x_regulatory_reports_code");
+
+                    b.ToTable("regulatory_reports");
+                });
+
+            modelBuilder.Entity("IngesCompanyCCPlatform.API.Quality.Domain.Model.Aggregates.TaskComment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Author")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("author");
+
+                    b.Property<DateTimeOffset?>("CreatedAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("created_at");
+
+                    b.Property<string>("Initials")
+                        .IsRequired()
+                        .HasMaxLength(5)
+                        .HasColumnType("varchar(5)")
+                        .HasColumnName("initials");
+
+                    b.Property<DateTime?>("PostedAt")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("posted_at");
+
+                    b.Property<string>("RecordCode")
+                        .IsRequired()
+                        .HasMaxLength(60)
+                        .HasColumnType("varchar(60)")
+                        .HasColumnName("record_code");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("text");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("Id")
+                        .HasName("p_k_task_comments");
+
+                    b.HasIndex("RecordCode")
+                        .HasDatabaseName("i_x_task_comments_record_code");
+
+                    b.ToTable("task_comments");
+                });
+
+            modelBuilder.Entity("IngesCompanyCCPlatform.API.Quality.Domain.Model.Aggregates.TraceabilityGap", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<string>("BatchCode")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(30)")
+                        .HasColumnName("batch_code");
+
+                    b.Property<DateTimeOffset?>("CreatedAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("created_at");
+
+                    b.Property<string>("Detail")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)")
+                        .HasColumnName("detail");
+
+                    b.Property<string>("MissingRecord")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("varchar(150)")
+                        .HasColumnName("missing_record");
+
+                    b.Property<string>("Product")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("product");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(24)
+                        .HasColumnType("varchar(24)")
+                        .HasColumnName("status");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("Id")
+                        .HasName("p_k_traceability_gaps");
+
+                    b.HasIndex("BatchCode")
+                        .HasDatabaseName("i_x_traceability_gaps_batch_code");
+
+                    b.ToTable("traceability_gaps");
                 });
 
             modelBuilder.Entity("IngesCompanyCCPlatform.API.Subscriptions.Domain.Model.Aggregates.Plan", b =>

@@ -1,10 +1,30 @@
-﻿using IngesCompanyCCPlatform.API.Manufacturing.Application.CommandServices;
+﻿using IngesCompanyCCPlatform.API.Iam.Application.Acl;
+using IngesCompanyCCPlatform.API.Iam.Application.CommandServices;
+using IngesCompanyCCPlatform.API.Iam.Application.Internal.CommandServices;
+using IngesCompanyCCPlatform.API.Iam.Application.Internal.OutboundServices;
+using IngesCompanyCCPlatform.API.Iam.Application.Internal.QueryServices;
+using IngesCompanyCCPlatform.API.Iam.Application.QueryServices;
+using IngesCompanyCCPlatform.API.Iam.Domain.Repositories;
+using IngesCompanyCCPlatform.API.Iam.Infrastructure.Hashing.BCrypt.Services;
+using IngesCompanyCCPlatform.API.Iam.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using IngesCompanyCCPlatform.API.Iam.Infrastructure.Pipeline.Middleware.Extensions;
+using IngesCompanyCCPlatform.API.Iam.Infrastructure.Tokens.Jwt.Configuration;
+using IngesCompanyCCPlatform.API.Iam.Infrastructure.Tokens.Jwt.Services;
+using IngesCompanyCCPlatform.API.Iam.Interfaces.Acl;
+using IngesCompanyCCPlatform.API.Manufacturing.Application.CommandServices;
 using IngesCompanyCCPlatform.API.Manufacturing.Application.Internal.CommandServices;
 using IngesCompanyCCPlatform.API.Manufacturing.Application.Internal.QueryServices;
 using IngesCompanyCCPlatform.API.Manufacturing.Application.QueryServices;
 using IngesCompanyCCPlatform.API.Manufacturing.Domain.Repositories;
 using IngesCompanyCCPlatform.API.Manufacturing.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using IngesCompanyCCPlatform.API.Manufacturing.Resources;
+using IngesCompanyCCPlatform.API.Quality.Application.CommandServices;
+using IngesCompanyCCPlatform.API.Quality.Application.Internal.CommandServices;
+using IngesCompanyCCPlatform.API.Quality.Application.Internal.QueryServices;
+using IngesCompanyCCPlatform.API.Quality.Application.QueryServices;
+using IngesCompanyCCPlatform.API.Quality.Domain.Repositories;
+using IngesCompanyCCPlatform.API.Quality.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using IngesCompanyCCPlatform.API.Quality.Resources;
 using IngesCompanyCCPlatform.API.Shared.Domain.Repositories;
 using IngesCompanyCCPlatform.API.Shared.Infrastructure.Interfaces.Asp.Configuration;
 using IngesCompanyCCPlatform.API.Shared.Infrastructure.Interfaces.Asp.OpenApi;
@@ -73,6 +93,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddOpenApi(options =>
 {
     options.AddDocumentTransformer<BearerSecuritySchemeTransformer>();
+    options.AddOperationTransformer<IamBearerSecurityOperationTransformer>();
 });
 
 // Add Database Connection
@@ -122,6 +143,18 @@ builder.Services.AddScoped<IAdministrativeActivityQueryService, AdministrativeAc
 
 // Shared Bounded Context Injection Configuration
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+// IAM Bounded Context (JWT secret in TokenSettings:Secret; in production set TokenSettings__Secret)
+builder.Services.Configure<TokenSettings>(builder.Configuration.GetSection("TokenSettings"));
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserCommandService, UserCommandService>();
+builder.Services.AddScoped<IUserQueryService, UserQueryService>();
+builder.Services.AddScoped<IInvitationRepository, InvitationRepository>();
+builder.Services.AddScoped<IInvitationCommandService, InvitationCommandService>();
+builder.Services.AddScoped<IInvitationQueryService, InvitationQueryService>();
+builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IHashingService, HashingService>();
+builder.Services.AddScoped<IIamContextFacade, IamContextFacade>();
 builder.Services.AddScoped<DispatchDomainEventsInterceptor>();
 
 // Subscriptions Bounded Context Injection Configuration
@@ -142,6 +175,51 @@ builder.Services.AddBoundedContextMessages<CommonMessages>();
 builder.Services.AddBoundedContextMessages<SubscriptionsMessages>();
 builder.Services.AddBoundedContextMessages<ManufacturingMessages>();
 builder.Services.AddBoundedContextMessages<MonitoringMessages>();
+builder.Services.AddBoundedContextMessages<QualityMessages>();
+// Quality & Compliance Bounded Context Injection Configuration
+builder.Services.AddScoped<IQualityDocumentRepository, QualityDocumentRepository>();
+builder.Services.AddScoped<IDeviationRepository, DeviationRepository>();
+builder.Services.AddScoped<IEvidenceRepository, EvidenceRepository>();
+builder.Services.AddScoped<ICapaPlanRepository, CapaPlanRepository>();
+builder.Services.AddScoped<ICapaActionRepository, CapaActionRepository>();
+builder.Services.AddScoped<IBatchReleaseRepository, BatchReleaseRepository>();
+builder.Services.AddScoped<IAnalyticalResultRepository, AnalyticalResultRepository>();
+builder.Services.AddScoped<IAuditRepository, AuditRepository>();
+builder.Services.AddScoped<IAuditFindingRepository, AuditFindingRepository>();
+builder.Services.AddScoped<IRegulatoryReportRepository, RegulatoryReportRepository>();
+builder.Services.AddScoped<ICollaborationTaskRepository, CollaborationTaskRepository>();
+builder.Services.AddScoped<ITaskCommentRepository, TaskCommentRepository>();
+builder.Services.AddScoped<ITraceabilityGapRepository, TraceabilityGapRepository>();
+builder.Services.AddScoped<IAuditEventRepository, AuditEventRepository>();
+builder.Services.AddScoped<IQualityDocumentCommandService, QualityDocumentCommandService>();
+builder.Services.AddScoped<IQualityDocumentQueryService, QualityDocumentQueryService>();
+builder.Services.AddScoped<IDeviationCommandService, DeviationCommandService>();
+builder.Services.AddScoped<IDeviationQueryService, DeviationQueryService>();
+builder.Services.AddScoped<IEvidenceCommandService, EvidenceCommandService>();
+builder.Services.AddScoped<IEvidenceQueryService, EvidenceQueryService>();
+builder.Services.AddScoped<ICapaPlanCommandService, CapaPlanCommandService>();
+builder.Services.AddScoped<ICapaPlanQueryService, CapaPlanQueryService>();
+builder.Services.AddScoped<ICapaActionCommandService, CapaActionCommandService>();
+builder.Services.AddScoped<ICapaActionQueryService, CapaActionQueryService>();
+builder.Services.AddScoped<IBatchReleaseCommandService, BatchReleaseCommandService>();
+builder.Services.AddScoped<IBatchReleaseQueryService, BatchReleaseQueryService>();
+builder.Services.AddScoped<IAnalyticalResultCommandService, AnalyticalResultCommandService>();
+builder.Services.AddScoped<IAnalyticalResultQueryService, AnalyticalResultQueryService>();
+builder.Services.AddScoped<IAuditCommandService, AuditCommandService>();
+builder.Services.AddScoped<IAuditQueryService, AuditQueryService>();
+builder.Services.AddScoped<IAuditFindingCommandService, AuditFindingCommandService>();
+builder.Services.AddScoped<IAuditFindingQueryService, AuditFindingQueryService>();
+builder.Services.AddScoped<IRegulatoryReportCommandService, RegulatoryReportCommandService>();
+builder.Services.AddScoped<IRegulatoryReportQueryService, RegulatoryReportQueryService>();
+builder.Services.AddScoped<ICollaborationTaskCommandService, CollaborationTaskCommandService>();
+builder.Services.AddScoped<ICollaborationTaskQueryService, CollaborationTaskQueryService>();
+builder.Services.AddScoped<ITaskCommentCommandService, TaskCommentCommandService>();
+builder.Services.AddScoped<ITaskCommentQueryService, TaskCommentQueryService>();
+builder.Services.AddScoped<ITraceabilityGapCommandService, TraceabilityGapCommandService>();
+builder.Services.AddScoped<ITraceabilityGapQueryService, TraceabilityGapQueryService>();
+builder.Services.AddScoped<IAuditEventCommandService, AuditEventCommandService>();
+builder.Services.AddScoped<IAuditEventQueryService, AuditEventQueryService>();
+builder.Services.AddScoped<IDeviationTrendQueryService, DeviationTrendQueryService>();
 
 // Manufacturing Bounded Context Injection Configuration
 builder.Services.AddScoped<IProductionBatchRepository, ProductionBatchRepository>();
@@ -210,6 +288,9 @@ app.MapOpenApi();
 
 // Apply CORS Policy
 app.UseCors("AllowAllPolicy");
+
+// Reads the Bearer token; the IAM [Authorize] attribute answers 401 or 403
+app.UseRequestAuthorization();
 
 app.UseHttpsRedirection();
 

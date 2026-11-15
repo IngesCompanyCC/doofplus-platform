@@ -1,0 +1,210 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="quality.batchRelease.error.alreadyRequested" xml:space="preserve">
+    <value>A release request already exists for this batch.</value>
+  </data>
+  <data name="quality.batchRelease.error.batchCode.notBlank" xml:space="preserve">
+    <value>The batch code of the batch release must not be blank.</value>
+  </data>
+  <data name="quality.batchRelease.error.decision.notBlank" xml:space="preserve">
+    <value>The decision of the batch release must not be blank.</value>
+  </data>
+  <data name="quality.batchRelease.error.notFoundById" xml:space="preserve">
+    <value>Batch release not found for id {0}.</value>
+  </data>
+  <data name="quality.batchRelease.error.notPending" xml:space="preserve">
+    <value>Only a pending release can be approved or rejected.</value>
+  </data>
+  <data name="quality.batchRelease.error.requestedBy.notBlank" xml:space="preserve">
+    <value>The requested by of the batch release must not be blank.</value>
+  </data>
+  <data name="quality.batchRelease.error.signatureReference.notBlank" xml:space="preserve">
+    <value>The signature reference of the batch release must not be blank.</value>
+  </data>
+  <data name="quality.batchRelease.error.signedBy.notBlank" xml:space="preserve">
+    <value>The signed by of the batch release must not be blank.</value>
+  </data>
+  <data name="quality.qualityDocument.error.notFoundById" xml:space="preserve">
+    <value>Quality document not found for id {0}.</value>
+  </data>
+  <data name="quality.qualityDocument.error.code.notBlank" xml:space="preserve">
+    <value>The code is required (quality document).</value>
+  </data>
+  <data name="quality.qualityDocument.error.version.notBlank" xml:space="preserve">
+    <value>The version is required (quality document).</value>
+  </data>
+  <data name="quality.qualityDocument.error.title.notBlank" xml:space="preserve">
+    <value>The title is required (quality document).</value>
+  </data>
+  <data name="quality.qualityDocument.error.status.invalid" xml:space="preserve">
+    <value>The status is not valid. Use one of: Draft, InReview, Approved, Obsolete.</value>
+  </data>
+  <data name="quality.deviation.error.notFoundById" xml:space="preserve">
+    <value>Deviation not found for id {0}.</value>
+  </data>
+  <data name="quality.deviation.error.duplicate" xml:space="preserve">
+    <value>A deviation with the same code already exists.</value>
+  </data>
+  <data name="quality.deviation.error.code.notBlank" xml:space="preserve">
+    <value>The code is required (deviation).</value>
+  </data>
+  <data name="quality.deviation.error.title.notBlank" xml:space="preserve">
+    <value>The title is required (deviation).</value>
+  </data>
+  <data name="quality.deviation.error.classification.invalid" xml:space="preserve">
+    <value>The classification is not valid. Use one of: Minor, Major, Critical.</value>
+  </data>
+  <data name="quality.deviation.error.status.invalid" xml:space="preserve">
+    <value>The status is not valid. Use one of: Open, Submitted, Dispositioned, Closed.</value>
+  </data>
+  <data name="quality.evidence.error.notFoundById" xml:space="preserve">
+    <value>Evidence not found for id {0}.</value>
+  </data>
+  <data name="quality.evidence.error.recordCode.notBlank" xml:space="preserve">
+    <value>The record code is required (evidence).</value>
+  </data>
+  <data name="quality.evidence.error.fileName.notBlank" xml:space="preserve">
+    <value>The file name is required (evidence).</value>
+  </data>
+  <data name="quality.evidence.error.status.invalid" xml:space="preserve">
+    <value>The status is not valid. Use one of: Attached, PendingReview, Reviewed.</value>
+  </data>
+  <data name="quality.capaPlan.error.notFoundById" xml:space="preserve">
+    <value>Capa plan not found for id {0}.</value>
+  </data>
+  <data name="quality.capaPlan.error.duplicate" xml:space="preserve">
+    <value>A capa plan with the same code already exists.</value>
+  </data>
+  <data name="quality.capaPlan.error.code.notBlank" xml:space="preserve">
+    <value>The code is required (capa plan).</value>
+  </data>
+  <data name="quality.capaPlan.error.title.notBlank" xml:space="preserve">
+    <value>The title is required (capa plan).</value>
+  </data>
+  <data name="quality.capaPlan.error.status.invalid" xml:space="preserve">
+    <value>The status is not valid. Use one of: Draft, InProgress, InApproval, Closed.</value>
+  </data>
+  <data name="quality.capaAction.error.notFoundById" xml:space="preserve">
+    <value>Capa action not found for id {0}.</value>
+  </data>
+  <data name="quality.capaAction.error.capaCode.notBlank" xml:space="preserve">
+    <value>The capa code is required (capa action).</value>
+  </data>
+  <data name="quality.capaAction.error.code.notBlank" xml:space="preserve">
+    <value>The code is required (capa action).</value>
+  </data>
+  <data name="quality.capaAction.error.type.invalid" xml:space="preserve">
+    <value>The type is not valid. Use one of: Corrective, Preventive.</value>
+  </data>
+  <data name="quality.capaAction.error.title.notBlank" xml:space="preserve">
+    <value>The title is required (capa action).</value>
+  </data>
+  <data name="quality.capaAction.error.status.invalid" xml:space="preserve">
+    <value>The status is not valid. Use one of: Open, Planned, InReview, Complete.</value>
+  </data>
+  <data name="quality.analyticalResult.error.notFoundById" xml:space="preserve">
+    <value>Analytical result not found for id {0}.</value>
+  </data>
+  <data name="quality.analyticalResult.error.batchCode.notBlank" xml:space="preserve">
+    <value>The batch code is required (analytical result).</value>
+  </data>
+  <data name="quality.analyticalResult.error.test.notBlank" xml:space="preserve">
+    <value>The test is required (analytical result).</value>
+  </data>
+  <data name="quality.analyticalResult.error.status.invalid" xml:space="preserve">
+    <value>The status is not valid. Use one of: Within, Oos, Pending.</value>
+  </data>
+  <data name="quality.analyticalResult.error.approval.invalid" xml:space="preserve">
+    <value>The approval is not valid. Use one of: Requested, Approved.</value>
+  </data>
+  <data name="quality.audit.error.notFoundById" xml:space="preserve">
+    <value>Audit not found for id {0}.</value>
+  </data>
+  <data name="quality.audit.error.duplicate" xml:space="preserve">
+    <value>A audit with the same code already exists.</value>
+  </data>
+  <data name="quality.audit.error.code.notBlank" xml:space="preserve">
+    <value>The code is required (audit).</value>
+  </data>
+  <data name="quality.audit.error.title.notBlank" xml:space="preserve">
+    <value>The title is required (audit).</value>
+  </data>
+  <data name="quality.audit.error.status.invalid" xml:space="preserve">
+    <value>The status is not valid. Use one of: Scheduled, InProgress, Closed.</value>
+  </data>
+  <data name="quality.auditFinding.error.notFoundById" xml:space="preserve">
+    <value>Audit finding not found for id {0}.</value>
+  </data>
+  <data name="quality.auditFinding.error.auditCode.notBlank" xml:space="preserve">
+    <value>The audit code is required (audit finding).</value>
+  </data>
+  <data name="quality.auditFinding.error.code.notBlank" xml:space="preserve">
+    <value>The code is required (audit finding).</value>
+  </data>
+  <data name="quality.auditFinding.error.title.notBlank" xml:space="preserve">
+    <value>The title is required (audit finding).</value>
+  </data>
+  <data name="quality.auditFinding.error.classification.invalid" xml:space="preserve">
+    <value>The classification is not valid. Use one of: Minor, Major, Critical.</value>
+  </data>
+  <data name="quality.auditFinding.error.status.invalid" xml:space="preserve">
+    <value>The status is not valid. Use one of: EvidencePending, InReview, Closed.</value>
+  </data>
+  <data name="quality.auditEvent.error.notFoundById" xml:space="preserve">
+    <value>Audit event not found for id {0}.</value>
+  </data>
+  <data name="quality.auditEvent.error.eventCode.notBlank" xml:space="preserve">
+    <value>The event code is required (audit event).</value>
+  </data>
+  <data name="quality.auditEvent.error.event.notBlank" xml:space="preserve">
+    <value>The event is required (audit event).</value>
+  </data>
+  <data name="quality.regulatoryReport.error.notFoundById" xml:space="preserve">
+    <value>Regulatory report not found for id {0}.</value>
+  </data>
+  <data name="quality.regulatoryReport.error.duplicate" xml:space="preserve">
+    <value>A regulatory report with the same code already exists.</value>
+  </data>
+  <data name="quality.regulatoryReport.error.code.notBlank" xml:space="preserve">
+    <value>The code is required (regulatory report).</value>
+  </data>
+  <data name="quality.regulatoryReport.error.type.invalid" xml:space="preserve">
+    <value>The type is not valid. Use one of: BatchDossier, QualityReview, CapaSummary, AuditEvidence.</value>
+  </data>
+  <data name="quality.regulatoryReport.error.status.invalid" xml:space="preserve">
+    <value>The status is not valid. Use one of: Draft, Blocked, Approved.</value>
+  </data>
+  <data name="quality.collaborationTask.error.notFoundById" xml:space="preserve">
+    <value>Collaboration task not found for id {0}.</value>
+  </data>
+  <data name="quality.collaborationTask.error.title.notBlank" xml:space="preserve">
+    <value>The title is required (collaboration task).</value>
+  </data>
+  <data name="quality.collaborationTask.error.status.invalid" xml:space="preserve">
+    <value>The status is not valid. Use one of: ToDo, Open, Pending, InReview, Ready, Done.</value>
+  </data>
+  <data name="quality.taskComment.error.notFoundById" xml:space="preserve">
+    <value>Task comment not found for id {0}.</value>
+  </data>
+  <data name="quality.taskComment.error.recordCode.notBlank" xml:space="preserve">
+    <value>The record code is required (task comment).</value>
+  </data>
+  <data name="quality.taskComment.error.text.notBlank" xml:space="preserve">
+    <value>The text is required (task comment).</value>
+  </data>
+  <data name="quality.traceabilityGap.error.notFoundById" xml:space="preserve">
+    <value>Traceability gap not found for id {0}.</value>
+  </data>
+  <data name="quality.traceabilityGap.error.batchCode.notBlank" xml:space="preserve">
+    <value>The batch code is required (traceability gap).</value>
+  </data>
+  <data name="quality.traceabilityGap.error.missingRecord.notBlank" xml:space="preserve">
+    <value>The missing record is required (traceability gap).</value>
+  </data>
+  <data name="quality.traceabilityGap.error.status.invalid" xml:space="preserve">
+    <value>The status is not valid. Use one of: Open, UnderReview, Resolved.</value>
+  </data>
+  <data name="quality.evidence.error.reviewed" xml:space="preserve">
+    <value>Reviewed evidence cannot be removed.</value>
+  </data>
+</root>

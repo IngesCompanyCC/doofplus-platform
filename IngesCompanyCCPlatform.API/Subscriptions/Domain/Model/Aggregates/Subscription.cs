@@ -16,6 +16,7 @@ public partial class Subscription : AggregateRoot
 {
     private const string NotPendingMessageKey = "subscription.error.state.notPending";
     private const string NotActiveMessageKey = "subscription.error.state.notActive";
+    private const string NotCurrentMessageKey = "subscription.error.state.notCurrent";
     private readonly List<Payment> _payments = [];
 
     /// <summary>
@@ -154,6 +155,21 @@ public partial class Subscription : AggregateRoot
             throw new InvalidOperationException(NotActiveMessageKey);
         CurrentPeriodStart = CurrentPeriodEnd;
         CurrentPeriodEnd = NextPeriodEnd(CurrentPeriodStart.Value);
+    }
+
+    /// <summary>
+    ///     Changes the plan and the billing cycle; the new price is charged in the next payment (US53).
+    /// </summary>
+    /// <param name="planId">The new plan.</param>
+    /// <param name="billingCycle">The new billing cycle.</param>
+    /// <exception cref="InvalidOperationException">
+    ///     When the subscription is not pending or active.
+    /// </exception>
+    public void ChangePlan(PlanId planId, EBillingCycle billingCycle)
+    {
+        if (!IsCurrent) throw new InvalidOperationException(NotCurrentMessageKey);
+        PlanId = planId;
+        BillingCycle = billingCycle;
     }
 
     /// <summary>

@@ -8,6 +8,4 @@ public record OrganizationRegisteredEvent(
     int OrganizationId,
     string LegalName,
     string Ruc,
-    string AdministratorEmail,
-    string AdministratorName,
-    string Password);
+    string OwnerName);

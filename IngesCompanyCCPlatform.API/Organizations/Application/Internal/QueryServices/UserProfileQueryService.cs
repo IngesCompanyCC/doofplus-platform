@@ -26,4 +26,12 @@ public class UserProfileQueryService(
             query.OrganizationId,
             cancellationToken);
     }
+
+    /// <inheritdoc />
+    public async Task<IEnumerable<UserProfile>> Handle(
+        GetAllUserProfilesQuery query,
+        CancellationToken cancellationToken = default)
+    {
+        return await userProfileRepository.ListAsNoTrackingAsync(cancellationToken);
+    }
 }

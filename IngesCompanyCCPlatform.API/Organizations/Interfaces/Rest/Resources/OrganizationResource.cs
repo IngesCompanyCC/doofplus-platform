@@ -6,5 +6,4 @@ public record OrganizationResource(
     string Ruc,
     string Region,
     string OwnerName,
-    string Status,
-    DateTimeOffset? CreatedAt);
+    string Status);

@@ -8,7 +8,7 @@ namespace IngesCompanyCCPlatform.API.Manufacturing.Domain.Model.Aggregates;
 ///     A lot of raw material received from a supplier: an active ingredient, an excipient or packaging.
 /// </summary>
 /// <remarks>
-///     It starts in <see cref="ERawMaterialLotStatus.Inspection" />. It can be approved only when its packaging and
+///     It starts in <see cref="ERawMaterialLotStatus.Sampling" /> with its sample pending, as in the Web App. It can be approved only when its packaging and
 ///     identity are verified and its samples are taken, and only an approved lot can be allocated to a batch.
 /// </remarks>
 public partial class RawMaterialLot : AggregateRoot
@@ -37,7 +37,7 @@ public partial class RawMaterialLot : AggregateRoot
     }
 
     /// <summary>
-    ///     Receives a lot, in Inspection and with its samples requested.
+    ///     Receives a lot. It goes to Sampling with its sample pending, as in the Web App.
     /// </summary>
     /// <param name="command">The data of the receipt.</param>
     /// <exception cref="ArgumentException">Thrown when the material is blank.</exception>
@@ -54,7 +54,7 @@ public partial class RawMaterialLot : AggregateRoot
         ExpiryDate = command.ExpiryDate;
         StorageLocation = command.StorageLocation?.Trim() ?? string.Empty;
         Certificate = command.Certificate?.Trim() ?? string.Empty;
-        Status = ERawMaterialLotStatus.Quarantine;
+        Status = ERawMaterialLotStatus.Sampling;
         SamplingStatus = ESamplingStatus.Pending;
     }
 

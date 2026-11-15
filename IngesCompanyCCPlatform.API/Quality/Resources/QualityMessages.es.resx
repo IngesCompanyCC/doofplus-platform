@@ -1,0 +1,210 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="quality.batchRelease.error.alreadyRequested" xml:space="preserve">
+    <value>Ya existe una solicitud de liberación para este lote.</value>
+  </data>
+  <data name="quality.batchRelease.error.batchCode.notBlank" xml:space="preserve">
+    <value>Falta el código del lote (liberación de lote).</value>
+  </data>
+  <data name="quality.batchRelease.error.decision.notBlank" xml:space="preserve">
+    <value>Falta la decisión (liberación de lote).</value>
+  </data>
+  <data name="quality.batchRelease.error.notFoundById" xml:space="preserve">
+    <value>No existe el registro de liberación de lote con id {0}.</value>
+  </data>
+  <data name="quality.batchRelease.error.notPending" xml:space="preserve">
+    <value>Solo se puede aprobar o rechazar una liberación pendiente.</value>
+  </data>
+  <data name="quality.batchRelease.error.requestedBy.notBlank" xml:space="preserve">
+    <value>Falta quién solicita (liberación de lote).</value>
+  </data>
+  <data name="quality.batchRelease.error.signatureReference.notBlank" xml:space="preserve">
+    <value>Falta la referencia de la firma (liberación de lote).</value>
+  </data>
+  <data name="quality.batchRelease.error.signedBy.notBlank" xml:space="preserve">
+    <value>Falta quién firma (liberación de lote).</value>
+  </data>
+  <data name="quality.qualityDocument.error.notFoundById" xml:space="preserve">
+    <value>No existe el documento de calidad con id {0}.</value>
+  </data>
+  <data name="quality.qualityDocument.error.code.notBlank" xml:space="preserve">
+    <value>Falta el código (documento de calidad).</value>
+  </data>
+  <data name="quality.qualityDocument.error.version.notBlank" xml:space="preserve">
+    <value>Falta la versión (documento de calidad).</value>
+  </data>
+  <data name="quality.qualityDocument.error.title.notBlank" xml:space="preserve">
+    <value>Falta el título (documento de calidad).</value>
+  </data>
+  <data name="quality.qualityDocument.error.status.invalid" xml:space="preserve">
+    <value>El valor de status no es válido. Usa uno de: Draft, InReview, Approved, Obsolete.</value>
+  </data>
+  <data name="quality.deviation.error.notFoundById" xml:space="preserve">
+    <value>No existe la desviación con id {0}.</value>
+  </data>
+  <data name="quality.deviation.error.duplicate" xml:space="preserve">
+    <value>Ya existe un registro (desviación) con el mismo código.</value>
+  </data>
+  <data name="quality.deviation.error.code.notBlank" xml:space="preserve">
+    <value>Falta el código (desviación).</value>
+  </data>
+  <data name="quality.deviation.error.title.notBlank" xml:space="preserve">
+    <value>Falta el título (desviación).</value>
+  </data>
+  <data name="quality.deviation.error.classification.invalid" xml:space="preserve">
+    <value>El valor de classification no es válido. Usa uno de: Minor, Major, Critical.</value>
+  </data>
+  <data name="quality.deviation.error.status.invalid" xml:space="preserve">
+    <value>El valor de status no es válido. Usa uno de: Open, Submitted, Dispositioned, Closed.</value>
+  </data>
+  <data name="quality.evidence.error.notFoundById" xml:space="preserve">
+    <value>No existe la evidencia con id {0}.</value>
+  </data>
+  <data name="quality.evidence.error.recordCode.notBlank" xml:space="preserve">
+    <value>Falta el código del registro (evidencia).</value>
+  </data>
+  <data name="quality.evidence.error.fileName.notBlank" xml:space="preserve">
+    <value>Falta el nombre del archivo (evidencia).</value>
+  </data>
+  <data name="quality.evidence.error.status.invalid" xml:space="preserve">
+    <value>El valor de status no es válido. Usa uno de: Attached, PendingReview, Reviewed.</value>
+  </data>
+  <data name="quality.capaPlan.error.notFoundById" xml:space="preserve">
+    <value>No existe el plan CAPA con id {0}.</value>
+  </data>
+  <data name="quality.capaPlan.error.duplicate" xml:space="preserve">
+    <value>Ya existe un registro (plan CAPA) con el mismo código.</value>
+  </data>
+  <data name="quality.capaPlan.error.code.notBlank" xml:space="preserve">
+    <value>Falta el código (plan CAPA).</value>
+  </data>
+  <data name="quality.capaPlan.error.title.notBlank" xml:space="preserve">
+    <value>Falta el título (plan CAPA).</value>
+  </data>
+  <data name="quality.capaPlan.error.status.invalid" xml:space="preserve">
+    <value>El valor de status no es válido. Usa uno de: Draft, InProgress, InApproval, Closed.</value>
+  </data>
+  <data name="quality.capaAction.error.notFoundById" xml:space="preserve">
+    <value>No existe el acción CAPA con id {0}.</value>
+  </data>
+  <data name="quality.capaAction.error.capaCode.notBlank" xml:space="preserve">
+    <value>Falta el código del plan CAPA (acción CAPA).</value>
+  </data>
+  <data name="quality.capaAction.error.code.notBlank" xml:space="preserve">
+    <value>Falta el código (acción CAPA).</value>
+  </data>
+  <data name="quality.capaAction.error.type.invalid" xml:space="preserve">
+    <value>El valor de type no es válido. Usa uno de: Corrective, Preventive.</value>
+  </data>
+  <data name="quality.capaAction.error.title.notBlank" xml:space="preserve">
+    <value>Falta el título (acción CAPA).</value>
+  </data>
+  <data name="quality.capaAction.error.status.invalid" xml:space="preserve">
+    <value>El valor de status no es válido. Usa uno de: Open, Planned, InReview, Complete.</value>
+  </data>
+  <data name="quality.analyticalResult.error.notFoundById" xml:space="preserve">
+    <value>No existe el resultado analítico con id {0}.</value>
+  </data>
+  <data name="quality.analyticalResult.error.batchCode.notBlank" xml:space="preserve">
+    <value>Falta el código del lote (resultado analítico).</value>
+  </data>
+  <data name="quality.analyticalResult.error.test.notBlank" xml:space="preserve">
+    <value>Falta el ensayo (resultado analítico).</value>
+  </data>
+  <data name="quality.analyticalResult.error.status.invalid" xml:space="preserve">
+    <value>El valor de status no es válido. Usa uno de: Within, Oos, Pending.</value>
+  </data>
+  <data name="quality.analyticalResult.error.approval.invalid" xml:space="preserve">
+    <value>El valor de approval no es válido. Usa uno de: Requested, Approved.</value>
+  </data>
+  <data name="quality.audit.error.notFoundById" xml:space="preserve">
+    <value>No existe la auditoría con id {0}.</value>
+  </data>
+  <data name="quality.audit.error.duplicate" xml:space="preserve">
+    <value>Ya existe un registro (auditoría) con el mismo código.</value>
+  </data>
+  <data name="quality.audit.error.code.notBlank" xml:space="preserve">
+    <value>Falta el código (auditoría).</value>
+  </data>
+  <data name="quality.audit.error.title.notBlank" xml:space="preserve">
+    <value>Falta el título (auditoría).</value>
+  </data>
+  <data name="quality.audit.error.status.invalid" xml:space="preserve">
+    <value>El valor de status no es válido. Usa uno de: Scheduled, InProgress, Closed.</value>
+  </data>
+  <data name="quality.auditFinding.error.notFoundById" xml:space="preserve">
+    <value>No existe la hallazgo de auditoría con id {0}.</value>
+  </data>
+  <data name="quality.auditFinding.error.auditCode.notBlank" xml:space="preserve">
+    <value>Falta el código de la auditoría (hallazgo de auditoría).</value>
+  </data>
+  <data name="quality.auditFinding.error.code.notBlank" xml:space="preserve">
+    <value>Falta el código (hallazgo de auditoría).</value>
+  </data>
+  <data name="quality.auditFinding.error.title.notBlank" xml:space="preserve">
+    <value>Falta el título (hallazgo de auditoría).</value>
+  </data>
+  <data name="quality.auditFinding.error.classification.invalid" xml:space="preserve">
+    <value>El valor de classification no es válido. Usa uno de: Minor, Major, Critical.</value>
+  </data>
+  <data name="quality.auditFinding.error.status.invalid" xml:space="preserve">
+    <value>El valor de status no es válido. Usa uno de: EvidencePending, InReview, Closed.</value>
+  </data>
+  <data name="quality.auditEvent.error.notFoundById" xml:space="preserve">
+    <value>No existe la evento de auditoría con id {0}.</value>
+  </data>
+  <data name="quality.auditEvent.error.eventCode.notBlank" xml:space="preserve">
+    <value>Falta el código del evento (evento de auditoría).</value>
+  </data>
+  <data name="quality.auditEvent.error.event.notBlank" xml:space="preserve">
+    <value>Falta el evento (evento de auditoría).</value>
+  </data>
+  <data name="quality.regulatoryReport.error.notFoundById" xml:space="preserve">
+    <value>No existe el reporte regulatorio con id {0}.</value>
+  </data>
+  <data name="quality.regulatoryReport.error.duplicate" xml:space="preserve">
+    <value>Ya existe un registro (reporte regulatorio) con el mismo código.</value>
+  </data>
+  <data name="quality.regulatoryReport.error.code.notBlank" xml:space="preserve">
+    <value>Falta el código (reporte regulatorio).</value>
+  </data>
+  <data name="quality.regulatoryReport.error.type.invalid" xml:space="preserve">
+    <value>El valor de type no es válido. Usa uno de: BatchDossier, QualityReview, CapaSummary, AuditEvidence.</value>
+  </data>
+  <data name="quality.regulatoryReport.error.status.invalid" xml:space="preserve">
+    <value>El valor de status no es válido. Usa uno de: Draft, Blocked, Approved.</value>
+  </data>
+  <data name="quality.collaborationTask.error.notFoundById" xml:space="preserve">
+    <value>No existe la tarea de colaboración con id {0}.</value>
+  </data>
+  <data name="quality.collaborationTask.error.title.notBlank" xml:space="preserve">
+    <value>Falta el título (tarea de colaboración).</value>
+  </data>
+  <data name="quality.collaborationTask.error.status.invalid" xml:space="preserve">
+    <value>El valor de status no es válido. Usa uno de: ToDo, Open, Pending, InReview, Ready, Done.</value>
+  </data>
+  <data name="quality.taskComment.error.notFoundById" xml:space="preserve">
+    <value>No existe el comentario con id {0}.</value>
+  </data>
+  <data name="quality.taskComment.error.recordCode.notBlank" xml:space="preserve">
+    <value>Falta el código del registro (comentario).</value>
+  </data>
+  <data name="quality.taskComment.error.text.notBlank" xml:space="preserve">
+    <value>Falta el texto (comentario).</value>
+  </data>
+  <data name="quality.traceabilityGap.error.notFoundById" xml:space="preserve">
+    <value>No existe el brecha de trazabilidad con id {0}.</value>
+  </data>
+  <data name="quality.traceabilityGap.error.batchCode.notBlank" xml:space="preserve">
+    <value>Falta el código del lote (brecha de trazabilidad).</value>
+  </data>
+  <data name="quality.traceabilityGap.error.missingRecord.notBlank" xml:space="preserve">
+    <value>Falta el registro que falta (brecha de trazabilidad).</value>
+  </data>
+  <data name="quality.traceabilityGap.error.status.invalid" xml:space="preserve">
+    <value>El valor de status no es válido. Usa uno de: Open, UnderReview, Resolved.</value>
+  </data>
+  <data name="quality.evidence.error.reviewed" xml:space="preserve">
+    <value>Una evidencia revisada no se puede quitar.</value>
+  </data>
+</root>

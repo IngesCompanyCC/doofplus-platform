@@ -9,19 +9,15 @@ public static class UserProfileResourceFromEntityAssembler
     {
         return new UserProfileResource(
             entity.Id,
-            entity.OrganizationId,
             entity.UserId,
+            entity.OrganizationId,
             entity.FirstName,
             entity.LastName,
-            entity.FullName,
             entity.Email,
             entity.Area,
             entity.Site,
-            entity.Role.ToString(),
             entity.EmailNotifications,
             entity.InAppNotifications,
-            entity.Language,
-            entity.IsActive,
-            entity.CreatedAt);
+            entity.Language);
     }
 }

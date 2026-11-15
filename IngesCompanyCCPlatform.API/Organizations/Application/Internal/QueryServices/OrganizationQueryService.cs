@@ -17,4 +17,20 @@ public class OrganizationQueryService(
     {
         return await organizationRepository.FindByIdAsync(query.OrganizationId, cancellationToken);
     }
+
+    /// <inheritdoc />
+    public async Task<IEnumerable<Organization>> Handle(
+        GetAllOrganizationsQuery query,
+        CancellationToken cancellationToken = default)
+    {
+        return await organizationRepository.ListAsNoTrackingAsync(cancellationToken);
+    }
+
+    /// <inheritdoc />
+    public async Task<Organization?> Handle(
+        GetOrganizationByRucQuery query,
+        CancellationToken cancellationToken = default)
+    {
+        return await organizationRepository.FindByRucAsync(query.Ruc.Trim(), cancellationToken);
+    }
 }
