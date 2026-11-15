@@ -33,12 +33,13 @@ public class DeviationRepository(AppDbContext context) : BaseRepository<Deviatio
     {
         return await Context.Set<Deviation>().AnyAsync(deviation => deviation.Code == code, cancellationToken);
     }
+
     /// <inheritdoc />
-    public async Task<IEnumerable<Deviation>> FindAllByBatchIdAsNoTrackingAsync(int batchId, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<Deviation>> FindAllByBatchCodeAsNoTrackingAsync(string batchCode, CancellationToken cancellationToken = default)
     {
         return await Context.Set<Deviation>()
             .AsNoTracking()
-            .Where(deviation => deviation.BatchId == batchId)
+            .Where(deviation => deviation.BatchCode == batchCode)
             .ToListAsync(cancellationToken);
     }
 }

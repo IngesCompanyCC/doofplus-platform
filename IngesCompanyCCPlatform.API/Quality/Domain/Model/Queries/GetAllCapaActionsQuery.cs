@@ -1,6 +1,6 @@
 ﻿namespace IngesCompanyCCPlatform.API.Quality.Domain.Model.Queries;
 
 /// <summary>
-///     Query to get all the capa actions.
+///     Query of the capa actions, optionally filtered by capa code.
 /// </summary>
-public record GetAllCapaActionsQuery;
+public record GetAllCapaActionsQuery(string? CapaCode = null);

@@ -2,6 +2,7 @@
 using IngesCompanyCCPlatform.API.Quality.Application.CommandServices;
 using IngesCompanyCCPlatform.API.Quality.Application.QueryServices;
 using IngesCompanyCCPlatform.API.Quality.Domain.Model;
+using IngesCompanyCCPlatform.API.Quality.Domain.Model.Commands;
 using IngesCompanyCCPlatform.API.Quality.Domain.Model.Errors;
 using IngesCompanyCCPlatform.API.Quality.Domain.Model.Queries;
 using IngesCompanyCCPlatform.API.Quality.Interfaces.Rest.Resources;
@@ -32,8 +33,6 @@ public class QualityDocumentsController(
     [EndpointDescription("Creates a quality document.")]
     [ProducesResponseType(typeof(QualityDocumentResource), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<IActionResult> CreateQualityDocument([FromBody] CreateQualityDocumentResource resource, CancellationToken cancellationToken)
     {
         var command = QualityDocumentCommandFromResourceAssembler.ToCommandFromResource(resource);
@@ -42,15 +41,17 @@ public class QualityDocumentsController(
             created => CreatedAtAction(nameof(GetQualityDocumentById), new { qualityDocumentId = created.Id.Value },
                 QualityDocumentResourceFromEntityAssembler.ToResourceFromEntity(created)));
     }
+
     [HttpGet]
     [EndpointSummary("Get the quality documents")]
-    [EndpointDescription("Gets all the quality documents.")]
+    [EndpointDescription("Gets the quality documents; with code, only the ones with that code.")]
     [ProducesResponseType(typeof(IEnumerable<QualityDocumentResource>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetQualityDocuments(CancellationToken cancellationToken)
+    public async Task<IActionResult> GetQualityDocuments([FromQuery] string? code, CancellationToken cancellationToken)
     {
-        var items = await qualityDocumentQueryService.Handle(new GetAllQualityDocumentsQuery(), cancellationToken);
+        var items = await qualityDocumentQueryService.Handle(new GetAllQualityDocumentsQuery(code), cancellationToken);
         return Ok(items.Select(QualityDocumentResourceFromEntityAssembler.ToResourceFromEntity));
     }
+
     [HttpGet("{qualityDocumentId:int}")]
     [EndpointSummary("Get a quality document by its id")]
     [EndpointDescription("Gets a quality document by the provided id.")]
@@ -62,5 +63,19 @@ public class QualityDocumentsController(
         return QualityActionResultAssembler.ToActionResultFromQueryResult(this, item, QualityDocumentErrors.NotFoundById(qualityDocumentId),
             QualityError.QualityDocumentNotFound, messages, problemDetailsFactory,
             found => Ok(QualityDocumentResourceFromEntityAssembler.ToResourceFromEntity(found)), qualityDocumentId);
+    }
+
+    [HttpPut("{qualityDocumentId:int}")]
+    [EndpointSummary("Update a quality document")]
+    [EndpointDescription("Replaces the data of the quality document with the provided id.")]
+    [ProducesResponseType(typeof(QualityDocumentResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UpdateQualityDocument([FromRoute] int qualityDocumentId, [FromBody] UpdateQualityDocumentResource resource, CancellationToken cancellationToken)
+    {
+        var command = QualityDocumentCommandFromResourceAssembler.ToCommandFromResource(qualityDocumentId, resource);
+        var result = await qualityDocumentCommandService.Handle(command, cancellationToken);
+        return QualityActionResultAssembler.ToActionResultFromCommandResult(this, result, messages, problemDetailsFactory,
+            updated => Ok(QualityDocumentResourceFromEntityAssembler.ToResourceFromEntity(updated)), qualityDocumentId);
     }
 }

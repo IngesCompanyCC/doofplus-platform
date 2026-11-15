@@ -13,17 +13,14 @@ public class TraceabilityGapQueryService(ITraceabilityGapRepository traceability
     /// <inheritdoc />
     public async Task<IEnumerable<TraceabilityGap>> Handle(GetAllTraceabilityGapsQuery query, CancellationToken cancellationToken)
     {
-        return await traceabilityGapRepository.ListAsNoTrackingAsync(cancellationToken);
+        return string.IsNullOrWhiteSpace(query.BatchCode)
+            ? await traceabilityGapRepository.ListAsNoTrackingAsync(cancellationToken)
+            : await traceabilityGapRepository.FindAllByBatchCodeAsNoTrackingAsync(query.BatchCode.Trim(), cancellationToken);
     }
 
     /// <inheritdoc />
     public async Task<TraceabilityGap?> Handle(GetTraceabilityGapByIdQuery query, CancellationToken cancellationToken)
     {
         return await traceabilityGapRepository.FindByIdAsNoTrackingAsync(query.TraceabilityGapId, cancellationToken);
-    }
-    /// <inheritdoc />
-    public async Task<IEnumerable<TraceabilityGap>> Handle(GetAllTraceabilityGapsByBatchIdQuery query, CancellationToken cancellationToken)
-    {
-        return await traceabilityGapRepository.FindAllByBatchIdAsNoTrackingAsync(query.BatchId, cancellationToken);
     }
 }

@@ -6,12 +6,10 @@ using IngesCompanyCCPlatform.API.Quality.Interfaces.Rest.Resources;
 namespace IngesCompanyCCPlatform.API.Quality.Interfaces.Rest.Transform;
 
 /// <summary>
-///     Builds the commands of <c>Audit</c> from the resources.
+///     Builds the commands of <c>Audit</c> from the resources. Enums are accepted in any case and with hyphens.
 /// </summary>
 public static class AuditCommandFromResourceAssembler
 {
-
-
     /// <summary>
     ///     Builds the command to create a audit.
     /// </summary>
@@ -21,12 +19,12 @@ public static class AuditCommandFromResourceAssembler
     public static CreateAuditCommand ToCommandFromResource(CreateAuditResource resource)
     {
         return new CreateAuditCommand(
-            resource.Code,
-            resource.Title,
-            resource.Scope ?? string.Empty,
-            resource.AuditType ?? string.Empty,
-            resource.AuditorId,
-            resource.PlannedDate);
+            resource.Code ?? string.Empty,
+            resource.Title ?? string.Empty,
+            resource.Period ?? string.Empty,
+            resource.AreasReviewed ?? 0,
+            resource.AreasTotal ?? 0,
+            resource.Status is null ? EAuditStatus.Scheduled : EnumParser.Parse<EAuditStatus>(resource.Status, "quality.audit.error.status.invalid"));
     }
 }
 
@@ -46,12 +44,9 @@ public static class AuditResourceFromEntityAssembler
             entity.Id.Value,
             entity.Code,
             entity.Title,
-            entity.Scope,
-            entity.AuditType,
-            entity.AuditorId,
-            entity.PlannedDate,
-            entity.Status.ToString(),
-            entity.StartedAt is null ? null : DateTime.SpecifyKind(entity.StartedAt.Value, DateTimeKind.Utc),
-            entity.CompletedAt is null ? null : DateTime.SpecifyKind(entity.CompletedAt.Value, DateTimeKind.Utc));
+            entity.Period,
+            entity.AreasReviewed,
+            entity.AreasTotal,
+            entity.Status.ToString());
     }
 }

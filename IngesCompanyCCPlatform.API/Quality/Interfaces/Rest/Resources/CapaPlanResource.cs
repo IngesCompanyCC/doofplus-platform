@@ -1,15 +1,16 @@
 ﻿namespace IngesCompanyCCPlatform.API.Quality.Interfaces.Rest.Resources;
 
 /// <summary>
-///     A capa plan, as the API returns it.
+///     A capa plan, with the fields of <c>contratos/quality-api.json</c>.
 /// </summary>
 public record CapaPlanResource(
     int Id,
-    int DeviationId,
+    string Code,
     string Title,
-    string Description,
-    DateOnly DueDate,
-    string Responsible,
-    string Status,
-    DateTime? CompletedAt,
-    DateTimeOffset? CreatedAt);
+    string SourceDeviation,
+    string Owner,
+    string Reviewer,
+    string RootCause,
+    string AcceptanceCriterion,
+    DateOnly? EffectivenessCheckAt,
+    string Status);

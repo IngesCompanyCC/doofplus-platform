@@ -1,6 +1,6 @@
 ﻿namespace IngesCompanyCCPlatform.API.Quality.Domain.Model.Queries;
 
 /// <summary>
-///     Query to get all the collaboration tasks.
+///     Query of the collaboration tasks, optionally filtered by record code.
 /// </summary>
-public record GetAllCollaborationTasksQuery;
+public record GetAllCollaborationTasksQuery(string? RecordCode = null);

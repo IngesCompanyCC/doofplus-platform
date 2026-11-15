@@ -19,11 +19,21 @@ public class QualityDocumentCommandService(
     /// <inheritdoc />
     public async Task<Result<QualityDocument>> Handle(CreateQualityDocumentCommand command, CancellationToken cancellationToken)
     {
-        if (await qualityDocumentRepository.ExistsByCodeAsync(command.Code.Trim(), cancellationToken))
-            return Result<QualityDocument>.Failure(QualityDocumentErrors.DuplicateCode, QualityError.DuplicateQualityDocumentCode);
-
         var qualityDocument = new QualityDocument(command);
         await qualityDocumentRepository.AddAsync(qualityDocument, cancellationToken);
+        await unitOfWork.CompleteAsync(cancellationToken);
+        return Result<QualityDocument>.Success(qualityDocument);
+    }
+
+    /// <inheritdoc />
+    public async Task<Result<QualityDocument>> Handle(UpdateQualityDocumentCommand command, CancellationToken cancellationToken)
+    {
+        var qualityDocument = await qualityDocumentRepository.FindByIdAsync(command.QualityDocumentId, cancellationToken);
+        if (qualityDocument is null)
+            return Result<QualityDocument>.Failure(QualityDocumentErrors.NotFoundById(command.QualityDocumentId), QualityError.QualityDocumentNotFound);
+
+        qualityDocument.Update(command);
+        qualityDocumentRepository.Update(qualityDocument);
         await unitOfWork.CompleteAsync(cancellationToken);
         return Result<QualityDocument>.Success(qualityDocument);
     }

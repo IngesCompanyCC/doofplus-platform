@@ -2,6 +2,7 @@
 using IngesCompanyCCPlatform.API.Quality.Application.CommandServices;
 using IngesCompanyCCPlatform.API.Quality.Application.QueryServices;
 using IngesCompanyCCPlatform.API.Quality.Domain.Model;
+using IngesCompanyCCPlatform.API.Quality.Domain.Model.Commands;
 using IngesCompanyCCPlatform.API.Quality.Domain.Model.Errors;
 using IngesCompanyCCPlatform.API.Quality.Domain.Model.Queries;
 using IngesCompanyCCPlatform.API.Quality.Interfaces.Rest.Resources;
@@ -32,7 +33,6 @@ public class AuditsController(
     [EndpointDescription("Creates a audit.")]
     [ProducesResponseType(typeof(AuditResource), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<IActionResult> CreateAudit([FromBody] CreateAuditResource resource, CancellationToken cancellationToken)
     {
@@ -42,15 +42,17 @@ public class AuditsController(
             created => CreatedAtAction(nameof(GetAuditById), new { auditId = created.Id.Value },
                 AuditResourceFromEntityAssembler.ToResourceFromEntity(created)));
     }
+
     [HttpGet]
     [EndpointSummary("Get the audits")]
-    [EndpointDescription("Gets all the audits.")]
+    [EndpointDescription("Gets the audits.")]
     [ProducesResponseType(typeof(IEnumerable<AuditResource>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAudits(CancellationToken cancellationToken)
     {
         var items = await auditQueryService.Handle(new GetAllAuditsQuery(), cancellationToken);
         return Ok(items.Select(AuditResourceFromEntityAssembler.ToResourceFromEntity));
     }
+
     [HttpGet("{auditId:int}")]
     [EndpointSummary("Get a audit by its id")]
     [EndpointDescription("Gets a audit by the provided id.")]

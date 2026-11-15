@@ -9,7 +9,7 @@ namespace IngesCompanyCCPlatform.API.Quality.Application.QueryServices;
 public interface IRegulatoryReportQueryService
 {
     /// <summary>
-    ///     Gets all the regulatory reports.
+    ///     Gets the regulatory reports.
     /// </summary>
     Task<IEnumerable<RegulatoryReport>> Handle(GetAllRegulatoryReportsQuery query, CancellationToken cancellationToken);
 

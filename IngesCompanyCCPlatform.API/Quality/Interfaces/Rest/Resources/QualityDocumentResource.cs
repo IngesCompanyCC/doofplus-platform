@@ -1,16 +1,20 @@
 ﻿namespace IngesCompanyCCPlatform.API.Quality.Interfaces.Rest.Resources;
 
 /// <summary>
-///     A quality document, as the API returns it.
+///     A quality document, with the fields of <c>contratos/quality-api.json</c>.
 /// </summary>
 public record QualityDocumentResource(
     int Id,
     string Code,
-    string Title,
-    string Description,
-    string DocumentType,
-    string FileReference,
     string Version,
-    int? OwnerId,
+    string Title,
     string Status,
-    DateTime? ApprovedAt);
+    string Author,
+    string TechnicalReviewer,
+    string Approver,
+    DateOnly? ChangedAt,
+    string Purpose,
+    string Scope,
+    string Procedure,
+    string RevisionSummary,
+    int ReviewCycleMonths);

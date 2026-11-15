@@ -28,4 +28,18 @@ public class CapaPlanRepository(AppDbContext context) : BaseRepository<CapaPlan>
             .FirstOrDefaultAsync(capaPlan => capaPlan.Id == capaPlanId, cancellationToken);
     }
 
+    /// <inheritdoc />
+    public async Task<bool> ExistsByCodeAsync(string code, CancellationToken cancellationToken = default)
+    {
+        return await Context.Set<CapaPlan>().AnyAsync(capaPlan => capaPlan.Code == code, cancellationToken);
+    }
+
+    /// <inheritdoc />
+    public async Task<IEnumerable<CapaPlan>> FindAllBySourceDeviationAsNoTrackingAsync(string sourceDeviation, CancellationToken cancellationToken = default)
+    {
+        return await Context.Set<CapaPlan>()
+            .AsNoTracking()
+            .Where(capaPlan => capaPlan.SourceDeviation == sourceDeviation)
+            .ToListAsync(cancellationToken);
+    }
 }

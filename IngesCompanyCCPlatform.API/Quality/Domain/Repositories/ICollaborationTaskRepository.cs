@@ -8,4 +8,8 @@ namespace IngesCompanyCCPlatform.API.Quality.Domain.Repositories;
 /// </summary>
 public interface ICollaborationTaskRepository : IBaseRepository<CollaborationTask>
 {
+    /// <summary>
+    ///     Gets the collaboration tasks with the record code.
+    /// </summary>
+    Task<IEnumerable<CollaborationTask>> FindAllByRecordCodeAsNoTrackingAsync(string recordCode, CancellationToken cancellationToken = default);
 }

@@ -1,14 +1,16 @@
 ﻿namespace IngesCompanyCCPlatform.API.Quality.Interfaces.Rest.Resources;
 
 /// <summary>
-///     A capa action, as the API returns it.
+///     A capa action, with the fields of <c>contratos/quality-api.json</c>.
 /// </summary>
 public record CapaActionResource(
     int Id,
-    int CapaPlanId,
+    string CapaCode,
+    string Code,
+    string Type,
     string Title,
-    string Description,
-    string AssignedTo,
-    DateOnly DueDate,
+    string Owner,
+    DateOnly? DueAt,
     string Status,
-    DateTime? CompletedAt);
+    string Evidence,
+    bool EvidenceAttached);

@@ -5,20 +5,22 @@ using IngesCompanyCCPlatform.API.Shared.Domain.Model.Aggregates.Internal;
 namespace IngesCompanyCCPlatform.API.Quality.Domain.Model.Aggregates;
 
 /// <summary>
-///     A missing link in the genealogy of a production batch.
+///     Traceability gap of the Quality &amp; Compliance bounded context, as in <c>class-06-quality</c>.
 /// </summary>
 public partial class TraceabilityGap : AggregateRoot
 {
-    private const string DescriptionNotBlankMessageKey = "quality.traceabilityGap.error.description.notBlank";
+    private const string BatchCodeNotBlankMessageKey = "quality.traceabilityGap.error.batchCode.notBlank";
+    private const string MissingRecordNotBlankMessageKey = "quality.traceabilityGap.error.missingRecord.notBlank";
 
     /// <summary>
     ///     Constructor used by Entity Framework Core.
     /// </summary>
     protected TraceabilityGap()
     {
-        Description = string.Empty;
-        MissingReference = string.Empty;
-        AffectedProcess = string.Empty;
+        BatchCode = string.Empty;
+        Product = string.Empty;
+        MissingRecord = string.Empty;
+        Detail = string.Empty;
     }
 
     /// <summary>
@@ -26,16 +28,7 @@ public partial class TraceabilityGap : AggregateRoot
     /// </summary>
     /// <param name="command">The data of the traceability gap.</param>
     /// <exception cref="ArgumentException">Thrown when a required value is blank.</exception>
-    public TraceabilityGap(CreateTraceabilityGapCommand command) : this()
-    {
-        BatchId = command.BatchId;
-        if (string.IsNullOrWhiteSpace(command.Description)) throw new ArgumentException(DescriptionNotBlankMessageKey);
-        Description = command.Description.Trim();
-        MissingReference = command.MissingReference?.Trim() ?? string.Empty;
-        AffectedProcess = command.AffectedProcess?.Trim() ?? string.Empty;
-        Status = ETraceabilityGapStatus.Open;
-        DetectedAt = DateTime.UtcNow;
-    }
+    public TraceabilityGap(CreateTraceabilityGapCommand command) : this() => Apply(command.BatchCode, command.Product, command.MissingRecord, command.Detail, command.Status);
 
     /// <summary>
     ///     The id of the traceability gap.
@@ -43,57 +36,38 @@ public partial class TraceabilityGap : AggregateRoot
     public TraceabilityGapId Id { get; }
 
     /// <summary>
-    ///     The id of the production batch.
+    ///     The batch code.
     /// </summary>
-    public int BatchId { get; private set; }
-    /// <summary>
-    ///     What is missing.
-    /// </summary>
-    public string Description { get; private set; }
-    /// <summary>
-    ///     The reference that is missing, for example a lot code.
-    /// </summary>
-    public string MissingReference { get; private set; }
-    /// <summary>
-    ///     The affected process.
-    /// </summary>
-    public string AffectedProcess { get; private set; }
-    /// <summary>
-    ///     Where the gap is.
-    /// </summary>
-    public ETraceabilityGapStatus Status { get; private set; }
-    /// <summary>
-    ///     The id of the user who resolved it.
-    /// </summary>
-    public int? ReviewedBy { get; private set; }
-    /// <summary>
-    ///     When the gap was registered (UTC).
-    /// </summary>
-    public DateTime DetectedAt { get; private set; }
-    /// <summary>
-    ///     When the gap was resolved (UTC).
-    /// </summary>
-    public DateTime? ResolvedAt { get; private set; }
+    public string BatchCode { get; private set; }
 
     /// <summary>
-    ///     Starts the review of an open gap.
+    ///     The product.
     /// </summary>
-    public bool StartReview()
-    {
-        if (Status != ETraceabilityGapStatus.Open) return false;
-        Status = ETraceabilityGapStatus.UnderReview;
-        return true;
-    }
+    public string Product { get; private set; }
 
     /// <summary>
-    ///     Resolves a gap under review.
+    ///     The missing record.
     /// </summary>
-    public bool Resolve(int reviewerId)
+    public string MissingRecord { get; private set; }
+
+    /// <summary>
+    ///     The detail.
+    /// </summary>
+    public string Detail { get; private set; }
+
+    /// <summary>
+    ///     The status.
+    /// </summary>
+    public EGapStatus Status { get; private set; }
+
+    private void Apply(string batchCode, string product, string missingRecord, string detail, EGapStatus status)
     {
-        if (Status != ETraceabilityGapStatus.UnderReview) return false;
-        Status = ETraceabilityGapStatus.Resolved;
-        ReviewedBy = reviewerId;
-        ResolvedAt = DateTime.UtcNow;
-        return true;
+        if (string.IsNullOrWhiteSpace(batchCode)) throw new ArgumentException(BatchCodeNotBlankMessageKey);
+        BatchCode = batchCode?.Trim() ?? string.Empty;
+        Product = product?.Trim() ?? string.Empty;
+        if (string.IsNullOrWhiteSpace(missingRecord)) throw new ArgumentException(MissingRecordNotBlankMessageKey);
+        MissingRecord = missingRecord?.Trim() ?? string.Empty;
+        Detail = detail?.Trim() ?? string.Empty;
+        Status = status;
     }
 }

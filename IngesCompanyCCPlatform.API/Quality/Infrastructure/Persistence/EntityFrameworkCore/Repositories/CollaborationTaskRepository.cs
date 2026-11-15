@@ -28,4 +28,12 @@ public class CollaborationTaskRepository(AppDbContext context) : BaseRepository<
             .FirstOrDefaultAsync(collaborationTask => collaborationTask.Id == collaborationTaskId, cancellationToken);
     }
 
+    /// <inheritdoc />
+    public async Task<IEnumerable<CollaborationTask>> FindAllByRecordCodeAsNoTrackingAsync(string recordCode, CancellationToken cancellationToken = default)
+    {
+        return await Context.Set<CollaborationTask>()
+            .AsNoTracking()
+            .Where(collaborationTask => collaborationTask.RecordCode == recordCode)
+            .ToListAsync(cancellationToken);
+    }
 }

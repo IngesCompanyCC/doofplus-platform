@@ -1,11 +1,15 @@
 ﻿namespace IngesCompanyCCPlatform.API.Quality.Interfaces.Rest.Resources;
 
 /// <summary>
-///     Data to create a capa plan.
+///     Data to create a capa plan. Missing optional values take their default.
 /// </summary>
 public record CreateCapaPlanResource(
-    int DeviationId,
-    string Title,
-    string Description,
-    DateOnly DueDate,
-    string Responsible);
+    string? Code,
+    string? Title,
+    string? SourceDeviation,
+    string? Owner,
+    string? Reviewer,
+    string? RootCause,
+    string? AcceptanceCriterion,
+    DateOnly? EffectivenessCheckAt,
+    string? Status);

@@ -13,4 +13,10 @@ public static class CapaPlanErrors
     /// <param name="id">The id that was looked for.</param>
     public static Error NotFoundById(int id) =>
         Error.NotFound("quality.capaPlan.error.notFoundById", $"Capa plan not found for id {id}.");
+
+    /// <summary>
+    ///     Another capa plan already has the code.
+    /// </summary>
+    public static readonly Error DuplicateCode =
+        Error.Conflict("quality.capaPlan.error.duplicate", "A capa plan with the same code already exists.");
 }

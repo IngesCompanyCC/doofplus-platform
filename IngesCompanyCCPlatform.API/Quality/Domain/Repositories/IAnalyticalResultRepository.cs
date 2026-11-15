@@ -9,7 +9,7 @@ namespace IngesCompanyCCPlatform.API.Quality.Domain.Repositories;
 public interface IAnalyticalResultRepository : IBaseRepository<AnalyticalResult>
 {
     /// <summary>
-    ///     Gets the analytical results filtered by batch id.
+    ///     Gets the analytical results with the batch code.
     /// </summary>
-    Task<IEnumerable<AnalyticalResult>> FindAllByBatchIdAsNoTrackingAsync(int batchId, CancellationToken cancellationToken = default);
+    Task<IEnumerable<AnalyticalResult>> FindAllByBatchCodeAsNoTrackingAsync(string batchCode, CancellationToken cancellationToken = default);
 }

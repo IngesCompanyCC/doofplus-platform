@@ -2,6 +2,7 @@
 using IngesCompanyCCPlatform.API.Quality.Application.CommandServices;
 using IngesCompanyCCPlatform.API.Quality.Application.QueryServices;
 using IngesCompanyCCPlatform.API.Quality.Domain.Model;
+using IngesCompanyCCPlatform.API.Quality.Domain.Model.Commands;
 using IngesCompanyCCPlatform.API.Quality.Domain.Model.Errors;
 using IngesCompanyCCPlatform.API.Quality.Domain.Model.Queries;
 using IngesCompanyCCPlatform.API.Quality.Interfaces.Rest.Resources;
@@ -21,20 +22,36 @@ namespace IngesCompanyCCPlatform.API.Quality.Interfaces.Rest;
 [Produces(MediaTypeNames.Application.Json)]
 [Tags("Audit Events")]
 public class AuditEventsController(
+    IAuditEventCommandService auditEventCommandService,
     IAuditEventQueryService auditEventQueryService,
     IStringLocalizer<QualityMessages> messages,
     ProblemDetailsFactory problemDetailsFactory)
     : ControllerBase
 {
+    [HttpPost]
+    [EndpointSummary("Create a audit event")]
+    [EndpointDescription("Creates a audit event.")]
+    [ProducesResponseType(typeof(AuditEventResource), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> CreateAuditEvent([FromBody] CreateAuditEventResource resource, CancellationToken cancellationToken)
+    {
+        var command = AuditEventCommandFromResourceAssembler.ToCommandFromResource(resource);
+        var result = await auditEventCommandService.Handle(command, cancellationToken);
+        return QualityActionResultAssembler.ToActionResultFromCommandResult(this, result, messages, problemDetailsFactory,
+            created => CreatedAtAction(nameof(GetAuditEventById), new { auditEventId = created.Id.Value },
+                AuditEventResourceFromEntityAssembler.ToResourceFromEntity(created)));
+    }
+
     [HttpGet]
     [EndpointSummary("Get the audit events")]
-    [EndpointDescription("Gets the audit events, newest first, optionally filtered by aggregate type and aggregate id.")]
+    [EndpointDescription("Gets the audit events; with record, only the ones with that record.")]
     [ProducesResponseType(typeof(IEnumerable<AuditEventResource>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetAuditEvents([FromQuery] string? aggregateType, [FromQuery] int? aggregateId, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetAuditEvents([FromQuery] string? record, CancellationToken cancellationToken)
     {
-        var items = await auditEventQueryService.Handle(new GetAllAuditEventsByAggregateTypeAggregateIdQuery(aggregateType, aggregateId), cancellationToken);
+        var items = await auditEventQueryService.Handle(new GetAllAuditEventsQuery(record), cancellationToken);
         return Ok(items.Select(AuditEventResourceFromEntityAssembler.ToResourceFromEntity));
     }
+
     [HttpGet("{auditEventId:int}")]
     [EndpointSummary("Get a audit event by its id")]
     [EndpointDescription("Gets a audit event by the provided id.")]

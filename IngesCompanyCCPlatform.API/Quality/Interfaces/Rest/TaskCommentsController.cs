@@ -2,6 +2,7 @@
 using IngesCompanyCCPlatform.API.Quality.Application.CommandServices;
 using IngesCompanyCCPlatform.API.Quality.Application.QueryServices;
 using IngesCompanyCCPlatform.API.Quality.Domain.Model;
+using IngesCompanyCCPlatform.API.Quality.Domain.Model.Commands;
 using IngesCompanyCCPlatform.API.Quality.Domain.Model.Errors;
 using IngesCompanyCCPlatform.API.Quality.Domain.Model.Queries;
 using IngesCompanyCCPlatform.API.Quality.Interfaces.Rest.Resources;
@@ -32,25 +33,25 @@ public class TaskCommentsController(
     [EndpointDescription("Creates a task comment.")]
     [ProducesResponseType(typeof(TaskCommentResource), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<IActionResult> CreateTaskComment([FromBody] CreateTaskCommentResource resource, CancellationToken cancellationToken)
     {
         var command = TaskCommentCommandFromResourceAssembler.ToCommandFromResource(resource);
         var result = await taskCommentCommandService.Handle(command, cancellationToken);
         return QualityActionResultAssembler.ToActionResultFromCommandResult(this, result, messages, problemDetailsFactory,
             created => CreatedAtAction(nameof(GetTaskCommentById), new { taskCommentId = created.Id.Value },
-                TaskCommentResourceFromEntityAssembler.ToResourceFromEntity(created)), resource.TaskId);
+                TaskCommentResourceFromEntityAssembler.ToResourceFromEntity(created)));
     }
+
     [HttpGet]
     [EndpointSummary("Get the task comments")]
-    [EndpointDescription("Gets all the task comments.")]
+    [EndpointDescription("Gets the task comments; with recordCode, only the ones with that record code.")]
     [ProducesResponseType(typeof(IEnumerable<TaskCommentResource>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetTaskComments(CancellationToken cancellationToken)
+    public async Task<IActionResult> GetTaskComments([FromQuery] string? recordCode, CancellationToken cancellationToken)
     {
-        var items = await taskCommentQueryService.Handle(new GetAllTaskCommentsQuery(), cancellationToken);
+        var items = await taskCommentQueryService.Handle(new GetAllTaskCommentsQuery(recordCode), cancellationToken);
         return Ok(items.Select(TaskCommentResourceFromEntityAssembler.ToResourceFromEntity));
     }
+
     [HttpGet("{taskCommentId:int}")]
     [EndpointSummary("Get a task comment by its id")]
     [EndpointDescription("Gets a task comment by the provided id.")]
@@ -62,14 +63,5 @@ public class TaskCommentsController(
         return QualityActionResultAssembler.ToActionResultFromQueryResult(this, item, TaskCommentErrors.NotFoundById(taskCommentId),
             QualityError.TaskCommentNotFound, messages, problemDetailsFactory,
             found => Ok(TaskCommentResourceFromEntityAssembler.ToResourceFromEntity(found)), taskCommentId);
-    }
-    [HttpGet("by-task/{taskId:int}")]
-    [EndpointSummary("Get the task comments of a task")]
-    [EndpointDescription("Gets the task comments of the task with the provided id.")]
-    [ProducesResponseType(typeof(IEnumerable<TaskCommentResource>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetTaskCommentsByTaskId([FromRoute] int taskId, CancellationToken cancellationToken)
-    {
-        var items = await taskCommentQueryService.Handle(new GetAllTaskCommentsByTaskIdQuery(taskId), cancellationToken);
-        return Ok(items.Select(TaskCommentResourceFromEntityAssembler.ToResourceFromEntity));
     }
 }

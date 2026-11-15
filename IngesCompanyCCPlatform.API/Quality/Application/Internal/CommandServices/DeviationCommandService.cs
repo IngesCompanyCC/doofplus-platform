@@ -27,4 +27,17 @@ public class DeviationCommandService(
         await unitOfWork.CompleteAsync(cancellationToken);
         return Result<Deviation>.Success(deviation);
     }
+
+    /// <inheritdoc />
+    public async Task<Result<Deviation>> Handle(UpdateDeviationCommand command, CancellationToken cancellationToken)
+    {
+        var deviation = await deviationRepository.FindByIdAsync(command.DeviationId, cancellationToken);
+        if (deviation is null)
+            return Result<Deviation>.Failure(DeviationErrors.NotFoundById(command.DeviationId), QualityError.DeviationNotFound);
+
+        deviation.Update(command);
+        deviationRepository.Update(deviation);
+        await unitOfWork.CompleteAsync(cancellationToken);
+        return Result<Deviation>.Success(deviation);
+    }
 }

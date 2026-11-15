@@ -1,6 +1,6 @@
 ﻿namespace IngesCompanyCCPlatform.API.Quality.Domain.Model.Queries;
 
 /// <summary>
-///     Query to get all the audit events.
+///     Query of the audit events, optionally filtered by record.
 /// </summary>
-public record GetAllAuditEventsQuery;
+public record GetAllAuditEventsQuery(string? Record = null);

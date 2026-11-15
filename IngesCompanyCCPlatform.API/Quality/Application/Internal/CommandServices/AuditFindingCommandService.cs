@@ -14,15 +14,11 @@ namespace IngesCompanyCCPlatform.API.Quality.Application.Internal.CommandService
 /// </summary>
 public class AuditFindingCommandService(
     IAuditFindingRepository auditFindingRepository,
-    IAuditRepository auditRepository,
     IUnitOfWork unitOfWork) : IAuditFindingCommandService
 {
     /// <inheritdoc />
     public async Task<Result<AuditFinding>> Handle(CreateAuditFindingCommand command, CancellationToken cancellationToken)
     {
-        if (await auditRepository.FindByIdAsNoTrackingAsync(command.AuditId, cancellationToken) is null)
-            return Result<AuditFinding>.Failure(AuditErrors.NotFoundById(command.AuditId), QualityError.AuditNotFound);
-
         var auditFinding = new AuditFinding(command);
         await auditFindingRepository.AddAsync(auditFinding, cancellationToken);
         await unitOfWork.CompleteAsync(cancellationToken);

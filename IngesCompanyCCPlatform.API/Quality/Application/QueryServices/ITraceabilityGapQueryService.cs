@@ -9,7 +9,7 @@ namespace IngesCompanyCCPlatform.API.Quality.Application.QueryServices;
 public interface ITraceabilityGapQueryService
 {
     /// <summary>
-    ///     Gets all the traceability gaps.
+    ///     Gets the traceability gaps, filtered by batch code when it is sent.
     /// </summary>
     Task<IEnumerable<TraceabilityGap>> Handle(GetAllTraceabilityGapsQuery query, CancellationToken cancellationToken);
 
@@ -17,8 +17,4 @@ public interface ITraceabilityGapQueryService
     ///     Gets a traceability gap by its id, or <c>null</c>.
     /// </summary>
     Task<TraceabilityGap?> Handle(GetTraceabilityGapByIdQuery query, CancellationToken cancellationToken);
-    /// <summary>
-    ///     Gets the traceability gaps filtered by batch id.
-    /// </summary>
-    Task<IEnumerable<TraceabilityGap>> Handle(GetAllTraceabilityGapsByBatchIdQuery query, CancellationToken cancellationToken);
 }

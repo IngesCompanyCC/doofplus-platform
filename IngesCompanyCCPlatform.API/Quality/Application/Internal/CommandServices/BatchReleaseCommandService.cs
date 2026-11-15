@@ -26,9 +26,7 @@ public class BatchReleaseCommandService(
         var batchRelease = new BatchRelease(command);
         await batchReleaseRepository.AddAsync(batchRelease, cancellationToken);
         await unitOfWork.CompleteAsync(cancellationToken);
-        await auditEventRepository.AddAsync(new AuditEvent(new CreateAuditEventCommand(
-            nameof(BatchRelease), batchRelease.Id.Value, "Requested",
-            $"Release of batch {batchRelease.BatchCode} requested.", batchRelease.RequestedBy)), cancellationToken);
+        await auditEventRepository.AddAsync(TrailEvent("Batch release requested", batchRelease.BatchCode, "Requested", batchRelease.RequestedBy), cancellationToken);
         await unitOfWork.CompleteAsync(cancellationToken);
         return Result<BatchRelease>.Success(batchRelease);
     }
@@ -42,9 +40,7 @@ public class BatchReleaseCommandService(
         if (!release.Approve(command))
             return Result<BatchRelease>.Failure(BatchReleaseErrors.NotPending, QualityError.BatchReleaseStateConflict);
 
-        await auditEventRepository.AddAsync(new AuditEvent(new CreateAuditEventCommand(
-            nameof(BatchRelease), release.Id.Value, "Approved",
-            $"Batch {release.BatchCode} approved: {release.Decision}", release.SignedBy)), cancellationToken);
+        await auditEventRepository.AddAsync(TrailEvent("Batch released", release.BatchCode, "Approved", release.SignedBy, release.Decision), cancellationToken);
         await unitOfWork.CompleteAsync(cancellationToken);
         return Result<BatchRelease>.Success(release);
     }
@@ -58,10 +54,15 @@ public class BatchReleaseCommandService(
         if (!release.Reject(command))
             return Result<BatchRelease>.Failure(BatchReleaseErrors.NotPending, QualityError.BatchReleaseStateConflict);
 
-        await auditEventRepository.AddAsync(new AuditEvent(new CreateAuditEventCommand(
-            nameof(BatchRelease), release.Id.Value, "Rejected",
-            $"Batch {release.BatchCode} rejected: {release.Decision}", release.SignedBy)), cancellationToken);
+        await auditEventRepository.AddAsync(TrailEvent("Batch release rejected", release.BatchCode, "Rejected", release.SignedBy, release.Decision), cancellationToken);
         await unitOfWork.CompleteAsync(cancellationToken);
         return Result<BatchRelease>.Success(release);
     }
+
+    /// <summary>
+    ///     Builds the audit trail entry of a decision on the release of a batch.
+    /// </summary>
+    private static AuditEvent TrailEvent(string eventName, string batchCode, string result, string actor, string reason = "") =>
+        new(new CreateAuditEventCommand($"EVT-{DateTime.UtcNow:HHmmssfff}", DateTime.UtcNow, actor, "qa-specialist",
+            eventName, batchCode, result, "Release status", string.Empty, result, reason));
 }

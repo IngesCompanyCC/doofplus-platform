@@ -6,8 +6,12 @@ namespace IngesCompanyCCPlatform.API.Quality.Domain.Model.Commands;
 ///     Command to create a capa action.
 /// </summary>
 public record CreateCapaActionCommand(
-    int CapaPlanId,
+    string CapaCode,
+    string Code,
+    ECapaType? Type,
     string Title,
-    string Description,
-    string AssignedTo,
-    DateOnly DueDate);
+    string Owner,
+    DateOnly? DueAt,
+    EActionStatus Status,
+    string Evidence,
+    bool EvidenceAttached);

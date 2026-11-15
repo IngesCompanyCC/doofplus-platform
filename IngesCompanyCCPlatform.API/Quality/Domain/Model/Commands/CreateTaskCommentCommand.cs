@@ -6,6 +6,8 @@ namespace IngesCompanyCCPlatform.API.Quality.Domain.Model.Commands;
 ///     Command to create a task comment.
 /// </summary>
 public record CreateTaskCommentCommand(
-    int TaskId,
-    int AuthorId,
-    string Content);
+    string RecordCode,
+    string Author,
+    string Initials,
+    DateTime? PostedAt,
+    string Text);

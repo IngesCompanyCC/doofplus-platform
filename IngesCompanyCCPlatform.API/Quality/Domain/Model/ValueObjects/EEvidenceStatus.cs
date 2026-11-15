@@ -1,14 +1,11 @@
 ﻿namespace IngesCompanyCCPlatform.API.Quality.Domain.Model.ValueObjects;
 
 /// <summary>
-///     Where a piece of evidence is in its verification.
+///     Evidence status values of the Quality &amp; Compliance bounded context.
 /// </summary>
-/// <remarks>
-///     Stored as text in PascalCase, like the other enums of the project.
-/// </remarks>
 public enum EEvidenceStatus
 {
-    Pending,
-    Verified,
-    Rejected
+    Attached,
+    PendingReview,
+    Reviewed
 }

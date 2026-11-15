@@ -29,8 +29,11 @@ public class QualityDocumentRepository(AppDbContext context) : BaseRepository<Qu
     }
 
     /// <inheritdoc />
-    public async Task<bool> ExistsByCodeAsync(string code, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<QualityDocument>> FindAllByCodeAsNoTrackingAsync(string code, CancellationToken cancellationToken = default)
     {
-        return await Context.Set<QualityDocument>().AnyAsync(qualityDocument => qualityDocument.Code == code, cancellationToken);
+        return await Context.Set<QualityDocument>()
+            .AsNoTracking()
+            .Where(qualityDocument => qualityDocument.Code == code)
+            .ToListAsync(cancellationToken);
     }
 }

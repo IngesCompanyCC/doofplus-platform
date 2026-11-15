@@ -2,6 +2,7 @@
 using IngesCompanyCCPlatform.API.Quality.Application.CommandServices;
 using IngesCompanyCCPlatform.API.Quality.Application.QueryServices;
 using IngesCompanyCCPlatform.API.Quality.Domain.Model;
+using IngesCompanyCCPlatform.API.Quality.Domain.Model.Commands;
 using IngesCompanyCCPlatform.API.Quality.Domain.Model.Errors;
 using IngesCompanyCCPlatform.API.Quality.Domain.Model.Queries;
 using IngesCompanyCCPlatform.API.Quality.Interfaces.Rest.Resources;
@@ -32,25 +33,25 @@ public class CapaActionsController(
     [EndpointDescription("Creates a capa action.")]
     [ProducesResponseType(typeof(CapaActionResource), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<IActionResult> CreateCapaAction([FromBody] CreateCapaActionResource resource, CancellationToken cancellationToken)
     {
         var command = CapaActionCommandFromResourceAssembler.ToCommandFromResource(resource);
         var result = await capaActionCommandService.Handle(command, cancellationToken);
         return QualityActionResultAssembler.ToActionResultFromCommandResult(this, result, messages, problemDetailsFactory,
             created => CreatedAtAction(nameof(GetCapaActionById), new { capaActionId = created.Id.Value },
-                CapaActionResourceFromEntityAssembler.ToResourceFromEntity(created)), resource.CapaPlanId);
+                CapaActionResourceFromEntityAssembler.ToResourceFromEntity(created)));
     }
+
     [HttpGet]
     [EndpointSummary("Get the capa actions")]
-    [EndpointDescription("Gets all the capa actions.")]
+    [EndpointDescription("Gets the capa actions; with capaCode, only the ones with that capa code.")]
     [ProducesResponseType(typeof(IEnumerable<CapaActionResource>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetCapaActions(CancellationToken cancellationToken)
+    public async Task<IActionResult> GetCapaActions([FromQuery] string? capaCode, CancellationToken cancellationToken)
     {
-        var items = await capaActionQueryService.Handle(new GetAllCapaActionsQuery(), cancellationToken);
+        var items = await capaActionQueryService.Handle(new GetAllCapaActionsQuery(capaCode), cancellationToken);
         return Ok(items.Select(CapaActionResourceFromEntityAssembler.ToResourceFromEntity));
     }
+
     [HttpGet("{capaActionId:int}")]
     [EndpointSummary("Get a capa action by its id")]
     [EndpointDescription("Gets a capa action by the provided id.")]
@@ -63,13 +64,18 @@ public class CapaActionsController(
             QualityError.CapaActionNotFound, messages, problemDetailsFactory,
             found => Ok(CapaActionResourceFromEntityAssembler.ToResourceFromEntity(found)), capaActionId);
     }
-    [HttpGet("by-plan/{capaPlanId:int}")]
-    [EndpointSummary("Get the capa actions of a capa plan")]
-    [EndpointDescription("Gets the capa actions of the capa plan with the provided id.")]
-    [ProducesResponseType(typeof(IEnumerable<CapaActionResource>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetCapaActionsByCapaPlanId([FromRoute] int capaPlanId, CancellationToken cancellationToken)
+
+    [HttpPut("{capaActionId:int}")]
+    [EndpointSummary("Update a capa action")]
+    [EndpointDescription("Replaces the data of the capa action with the provided id.")]
+    [ProducesResponseType(typeof(CapaActionResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UpdateCapaAction([FromRoute] int capaActionId, [FromBody] UpdateCapaActionResource resource, CancellationToken cancellationToken)
     {
-        var items = await capaActionQueryService.Handle(new GetAllCapaActionsByCapaPlanIdQuery(capaPlanId), cancellationToken);
-        return Ok(items.Select(CapaActionResourceFromEntityAssembler.ToResourceFromEntity));
+        var command = CapaActionCommandFromResourceAssembler.ToCommandFromResource(capaActionId, resource);
+        var result = await capaActionCommandService.Handle(command, cancellationToken);
+        return QualityActionResultAssembler.ToActionResultFromCommandResult(this, result, messages, problemDetailsFactory,
+            updated => Ok(CapaActionResourceFromEntityAssembler.ToResourceFromEntity(updated)), capaActionId);
     }
 }

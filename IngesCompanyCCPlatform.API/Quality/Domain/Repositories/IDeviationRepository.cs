@@ -12,8 +12,9 @@ public interface IDeviationRepository : IBaseRepository<Deviation>
     ///     Checks whether a deviation already has the code.
     /// </summary>
     Task<bool> ExistsByCodeAsync(string code, CancellationToken cancellationToken = default);
+
     /// <summary>
-    ///     Gets the deviations filtered by batch id.
+    ///     Gets the deviations with the batch code.
     /// </summary>
-    Task<IEnumerable<Deviation>> FindAllByBatchIdAsNoTrackingAsync(int batchId, CancellationToken cancellationToken = default);
+    Task<IEnumerable<Deviation>> FindAllByBatchCodeAsNoTrackingAsync(string batchCode, CancellationToken cancellationToken = default);
 }

@@ -2,6 +2,7 @@
 using IngesCompanyCCPlatform.API.Quality.Application.CommandServices;
 using IngesCompanyCCPlatform.API.Quality.Application.QueryServices;
 using IngesCompanyCCPlatform.API.Quality.Domain.Model;
+using IngesCompanyCCPlatform.API.Quality.Domain.Model.Commands;
 using IngesCompanyCCPlatform.API.Quality.Domain.Model.Errors;
 using IngesCompanyCCPlatform.API.Quality.Domain.Model.Queries;
 using IngesCompanyCCPlatform.API.Quality.Interfaces.Rest.Resources;
@@ -32,27 +33,25 @@ public class AuditFindingsController(
     [EndpointDescription("Creates a audit finding.")]
     [ProducesResponseType(typeof(AuditFindingResource), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<IActionResult> CreateAuditFinding([FromBody] CreateAuditFindingResource resource, CancellationToken cancellationToken)
     {
         var command = AuditFindingCommandFromResourceAssembler.ToCommandFromResource(resource);
         var result = await auditFindingCommandService.Handle(command, cancellationToken);
         return QualityActionResultAssembler.ToActionResultFromCommandResult(this, result, messages, problemDetailsFactory,
             created => CreatedAtAction(nameof(GetAuditFindingById), new { auditFindingId = created.Id.Value },
-                AuditFindingResourceFromEntityAssembler.ToResourceFromEntity(created)), resource.AuditId);
+                AuditFindingResourceFromEntityAssembler.ToResourceFromEntity(created)));
     }
+
     [HttpGet]
     [EndpointSummary("Get the audit findings")]
-    [EndpointDescription("Gets all the audit findings, or the ones of a audit.")]
+    [EndpointDescription("Gets the audit findings; with auditCode, only the ones with that audit code.")]
     [ProducesResponseType(typeof(IEnumerable<AuditFindingResource>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetAuditFindings([FromQuery] int? auditId, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetAuditFindings([FromQuery] string? auditCode, CancellationToken cancellationToken)
     {
-        var items = auditId is null
-            ? await auditFindingQueryService.Handle(new GetAllAuditFindingsQuery(), cancellationToken)
-            : await auditFindingQueryService.Handle(new GetAllAuditFindingsByAuditIdQuery(auditId.Value), cancellationToken);
+        var items = await auditFindingQueryService.Handle(new GetAllAuditFindingsQuery(auditCode), cancellationToken);
         return Ok(items.Select(AuditFindingResourceFromEntityAssembler.ToResourceFromEntity));
     }
+
     [HttpGet("{auditFindingId:int}")]
     [EndpointSummary("Get a audit finding by its id")]
     [EndpointDescription("Gets a audit finding by the provided id.")]

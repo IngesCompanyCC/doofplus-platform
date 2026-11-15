@@ -13,7 +13,9 @@ public class QualityDocumentQueryService(IQualityDocumentRepository qualityDocum
     /// <inheritdoc />
     public async Task<IEnumerable<QualityDocument>> Handle(GetAllQualityDocumentsQuery query, CancellationToken cancellationToken)
     {
-        return await qualityDocumentRepository.ListAsNoTrackingAsync(cancellationToken);
+        return string.IsNullOrWhiteSpace(query.Code)
+            ? await qualityDocumentRepository.ListAsNoTrackingAsync(cancellationToken)
+            : await qualityDocumentRepository.FindAllByCodeAsNoTrackingAsync(query.Code.Trim(), cancellationToken);
     }
 
     /// <inheritdoc />

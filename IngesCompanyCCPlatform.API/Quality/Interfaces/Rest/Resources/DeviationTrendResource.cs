@@ -1,6 +1,6 @@
 ﻿namespace IngesCompanyCCPlatform.API.Quality.Interfaces.Rest.Resources;
 
 /// <summary>
-///     The number of deviations registered in a month (<c>yyyy-MM</c>).
+///     Deviations of a root cause in a month (yyyy-MM).
 /// </summary>
-public record DeviationTrendResource(string Month, int TotalDeviations);
+public record DeviationTrendResource(int Id, string RootCause, string Month, int Count);

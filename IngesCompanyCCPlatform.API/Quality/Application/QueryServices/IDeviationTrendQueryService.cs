@@ -3,14 +3,13 @@
 namespace IngesCompanyCCPlatform.API.Quality.Application.QueryServices;
 
 /// <summary>
-///     Query service of the monthly trend of deviations.
+///     Query service of the deviation trend, a read model built from the deviations.
 /// </summary>
 public interface IDeviationTrendQueryService
 {
     /// <summary>
-    ///     Counts the deviations registered each month, oldest first.
+    ///     Counts the deviations by month of report (yyyy-MM) and root cause, oldest month first.
     /// </summary>
-    /// <returns>Pairs of month (<c>yyyy-MM</c>) and number of deviations.</returns>
-    Task<IReadOnlyList<(string Month, int TotalDeviations)>> Handle(GetDeviationTrendsQuery query,
+    Task<IReadOnlyList<(string Month, string RootCause, int Count)>> Handle(GetDeviationTrendsQuery query,
         CancellationToken cancellationToken);
 }

@@ -1,13 +1,17 @@
 ﻿namespace IngesCompanyCCPlatform.API.Quality.Interfaces.Rest.Resources;
 
 /// <summary>
-///     A audit finding, as the API returns it.
+///     A audit finding, with the fields of <c>contratos/quality-api.json</c>.
 /// </summary>
 public record AuditFindingResource(
     int Id,
-    int AuditId,
+    string AuditCode,
+    string Code,
     string Title,
-    string Description,
-    string Severity,
-    int? RelatedDeviationId,
-    DateTime IdentifiedAt);
+    string Classification,
+    string Owner,
+    DateOnly? DueAt,
+    string Status,
+    string Observation,
+    string Response,
+    string ClosureRequirement);

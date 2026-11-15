@@ -1,11 +1,16 @@
 ﻿namespace IngesCompanyCCPlatform.API.Quality.Interfaces.Rest.Resources;
 
 /// <summary>
-///     Data to create a audit finding.
+///     Data to create a audit finding. Missing optional values take their default.
 /// </summary>
 public record CreateAuditFindingResource(
-    int AuditId,
-    string Title,
-    string? Description,
-    string Severity,
-    int? RelatedDeviationId);
+    string? AuditCode,
+    string? Code,
+    string? Title,
+    string? Classification,
+    string? Owner,
+    DateOnly? DueAt,
+    string? Status,
+    string? Observation,
+    string? Response,
+    string? ClosureRequirement);

@@ -29,11 +29,11 @@ public class TraceabilityGapRepository(AppDbContext context) : BaseRepository<Tr
     }
 
     /// <inheritdoc />
-    public async Task<IEnumerable<TraceabilityGap>> FindAllByBatchIdAsNoTrackingAsync(int batchId, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<TraceabilityGap>> FindAllByBatchCodeAsNoTrackingAsync(string batchCode, CancellationToken cancellationToken = default)
     {
         return await Context.Set<TraceabilityGap>()
             .AsNoTracking()
-            .Where(traceabilityGap => traceabilityGap.BatchId == batchId)
+            .Where(traceabilityGap => traceabilityGap.BatchCode == batchCode)
             .ToListAsync(cancellationToken);
     }
 }

@@ -6,8 +6,14 @@ namespace IngesCompanyCCPlatform.API.Quality.Domain.Model.Commands;
 ///     Command to create a audit event.
 /// </summary>
 public record CreateAuditEventCommand(
-    string AggregateType,
-    int AggregateId,
-    string EventType,
-    string Description,
-    string PerformedBy);
+    string EventCode,
+    DateTime? OccurredAt,
+    string Actor,
+    string ActorRole,
+    string Event,
+    string Record,
+    string Result,
+    string Field,
+    string Before,
+    string After,
+    string Reason);

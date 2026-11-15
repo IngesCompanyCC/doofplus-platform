@@ -8,7 +8,18 @@ namespace IngesCompanyCCPlatform.API.Quality.Domain.Model.Commands;
 public record CreateDeviationCommand(
     string Code,
     string Title,
-    string Description,
-    EDeviationSeverity Severity,
-    int BatchId,
-    int? AssignedTo);
+    string BatchCode,
+    string OrderCode,
+    string Summary,
+    EClassification Classification,
+    string Containment,
+    int Severity,
+    int Likelihood,
+    int Detectability,
+    EDeviationStatus Status,
+    string RootCause,
+    string CapaCode,
+    string ReportedBy,
+    DateTime? ReportedAt,
+    string Owner,
+    DateTime? DueAt);

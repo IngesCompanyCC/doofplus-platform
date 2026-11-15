@@ -6,12 +6,10 @@ using IngesCompanyCCPlatform.API.Quality.Interfaces.Rest.Resources;
 namespace IngesCompanyCCPlatform.API.Quality.Interfaces.Rest.Transform;
 
 /// <summary>
-///     Builds the commands of <c>TraceabilityGap</c> from the resources.
+///     Builds the commands of <c>TraceabilityGap</c> from the resources. Enums are accepted in any case and with hyphens.
 /// </summary>
 public static class TraceabilityGapCommandFromResourceAssembler
 {
-
-
     /// <summary>
     ///     Builds the command to create a traceability gap.
     /// </summary>
@@ -21,10 +19,11 @@ public static class TraceabilityGapCommandFromResourceAssembler
     public static CreateTraceabilityGapCommand ToCommandFromResource(CreateTraceabilityGapResource resource)
     {
         return new CreateTraceabilityGapCommand(
-            resource.BatchId,
-            resource.Description,
-            resource.MissingReference ?? string.Empty,
-            resource.AffectedProcess ?? string.Empty);
+            resource.BatchCode ?? string.Empty,
+            resource.Product ?? string.Empty,
+            resource.MissingRecord ?? string.Empty,
+            resource.Detail ?? string.Empty,
+            resource.Status is null ? EGapStatus.Open : EnumParser.Parse<EGapStatus>(resource.Status, "quality.traceabilityGap.error.status.invalid"));
     }
 }
 
@@ -42,13 +41,10 @@ public static class TraceabilityGapResourceFromEntityAssembler
     {
         return new TraceabilityGapResource(
             entity.Id.Value,
-            entity.BatchId,
-            entity.Description,
-            entity.MissingReference,
-            entity.AffectedProcess,
-            entity.Status.ToString(),
-            entity.ReviewedBy,
-            DateTime.SpecifyKind(entity.DetectedAt, DateTimeKind.Utc),
-            entity.ResolvedAt is null ? null : DateTime.SpecifyKind(entity.ResolvedAt.Value, DateTimeKind.Utc));
+            entity.BatchCode,
+            entity.Product,
+            entity.MissingRecord,
+            entity.Detail,
+            entity.Status.ToString());
     }
 }

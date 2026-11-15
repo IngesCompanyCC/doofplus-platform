@@ -1,6 +1,6 @@
 ﻿namespace IngesCompanyCCPlatform.API.Quality.Domain.Model.Queries;
 
 /// <summary>
-///     Query to get all the analytical results.
+///     Query of the analytical results, optionally filtered by batch code.
 /// </summary>
-public record GetAllAnalyticalResultsQuery;
+public record GetAllAnalyticalResultsQuery(string? BatchCode = null);

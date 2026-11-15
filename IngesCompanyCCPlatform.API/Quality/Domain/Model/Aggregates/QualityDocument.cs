@@ -5,11 +5,12 @@ using IngesCompanyCCPlatform.API.Shared.Domain.Model.Aggregates.Internal;
 namespace IngesCompanyCCPlatform.API.Quality.Domain.Model.Aggregates;
 
 /// <summary>
-///     A controlled document of the quality system, for example an SOP.
+///     Quality document of the Quality &amp; Compliance bounded context, as in <c>class-06-quality</c>.
 /// </summary>
 public partial class QualityDocument : AggregateRoot
 {
     private const string CodeNotBlankMessageKey = "quality.qualityDocument.error.code.notBlank";
+    private const string VersionNotBlankMessageKey = "quality.qualityDocument.error.version.notBlank";
     private const string TitleNotBlankMessageKey = "quality.qualityDocument.error.title.notBlank";
 
     /// <summary>
@@ -18,11 +19,15 @@ public partial class QualityDocument : AggregateRoot
     protected QualityDocument()
     {
         Code = string.Empty;
-        Title = string.Empty;
-        Description = string.Empty;
-        DocumentType = string.Empty;
-        FileReference = string.Empty;
         Version = string.Empty;
+        Title = string.Empty;
+        Author = string.Empty;
+        TechnicalReviewer = string.Empty;
+        Approver = string.Empty;
+        Purpose = string.Empty;
+        Scope = string.Empty;
+        Procedure = string.Empty;
+        RevisionSummary = string.Empty;
     }
 
     /// <summary>
@@ -30,19 +35,7 @@ public partial class QualityDocument : AggregateRoot
     /// </summary>
     /// <param name="command">The data of the quality document.</param>
     /// <exception cref="ArgumentException">Thrown when a required value is blank.</exception>
-    public QualityDocument(CreateQualityDocumentCommand command) : this()
-    {
-        if (string.IsNullOrWhiteSpace(command.Code)) throw new ArgumentException(CodeNotBlankMessageKey);
-        Code = command.Code.Trim();
-        if (string.IsNullOrWhiteSpace(command.Title)) throw new ArgumentException(TitleNotBlankMessageKey);
-        Title = command.Title.Trim();
-        Description = command.Description?.Trim() ?? string.Empty;
-        DocumentType = command.DocumentType?.Trim() ?? string.Empty;
-        FileReference = command.FileReference?.Trim() ?? string.Empty;
-        Version = command.Version?.Trim() ?? string.Empty;
-        OwnerId = command.OwnerId;
-        Status = EQualityDocumentStatus.Draft;
-    }
+    public QualityDocument(CreateQualityDocumentCommand command) : this() => Apply(command.Code, command.Version, command.Title, command.Status, command.Author, command.TechnicalReviewer, command.Approver, command.ChangedAt, command.Purpose, command.Scope, command.Procedure, command.RevisionSummary, command.ReviewCycleMonths);
 
     /// <summary>
     ///     The id of the quality document.
@@ -50,70 +43,94 @@ public partial class QualityDocument : AggregateRoot
     public QualityDocumentId Id { get; }
 
     /// <summary>
-    ///     The business code, for example SOP-QC-014.
+    ///     The code.
     /// </summary>
     public string Code { get; private set; }
+
     /// <summary>
-    ///     The title of the document.
-    /// </summary>
-    public string Title { get; private set; }
-    /// <summary>
-    ///     What the document covers.
-    /// </summary>
-    public string Description { get; private set; }
-    /// <summary>
-    ///     The kind of document, for example SOP or specification.
-    /// </summary>
-    public string DocumentType { get; private set; }
-    /// <summary>
-    ///     Where the file of the document is.
-    /// </summary>
-    public string FileReference { get; private set; }
-    /// <summary>
-    ///     The version of the document.
+    ///     The version.
     /// </summary>
     public string Version { get; private set; }
-    /// <summary>
-    ///     The id of the user who owns the document.
-    /// </summary>
-    public int? OwnerId { get; private set; }
-    /// <summary>
-    ///     Where the document is.
-    /// </summary>
-    public EQualityDocumentStatus Status { get; private set; }
-    /// <summary>
-    ///     When the document was approved (UTC).
-    /// </summary>
-    public DateTime? ApprovedAt { get; private set; }
 
     /// <summary>
-    ///     Sends a draft to review.
+    ///     The title.
     /// </summary>
-    public bool SubmitForReview()
-    {
-        if (Status != EQualityDocumentStatus.Draft) return false;
-        Status = EQualityDocumentStatus.UnderReview;
-        return true;
-    }
+    public string Title { get; private set; }
 
     /// <summary>
-    ///     Approves a document under review.
+    ///     The status.
     /// </summary>
-    public bool Approve()
-    {
-        if (Status != EQualityDocumentStatus.UnderReview) return false;
-        Status = EQualityDocumentStatus.Approved;
-        ApprovedAt = DateTime.UtcNow;
-        return true;
-    }
+    public EDocumentStatus Status { get; private set; }
 
     /// <summary>
-    ///     Marks an approved document as obsolete.
+    ///     The author.
     /// </summary>
-    public bool MarkObsolete()
+    public string Author { get; private set; }
+
+    /// <summary>
+    ///     The technical reviewer.
+    /// </summary>
+    public string TechnicalReviewer { get; private set; }
+
+    /// <summary>
+    ///     The approver.
+    /// </summary>
+    public string Approver { get; private set; }
+
+    /// <summary>
+    ///     The changed at.
+    /// </summary>
+    public DateOnly? ChangedAt { get; private set; }
+
+    /// <summary>
+    ///     The purpose.
+    /// </summary>
+    public string Purpose { get; private set; }
+
+    /// <summary>
+    ///     The scope.
+    /// </summary>
+    public string Scope { get; private set; }
+
+    /// <summary>
+    ///     The procedure.
+    /// </summary>
+    public string Procedure { get; private set; }
+
+    /// <summary>
+    ///     The revision summary.
+    /// </summary>
+    public string RevisionSummary { get; private set; }
+
+    /// <summary>
+    ///     The review cycle months.
+    /// </summary>
+    public int ReviewCycleMonths { get; private set; }
+
+    /// <summary>
+    ///     Replaces the data of the quality document with the data of the command.
+    /// </summary>
+    /// <param name="command">The new data.</param>
+    /// <exception cref="ArgumentException">Thrown when a required value is blank.</exception>
+    public void Update(UpdateQualityDocumentCommand command) => Apply(command.Code, command.Version, command.Title, command.Status, command.Author, command.TechnicalReviewer, command.Approver, command.ChangedAt, command.Purpose, command.Scope, command.Procedure, command.RevisionSummary, command.ReviewCycleMonths);
+
+    private void Apply(string code, string version, string title, EDocumentStatus status, string author, string technicalReviewer, string approver, DateOnly? changedAt, string purpose, string scope, string procedure, string revisionSummary, int reviewCycleMonths)
     {
-        if (Status != EQualityDocumentStatus.Approved) return false;
-        Status = EQualityDocumentStatus.Obsolete;
-        return true;
+        if (string.IsNullOrWhiteSpace(code)) throw new ArgumentException(CodeNotBlankMessageKey);
+        Code = code?.Trim() ?? string.Empty;
+        if (string.IsNullOrWhiteSpace(version)) throw new ArgumentException(VersionNotBlankMessageKey);
+        Version = version?.Trim() ?? string.Empty;
+        if (string.IsNullOrWhiteSpace(title)) throw new ArgumentException(TitleNotBlankMessageKey);
+        Title = title?.Trim() ?? string.Empty;
+        Status = status;
+        Author = author?.Trim() ?? string.Empty;
+        TechnicalReviewer = technicalReviewer?.Trim() ?? string.Empty;
+        Approver = approver?.Trim() ?? string.Empty;
+        ChangedAt = changedAt;
+        Purpose = purpose?.Trim() ?? string.Empty;
+        Scope = scope?.Trim() ?? string.Empty;
+        Procedure = procedure?.Trim() ?? string.Empty;
+        RevisionSummary = revisionSummary?.Trim() ?? string.Empty;
+        ReviewCycleMonths = reviewCycleMonths;
     }
 }

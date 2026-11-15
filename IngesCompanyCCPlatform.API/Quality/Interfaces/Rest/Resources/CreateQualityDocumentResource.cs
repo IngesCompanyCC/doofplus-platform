@@ -1,13 +1,19 @@
 ﻿namespace IngesCompanyCCPlatform.API.Quality.Interfaces.Rest.Resources;
 
 /// <summary>
-///     Data to create a quality document.
+///     Data to create a quality document. Missing optional values take their default.
 /// </summary>
 public record CreateQualityDocumentResource(
-    string Code,
-    string Title,
-    string? Description,
-    string? DocumentType,
-    string? FileReference,
+    string? Code,
     string? Version,
-    int? OwnerId);
+    string? Title,
+    string? Status,
+    string? Author,
+    string? TechnicalReviewer,
+    string? Approver,
+    DateOnly? ChangedAt,
+    string? Purpose,
+    string? Scope,
+    string? Procedure,
+    string? RevisionSummary,
+    int? ReviewCycleMonths);

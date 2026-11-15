@@ -6,12 +6,10 @@ using IngesCompanyCCPlatform.API.Quality.Interfaces.Rest.Resources;
 namespace IngesCompanyCCPlatform.API.Quality.Interfaces.Rest.Transform;
 
 /// <summary>
-///     Builds the commands of <c>CollaborationTask</c> from the resources.
+///     Builds the commands of <c>CollaborationTask</c> from the resources. Enums are accepted in any case and with hyphens.
 /// </summary>
 public static class CollaborationTaskCommandFromResourceAssembler
 {
-
-
     /// <summary>
     ///     Builds the command to create a collaboration task.
     /// </summary>
@@ -21,12 +19,12 @@ public static class CollaborationTaskCommandFromResourceAssembler
     public static CreateCollaborationTaskCommand ToCommandFromResource(CreateCollaborationTaskResource resource)
     {
         return new CreateCollaborationTaskCommand(
-            resource.Title,
-            resource.Description ?? string.Empty,
-            resource.AssignedTo,
-            resource.CreatedBy,
-            resource.RelatedDeviationId,
-            resource.DueDate);
+            resource.Title ?? string.Empty,
+            resource.RecordCode ?? string.Empty,
+            resource.Detail ?? string.Empty,
+            resource.Owner ?? string.Empty,
+            resource.DueAt,
+            resource.Status is null ? ETaskStatus.ToDo : EnumParser.Parse<ETaskStatus>(resource.Status, "quality.collaborationTask.error.status.invalid"));
     }
 }
 
@@ -45,12 +43,10 @@ public static class CollaborationTaskResourceFromEntityAssembler
         return new CollaborationTaskResource(
             entity.Id.Value,
             entity.Title,
-            entity.Description,
-            entity.AssignedTo,
-            entity.CreatedBy,
-            entity.RelatedDeviationId,
-            entity.DueDate,
-            entity.Status.ToString(),
-            entity.CompletedAt is null ? null : DateTime.SpecifyKind(entity.CompletedAt.Value, DateTimeKind.Utc));
+            entity.RecordCode,
+            entity.Detail,
+            entity.Owner,
+            entity.DueAt is null ? null : DateTime.SpecifyKind(entity.DueAt.Value, DateTimeKind.Utc),
+            entity.Status.ToString());
     }
 }

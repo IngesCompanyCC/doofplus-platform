@@ -5,19 +5,20 @@ using IngesCompanyCCPlatform.API.Quality.Domain.Repositories;
 namespace IngesCompanyCCPlatform.API.Quality.Application.Internal.QueryServices;
 
 /// <summary>
-///     Counts the deviations of each month from their detection date.
+///     Builds the deviation trend from the deviations. Deviations without report date or root cause are not counted.
 /// </summary>
 public class DeviationTrendQueryService(IDeviationRepository deviationRepository) : IDeviationTrendQueryService
 {
     /// <inheritdoc />
-    public async Task<IReadOnlyList<(string Month, int TotalDeviations)>> Handle(GetDeviationTrendsQuery query,
+    public async Task<IReadOnlyList<(string Month, string RootCause, int Count)>> Handle(GetDeviationTrendsQuery query,
         CancellationToken cancellationToken)
     {
         var deviations = await deviationRepository.ListAsNoTrackingAsync(cancellationToken);
         return deviations
-            .GroupBy(deviation => deviation.DetectedAt.ToString("yyyy-MM"))
-            .OrderBy(group => group.Key)
-            .Select(group => (group.Key, group.Count()))
+            .Where(deviation => deviation.ReportedAt is not null && !string.IsNullOrWhiteSpace(deviation.RootCause))
+            .GroupBy(deviation => (Month: deviation.ReportedAt!.Value.ToString("yyyy-MM"), deviation.RootCause))
+            .OrderBy(group => group.Key.Month).ThenBy(group => group.Key.RootCause)
+            .Select(group => (group.Key.Month, group.Key.RootCause, group.Count()))
             .ToList();
     }
 }

@@ -6,12 +6,10 @@ using IngesCompanyCCPlatform.API.Quality.Interfaces.Rest.Resources;
 namespace IngesCompanyCCPlatform.API.Quality.Interfaces.Rest.Transform;
 
 /// <summary>
-///     Builds the commands of <c>TaskComment</c> from the resources.
+///     Builds the commands of <c>TaskComment</c> from the resources. Enums are accepted in any case and with hyphens.
 /// </summary>
 public static class TaskCommentCommandFromResourceAssembler
 {
-
-
     /// <summary>
     ///     Builds the command to create a task comment.
     /// </summary>
@@ -21,9 +19,11 @@ public static class TaskCommentCommandFromResourceAssembler
     public static CreateTaskCommentCommand ToCommandFromResource(CreateTaskCommentResource resource)
     {
         return new CreateTaskCommentCommand(
-            resource.TaskId,
-            resource.AuthorId,
-            resource.Content);
+            resource.RecordCode ?? string.Empty,
+            resource.Author ?? string.Empty,
+            resource.Initials ?? string.Empty,
+            resource.PostedAt,
+            resource.Text ?? string.Empty);
     }
 }
 
@@ -41,9 +41,10 @@ public static class TaskCommentResourceFromEntityAssembler
     {
         return new TaskCommentResource(
             entity.Id.Value,
-            entity.TaskId,
-            entity.AuthorId,
-            entity.Content,
-            entity.CreatedAt);
+            entity.RecordCode,
+            entity.Author,
+            entity.Initials,
+            entity.PostedAt is null ? null : DateTime.SpecifyKind(entity.PostedAt.Value, DateTimeKind.Utc),
+            entity.Text);
     }
 }

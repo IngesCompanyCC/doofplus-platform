@@ -13,6 +13,7 @@ public static class AuditErrors
     /// <param name="id">The id that was looked for.</param>
     public static Error NotFoundById(int id) =>
         Error.NotFound("quality.audit.error.notFoundById", $"Audit not found for id {id}.");
+
     /// <summary>
     ///     Another audit already has the code.
     /// </summary>

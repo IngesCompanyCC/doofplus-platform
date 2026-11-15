@@ -9,7 +9,7 @@ namespace IngesCompanyCCPlatform.API.Quality.Application.QueryServices;
 public interface ITaskCommentQueryService
 {
     /// <summary>
-    ///     Gets all the task comments.
+    ///     Gets the task comments, filtered by record code when it is sent.
     /// </summary>
     Task<IEnumerable<TaskComment>> Handle(GetAllTaskCommentsQuery query, CancellationToken cancellationToken);
 
@@ -17,8 +17,4 @@ public interface ITaskCommentQueryService
     ///     Gets a task comment by its id, or <c>null</c>.
     /// </summary>
     Task<TaskComment?> Handle(GetTaskCommentByIdQuery query, CancellationToken cancellationToken);
-    /// <summary>
-    ///     Gets the task comments filtered by task id.
-    /// </summary>
-    Task<IEnumerable<TaskComment>> Handle(GetAllTaskCommentsByTaskIdQuery query, CancellationToken cancellationToken);
 }

@@ -1,16 +1,12 @@
 ﻿namespace IngesCompanyCCPlatform.API.Quality.Domain.Model.ValueObjects;
 
 /// <summary>
-///     Where a CAPA plan or action is.
+///     Capa status values of the Quality &amp; Compliance bounded context.
 /// </summary>
-/// <remarks>
-///     Stored as text in PascalCase, like the other enums of the project.
-/// </remarks>
 public enum ECapaStatus
 {
-    Open,
+    Draft,
     InProgress,
-    PendingVerification,
-    Completed,
-    Cancelled
+    InApproval,
+    Closed
 }

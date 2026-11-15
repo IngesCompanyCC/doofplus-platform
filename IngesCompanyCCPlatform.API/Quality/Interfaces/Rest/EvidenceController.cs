@@ -2,6 +2,7 @@
 using IngesCompanyCCPlatform.API.Quality.Application.CommandServices;
 using IngesCompanyCCPlatform.API.Quality.Application.QueryServices;
 using IngesCompanyCCPlatform.API.Quality.Domain.Model;
+using IngesCompanyCCPlatform.API.Quality.Domain.Model.Commands;
 using IngesCompanyCCPlatform.API.Quality.Domain.Model.Errors;
 using IngesCompanyCCPlatform.API.Quality.Domain.Model.Queries;
 using IngesCompanyCCPlatform.API.Quality.Interfaces.Rest.Resources;
@@ -32,8 +33,6 @@ public class EvidenceController(
     [EndpointDescription("Creates a evidence.")]
     [ProducesResponseType(typeof(EvidenceResource), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<IActionResult> CreateEvidence([FromBody] CreateEvidenceResource resource, CancellationToken cancellationToken)
     {
         var command = EvidenceCommandFromResourceAssembler.ToCommandFromResource(resource);
@@ -42,15 +41,17 @@ public class EvidenceController(
             created => CreatedAtAction(nameof(GetEvidenceById), new { evidenceId = created.Id.Value },
                 EvidenceResourceFromEntityAssembler.ToResourceFromEntity(created)));
     }
+
     [HttpGet]
     [EndpointSummary("Get the evidence")]
-    [EndpointDescription("Gets all the evidence.")]
+    [EndpointDescription("Gets the evidence; with recordCode, only the ones with that record code.")]
     [ProducesResponseType(typeof(IEnumerable<EvidenceResource>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetEvidence(CancellationToken cancellationToken)
+    public async Task<IActionResult> GetEvidence([FromQuery] string? recordCode, CancellationToken cancellationToken)
     {
-        var items = await evidenceQueryService.Handle(new GetAllEvidenceQuery(), cancellationToken);
+        var items = await evidenceQueryService.Handle(new GetAllEvidenceQuery(recordCode), cancellationToken);
         return Ok(items.Select(EvidenceResourceFromEntityAssembler.ToResourceFromEntity));
     }
+
     [HttpGet("{evidenceId:int}")]
     [EndpointSummary("Get a evidence by its id")]
     [EndpointDescription("Gets a evidence by the provided id.")]
@@ -63,13 +64,31 @@ public class EvidenceController(
             QualityError.EvidenceNotFound, messages, problemDetailsFactory,
             found => Ok(EvidenceResourceFromEntityAssembler.ToResourceFromEntity(found)), evidenceId);
     }
-    [HttpGet("by-deviation/{deviationId:int}")]
-    [EndpointSummary("Get the evidence of a deviation")]
-    [EndpointDescription("Gets the evidence of the deviation with the provided id.")]
-    [ProducesResponseType(typeof(IEnumerable<EvidenceResource>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetEvidenceByDeviationId([FromRoute] int deviationId, CancellationToken cancellationToken)
+
+    [HttpPut("{evidenceId:int}")]
+    [EndpointSummary("Update a evidence")]
+    [EndpointDescription("Replaces the data of the evidence with the provided id.")]
+    [ProducesResponseType(typeof(EvidenceResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UpdateEvidence([FromRoute] int evidenceId, [FromBody] UpdateEvidenceResource resource, CancellationToken cancellationToken)
     {
-        var items = await evidenceQueryService.Handle(new GetAllEvidenceByDeviationIdQuery(deviationId), cancellationToken);
-        return Ok(items.Select(EvidenceResourceFromEntityAssembler.ToResourceFromEntity));
+        var command = EvidenceCommandFromResourceAssembler.ToCommandFromResource(evidenceId, resource);
+        var result = await evidenceCommandService.Handle(command, cancellationToken);
+        return QualityActionResultAssembler.ToActionResultFromCommandResult(this, result, messages, problemDetailsFactory,
+            updated => Ok(EvidenceResourceFromEntityAssembler.ToResourceFromEntity(updated)), evidenceId);
+    }
+
+    [HttpDelete("{evidenceId:int}")]
+    [EndpointSummary("Remove a evidence")]
+    [EndpointDescription("Removes the evidence with the provided id; reviewed evidence cannot be removed.")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    public async Task<IActionResult> DeleteEvidence([FromRoute] int evidenceId, CancellationToken cancellationToken)
+    {
+        var result = await evidenceCommandService.Handle(new DeleteEvidenceCommand(evidenceId), cancellationToken);
+        return QualityActionResultAssembler.ToActionResultFromCommandResult(this, result, messages, problemDetailsFactory,
+            _ => NoContent(), evidenceId);
     }
 }

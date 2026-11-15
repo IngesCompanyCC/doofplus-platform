@@ -14,15 +14,11 @@ namespace IngesCompanyCCPlatform.API.Quality.Application.Internal.CommandService
 /// </summary>
 public class TaskCommentCommandService(
     ITaskCommentRepository taskCommentRepository,
-    ICollaborationTaskRepository collaborationTaskRepository,
     IUnitOfWork unitOfWork) : ITaskCommentCommandService
 {
     /// <inheritdoc />
     public async Task<Result<TaskComment>> Handle(CreateTaskCommentCommand command, CancellationToken cancellationToken)
     {
-        if (await collaborationTaskRepository.FindByIdAsNoTrackingAsync(command.TaskId, cancellationToken) is null)
-            return Result<TaskComment>.Failure(CollaborationTaskErrors.NotFoundById(command.TaskId), QualityError.CollaborationTaskNotFound);
-
         var taskComment = new TaskComment(command);
         await taskCommentRepository.AddAsync(taskComment, cancellationToken);
         await unitOfWork.CompleteAsync(cancellationToken);

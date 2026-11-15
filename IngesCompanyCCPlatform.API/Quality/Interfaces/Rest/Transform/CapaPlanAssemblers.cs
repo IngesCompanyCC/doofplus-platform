@@ -6,12 +6,10 @@ using IngesCompanyCCPlatform.API.Quality.Interfaces.Rest.Resources;
 namespace IngesCompanyCCPlatform.API.Quality.Interfaces.Rest.Transform;
 
 /// <summary>
-///     Builds the commands of <c>CapaPlan</c> from the resources.
+///     Builds the commands of <c>CapaPlan</c> from the resources. Enums are accepted in any case and with hyphens.
 /// </summary>
 public static class CapaPlanCommandFromResourceAssembler
 {
-
-
     /// <summary>
     ///     Builds the command to create a capa plan.
     /// </summary>
@@ -21,11 +19,37 @@ public static class CapaPlanCommandFromResourceAssembler
     public static CreateCapaPlanCommand ToCommandFromResource(CreateCapaPlanResource resource)
     {
         return new CreateCapaPlanCommand(
-            resource.DeviationId,
-            resource.Title,
-            resource.Description,
-            resource.DueDate,
-            resource.Responsible);
+            resource.Code ?? string.Empty,
+            resource.Title ?? string.Empty,
+            resource.SourceDeviation ?? string.Empty,
+            resource.Owner ?? string.Empty,
+            resource.Reviewer ?? string.Empty,
+            resource.RootCause ?? string.Empty,
+            resource.AcceptanceCriterion ?? string.Empty,
+            resource.EffectivenessCheckAt,
+            resource.Status is null ? ECapaStatus.Draft : EnumParser.Parse<ECapaStatus>(resource.Status, "quality.capaPlan.error.status.invalid"));
+    }
+
+    /// <summary>
+    ///     Builds the command to replace a capa plan.
+    /// </summary>
+    /// <param name="capaPlanId">The id of the capa plan.</param>
+    /// <param name="resource">The data sent by the client.</param>
+    /// <returns>The command.</returns>
+    /// <exception cref="ArgumentException">Thrown when an enum value is not valid.</exception>
+    public static UpdateCapaPlanCommand ToCommandFromResource(int capaPlanId, UpdateCapaPlanResource resource)
+    {
+        return new UpdateCapaPlanCommand(
+            capaPlanId,
+            resource.Code ?? string.Empty,
+            resource.Title ?? string.Empty,
+            resource.SourceDeviation ?? string.Empty,
+            resource.Owner ?? string.Empty,
+            resource.Reviewer ?? string.Empty,
+            resource.RootCause ?? string.Empty,
+            resource.AcceptanceCriterion ?? string.Empty,
+            resource.EffectivenessCheckAt,
+            resource.Status is null ? ECapaStatus.Draft : EnumParser.Parse<ECapaStatus>(resource.Status, "quality.capaPlan.error.status.invalid"));
     }
 }
 
@@ -43,13 +67,14 @@ public static class CapaPlanResourceFromEntityAssembler
     {
         return new CapaPlanResource(
             entity.Id.Value,
-            entity.DeviationId,
+            entity.Code,
             entity.Title,
-            entity.Description,
-            entity.DueDate,
-            entity.Responsible,
-            entity.Status.ToString(),
-            entity.CompletedAt is null ? null : DateTime.SpecifyKind(entity.CompletedAt.Value, DateTimeKind.Utc),
-            entity.CreatedAt);
+            entity.SourceDeviation,
+            entity.Owner,
+            entity.Reviewer,
+            entity.RootCause,
+            entity.AcceptanceCriterion,
+            entity.EffectivenessCheckAt,
+            entity.Status.ToString());
     }
 }

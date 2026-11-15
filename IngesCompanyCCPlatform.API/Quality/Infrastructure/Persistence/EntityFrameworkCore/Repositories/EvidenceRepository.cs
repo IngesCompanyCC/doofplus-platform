@@ -29,11 +29,11 @@ public class EvidenceRepository(AppDbContext context) : BaseRepository<Evidence>
     }
 
     /// <inheritdoc />
-    public async Task<IEnumerable<Evidence>> FindAllByDeviationIdAsNoTrackingAsync(int deviationId, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<Evidence>> FindAllByRecordCodeAsNoTrackingAsync(string recordCode, CancellationToken cancellationToken = default)
     {
         return await Context.Set<Evidence>()
             .AsNoTracking()
-            .Where(evidence => evidence.DeviationId == deviationId)
+            .Where(evidence => evidence.RecordCode == recordCode)
             .ToListAsync(cancellationToken);
     }
 }

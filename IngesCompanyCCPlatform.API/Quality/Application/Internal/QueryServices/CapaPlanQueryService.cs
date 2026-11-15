@@ -13,7 +13,9 @@ public class CapaPlanQueryService(ICapaPlanRepository capaPlanRepository) : ICap
     /// <inheritdoc />
     public async Task<IEnumerable<CapaPlan>> Handle(GetAllCapaPlansQuery query, CancellationToken cancellationToken)
     {
-        return await capaPlanRepository.ListAsNoTrackingAsync(cancellationToken);
+        return string.IsNullOrWhiteSpace(query.SourceDeviation)
+            ? await capaPlanRepository.ListAsNoTrackingAsync(cancellationToken)
+            : await capaPlanRepository.FindAllBySourceDeviationAsNoTrackingAsync(query.SourceDeviation.Trim(), cancellationToken);
     }
 
     /// <inheritdoc />

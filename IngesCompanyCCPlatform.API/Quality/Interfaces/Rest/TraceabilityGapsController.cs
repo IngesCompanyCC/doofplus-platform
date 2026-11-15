@@ -2,6 +2,7 @@
 using IngesCompanyCCPlatform.API.Quality.Application.CommandServices;
 using IngesCompanyCCPlatform.API.Quality.Application.QueryServices;
 using IngesCompanyCCPlatform.API.Quality.Domain.Model;
+using IngesCompanyCCPlatform.API.Quality.Domain.Model.Commands;
 using IngesCompanyCCPlatform.API.Quality.Domain.Model.Errors;
 using IngesCompanyCCPlatform.API.Quality.Domain.Model.Queries;
 using IngesCompanyCCPlatform.API.Quality.Interfaces.Rest.Resources;
@@ -32,8 +33,6 @@ public class TraceabilityGapsController(
     [EndpointDescription("Creates a traceability gap.")]
     [ProducesResponseType(typeof(TraceabilityGapResource), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<IActionResult> CreateTraceabilityGap([FromBody] CreateTraceabilityGapResource resource, CancellationToken cancellationToken)
     {
         var command = TraceabilityGapCommandFromResourceAssembler.ToCommandFromResource(resource);
@@ -42,15 +41,17 @@ public class TraceabilityGapsController(
             created => CreatedAtAction(nameof(GetTraceabilityGapById), new { traceabilityGapId = created.Id.Value },
                 TraceabilityGapResourceFromEntityAssembler.ToResourceFromEntity(created)));
     }
+
     [HttpGet]
     [EndpointSummary("Get the traceability gaps")]
-    [EndpointDescription("Gets all the traceability gaps.")]
+    [EndpointDescription("Gets the traceability gaps; with batchCode, only the ones with that batch code.")]
     [ProducesResponseType(typeof(IEnumerable<TraceabilityGapResource>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetTraceabilityGaps(CancellationToken cancellationToken)
+    public async Task<IActionResult> GetTraceabilityGaps([FromQuery] string? batchCode, CancellationToken cancellationToken)
     {
-        var items = await traceabilityGapQueryService.Handle(new GetAllTraceabilityGapsQuery(), cancellationToken);
+        var items = await traceabilityGapQueryService.Handle(new GetAllTraceabilityGapsQuery(batchCode), cancellationToken);
         return Ok(items.Select(TraceabilityGapResourceFromEntityAssembler.ToResourceFromEntity));
     }
+
     [HttpGet("{traceabilityGapId:int}")]
     [EndpointSummary("Get a traceability gap by its id")]
     [EndpointDescription("Gets a traceability gap by the provided id.")]
@@ -62,14 +63,5 @@ public class TraceabilityGapsController(
         return QualityActionResultAssembler.ToActionResultFromQueryResult(this, item, TraceabilityGapErrors.NotFoundById(traceabilityGapId),
             QualityError.TraceabilityGapNotFound, messages, problemDetailsFactory,
             found => Ok(TraceabilityGapResourceFromEntityAssembler.ToResourceFromEntity(found)), traceabilityGapId);
-    }
-    [HttpGet("by-batch/{batchId:int}")]
-    [EndpointSummary("Get the traceability gaps of a batch")]
-    [EndpointDescription("Gets the traceability gaps of the batch with the provided id.")]
-    [ProducesResponseType(typeof(IEnumerable<TraceabilityGapResource>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetTraceabilityGapsByBatchId([FromRoute] int batchId, CancellationToken cancellationToken)
-    {
-        var items = await traceabilityGapQueryService.Handle(new GetAllTraceabilityGapsByBatchIdQuery(batchId), cancellationToken);
-        return Ok(items.Select(TraceabilityGapResourceFromEntityAssembler.ToResourceFromEntity));
     }
 }

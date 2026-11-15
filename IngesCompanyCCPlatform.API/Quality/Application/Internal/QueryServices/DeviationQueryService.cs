@@ -13,17 +13,14 @@ public class DeviationQueryService(IDeviationRepository deviationRepository) : I
     /// <inheritdoc />
     public async Task<IEnumerable<Deviation>> Handle(GetAllDeviationsQuery query, CancellationToken cancellationToken)
     {
-        return await deviationRepository.ListAsNoTrackingAsync(cancellationToken);
+        return string.IsNullOrWhiteSpace(query.BatchCode)
+            ? await deviationRepository.ListAsNoTrackingAsync(cancellationToken)
+            : await deviationRepository.FindAllByBatchCodeAsNoTrackingAsync(query.BatchCode.Trim(), cancellationToken);
     }
 
     /// <inheritdoc />
     public async Task<Deviation?> Handle(GetDeviationByIdQuery query, CancellationToken cancellationToken)
     {
         return await deviationRepository.FindByIdAsNoTrackingAsync(query.DeviationId, cancellationToken);
-    }
-    /// <inheritdoc />
-    public async Task<IEnumerable<Deviation>> Handle(GetAllDeviationsByBatchIdQuery query, CancellationToken cancellationToken)
-    {
-        return await deviationRepository.FindAllByBatchIdAsNoTrackingAsync(query.BatchId, cancellationToken);
     }
 }

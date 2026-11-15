@@ -7,8 +7,8 @@ namespace IngesCompanyCCPlatform.API.Quality.Domain.Model.Commands;
 /// </summary>
 public record CreateCollaborationTaskCommand(
     string Title,
-    string Description,
-    int? AssignedTo,
-    int? CreatedBy,
-    int? RelatedDeviationId,
-    DateOnly? DueDate);
+    string RecordCode,
+    string Detail,
+    string Owner,
+    DateTime? DueAt,
+    ETaskStatus Status);
