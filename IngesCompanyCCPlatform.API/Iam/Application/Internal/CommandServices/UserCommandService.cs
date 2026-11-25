@@ -15,10 +15,17 @@ namespace IngesCompanyCCPlatform.API.Iam.Application.Internal.CommandServices;
 /// </summary>
 public class UserCommandService(
     IUserRepository userRepository,
+    IInvitationRepository invitationRepository,
     ITokenService tokenService,
     IHashingService hashingService,
     IUnitOfWork unitOfWork) : IUserCommandService
 {
+    private const string AdministrationEnvironment = "administration";
+
+    private const string AdministratorPrivilege = "administrator";
+
+    private const string NoPrivilege = "none";
+
     /// <summary>Detail of the 401 when the email or the password is wrong.</summary>
     public const string InvalidCredentials = "invalid-credentials";
 
@@ -55,7 +62,9 @@ public class UserCommandService(
     }
 
     /// <summary>
-    ///     Registers a user with the password and the two-factor code hashed with BCrypt.
+    ///     Registers a user with the password and the two-factor code hashed with BCrypt. The role, the privilege and the
+    ///     organization are not taken from the client: the first user of an organization is its administrator, an invited
+    ///     user takes the role and the organization of the pending invitation, and anybody else is rejected (403).
     /// </summary>
     public async Task<Result<User>> Handle(SignUpCommand command, CancellationToken cancellationToken = default)
     {
@@ -65,6 +74,32 @@ public class UserCommandService(
         var email = command.Email.Trim().ToLowerInvariant();
         if (await userRepository.ExistsByEmailAsync(email, cancellationToken))
             return Result<User>.Failure(IamError.EmailAlreadyTaken, "A user with the same email already exists.");
+
+        // The role, the privilege and the organization never come from the client: the first user of an organization
+        // is its administrator, and everybody else joins with the role and the organization of their invitation.
+        var invitation = await invitationRepository.FindPendingByEmailAsync(email, cancellationToken);
+        if (invitation is not null)
+        {
+            role = invitation.Role;
+            command = command with
+            {
+                OrganizationId = invitation.OrganizationId,
+                Facility = invitation.Facility,
+                Privilege = role == Roles.RoleAdministrator ? AdministratorPrivilege : NoPrivilege
+            };
+            invitation.Accept();
+            invitationRepository.Update(invitation);
+        }
+        else if (await userRepository.ExistsByOrganizationIdAsync(command.OrganizationId, cancellationToken))
+        {
+            return Result<User>.Failure(IamError.InvitationRequired,
+                "The organization already has users; new users join it by invitation.");
+        }
+        else
+        {
+            role = Roles.RoleAdministrator;
+            command = command with { Environment = AdministrationEnvironment, Privilege = AdministratorPrivilege };
+        }
 
         var twoFactorCodeHash = string.IsNullOrWhiteSpace(command.TwoFactorCode)
             ? null

@@ -14,6 +14,11 @@ public interface IInvitationRepository : IBaseRepository<Invitation>
     Task<bool> ExistsPendingByEmailAsync(string email, CancellationToken cancellationToken = default);
 
     /// <summary>
+    ///     Gets the pending invitation of an email, or null when it has none.
+    /// </summary>
+    Task<Invitation?> FindPendingByEmailAsync(string email, CancellationToken cancellationToken = default);
+
+    /// <summary>
     ///     Gets the invitations of an organization.
     /// </summary>
     Task<IEnumerable<Invitation>> FindAllByOrganizationIdAsync(int organizationId, CancellationToken cancellationToken = default);

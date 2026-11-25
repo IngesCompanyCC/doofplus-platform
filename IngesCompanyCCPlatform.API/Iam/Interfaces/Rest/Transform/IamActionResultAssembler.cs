@@ -19,6 +19,7 @@ public static class IamActionResultAssembler
         IamError.EmailAlreadyTaken => StatusCodes.Status409Conflict,
         IamError.UserNotFound => StatusCodes.Status404NotFound,
         IamError.InvitationNotFound => StatusCodes.Status404NotFound,
+        IamError.InvitationRequired => StatusCodes.Status403Forbidden,
         IamError.InvalidUserData => StatusCodes.Status400BadRequest,
         IamError.DatabaseError => StatusCodes.Status500InternalServerError,
         IamError.InternalServerError => StatusCodes.Status500InternalServerError,
