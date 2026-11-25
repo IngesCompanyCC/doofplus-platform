@@ -30,6 +30,7 @@ public class UsersController(
     [EndpointSummary("Create user (sign-up)")]
     [ProducesResponseType(typeof(UserResource), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<IActionResult> CreateUser([FromBody] SignUpResource resource, CancellationToken cancellationToken)
     {

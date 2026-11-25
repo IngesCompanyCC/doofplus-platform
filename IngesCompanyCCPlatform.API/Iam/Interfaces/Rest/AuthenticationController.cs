@@ -41,9 +41,10 @@ public class AuthenticationController(
     [HttpPost("sign-up")]
     [AllowAnonymous]
     [EndpointSummary("Sign up")]
-    [EndpointDescription("Registers a user with its role, workspace and organization.")]
+    [EndpointDescription("Registers the first user of an organization as its administrator, or an invited user with the role and organization of the invitation. Without an invitation, an organization that already has users answers 403.")]
     [ProducesResponseType(typeof(UserResource), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<IActionResult> SignUp([FromBody] SignUpResource resource, CancellationToken cancellationToken)
     {

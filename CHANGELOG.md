@@ -6,6 +6,10 @@ El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/
 
 ## [Unreleased]
 
+## [1.1.1] - 2026-11-25
+### Security
+- IAM: el registro público (`POST /api/v1/authentication/sign-up` y `POST /api/v1/users`) ya no toma el rol, el privilegio ni la organización del cliente. El primer usuario de una organización queda como administrador; los demás se unen con el rol, la organización y la planta de su invitación pendiente, y sin invitación el API responde `403 Forbidden`.
+
 ## [1.1.0] - 2026-11-15
 ### Added
 - IAM: registro e inicio de sesión con JWT y verificación en dos pasos con un código de seis dígitos; usuarios y roles (`/api/v1/users`, `/api/v1/roles`).

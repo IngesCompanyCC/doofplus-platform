@@ -21,6 +21,14 @@ public class InvitationRepository(AppDbContext context) : BaseRepository<Invitat
     }
 
     /// <inheritdoc />
+    public async Task<Invitation?> FindPendingByEmailAsync(string email, CancellationToken cancellationToken = default)
+    {
+        var normalized = email.Trim().ToLowerInvariant();
+        return await Context.Set<Invitation>()
+            .FirstOrDefaultAsync(invitation => invitation.Email == normalized && invitation.Status == EInvitationStatus.Pending, cancellationToken);
+    }
+
+    /// <inheritdoc />
     public async Task<IEnumerable<Invitation>> FindAllByOrganizationIdAsync(int organizationId, CancellationToken cancellationToken = default)
     {
         return await Context.Set<Invitation>()

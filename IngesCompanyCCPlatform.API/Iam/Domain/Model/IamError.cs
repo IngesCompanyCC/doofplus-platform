@@ -12,6 +12,7 @@ public enum IamError
     EmailAlreadyTaken,
     UserNotFound,
     InvitationNotFound,
+    InvitationRequired,
     InvalidUserData,
     DatabaseError,
     InternalServerError

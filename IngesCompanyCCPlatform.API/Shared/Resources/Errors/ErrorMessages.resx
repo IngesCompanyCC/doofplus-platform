@@ -222,6 +222,9 @@
   <data name="IamError.EmailAlreadyTaken" xml:space="preserve">
     <value>Email already registered</value>
   </data>
+  <data name="IamError.InvitationRequired" xml:space="preserve">
+    <value>An invitation is required to join this organization</value>
+  </data>
   <data name="IamError.UserNotFound" xml:space="preserve">
     <value>User not found</value>
   </data>
