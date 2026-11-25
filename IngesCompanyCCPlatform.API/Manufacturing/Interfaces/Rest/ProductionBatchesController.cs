@@ -10,6 +10,7 @@ using IngesCompanyCCPlatform.API.Manufacturing.Interfaces.Rest.Transform;
 using IngesCompanyCCPlatform.API.Shared.Interfaces.Rest.ProblemDetails;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using IngesCompanyCCPlatform.API.Iam.Infrastructure.Pipeline.Middleware.Attributes;
 
 namespace IngesCompanyCCPlatform.API.Manufacturing.Interfaces.Rest;
 
@@ -17,6 +18,7 @@ namespace IngesCompanyCCPlatform.API.Manufacturing.Interfaces.Rest;
 ///     REST controller exposing endpoints for pharmaceutical production batches.
 /// </summary>
 [ApiController]
+[Authorize]
 [Route("api/v1/production-batches")]
 [Produces(MediaTypeNames.Application.Json)]
 [Tags("Production Batches")]

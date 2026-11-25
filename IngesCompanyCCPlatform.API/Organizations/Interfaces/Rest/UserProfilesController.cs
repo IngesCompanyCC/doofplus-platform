@@ -8,10 +8,12 @@ using IngesCompanyCCPlatform.API.Organizations.Interfaces.Rest.Resources;
 using IngesCompanyCCPlatform.API.Organizations.Interfaces.Rest.Transform;
 using IngesCompanyCCPlatform.API.Shared.Interfaces.Rest.ProblemDetails;
 using Microsoft.AspNetCore.Mvc;
+using IngesCompanyCCPlatform.API.Iam.Infrastructure.Pipeline.Middleware.Attributes;
 
 namespace IngesCompanyCCPlatform.API.Organizations.Interfaces.Rest;
 
 [ApiController]
+[Authorize]
 [Route("api/v1/user-profiles")]
 [Produces(MediaTypeNames.Application.Json)]
 [Tags("User Profiles")]

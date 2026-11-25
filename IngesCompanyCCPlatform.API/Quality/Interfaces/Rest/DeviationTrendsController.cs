@@ -3,6 +3,7 @@ using IngesCompanyCCPlatform.API.Quality.Application.QueryServices;
 using IngesCompanyCCPlatform.API.Quality.Domain.Model.Queries;
 using IngesCompanyCCPlatform.API.Quality.Interfaces.Rest.Resources;
 using Microsoft.AspNetCore.Mvc;
+using IngesCompanyCCPlatform.API.Iam.Infrastructure.Pipeline.Middleware.Attributes;
 
 namespace IngesCompanyCCPlatform.API.Quality.Interfaces.Rest;
 
@@ -10,6 +11,7 @@ namespace IngesCompanyCCPlatform.API.Quality.Interfaces.Rest;
 ///     REST controller of the monthly trend of deviations by root cause.
 /// </summary>
 [ApiController]
+[Authorize]
 [Route("api/v1/[controller]")]
 [Produces(MediaTypeNames.Application.Json)]
 [Tags("Deviation Trends")]

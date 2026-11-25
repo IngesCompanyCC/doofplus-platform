@@ -15,6 +15,7 @@ namespace IngesCompanyCCPlatform.API.Iam.Interfaces.Rest;
 ///     Sign-in with two-factor authentication and sign-up. Both endpoints are public.
 /// </summary>
 [ApiController]
+[Authorize]
 [Route("api/v1/authentication")]
 [Produces(MediaTypeNames.Application.Json)]
 [Tags("Authentication")]

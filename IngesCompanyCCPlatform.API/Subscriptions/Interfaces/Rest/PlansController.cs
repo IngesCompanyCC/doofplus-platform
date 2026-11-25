@@ -10,6 +10,7 @@ using IngesCompanyCCPlatform.API.Subscriptions.Interfaces.Rest.Transform;
 using IngesCompanyCCPlatform.API.Subscriptions.Resources;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
+using IngesCompanyCCPlatform.API.Iam.Infrastructure.Pipeline.Middleware.Attributes;
 
 namespace IngesCompanyCCPlatform.API.Subscriptions.Interfaces.Rest;
 
@@ -17,6 +18,7 @@ namespace IngesCompanyCCPlatform.API.Subscriptions.Interfaces.Rest;
 ///     REST controller of the subscription plans offered by DoofPlus.
 /// </summary>
 [ApiController]
+[Authorize]
 [Route("api/v1/[controller]")]
 [Produces(MediaTypeNames.Application.Json)]
 [Tags("Plans")]
@@ -56,6 +58,7 @@ public class PlansController(
         }
     }
 
+    [AllowAnonymous]
     [HttpGet]
     [EndpointSummary("Get all plans")]
     [EndpointDescription("Gets the plans and prices shown to the laboratory administrator.")]
@@ -67,6 +70,7 @@ public class PlansController(
         return Ok(planResources);
     }
 
+    [AllowAnonymous]
     [HttpGet("{planId:int}")]
     [EndpointSummary("Get a plan by its id")]
     [EndpointDescription("Gets a plan by the provided id.")]

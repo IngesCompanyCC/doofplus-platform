@@ -12,6 +12,7 @@ using IngesCompanyCCPlatform.API.Manufacturing.Resources;
 using IngesCompanyCCPlatform.API.Shared.Interfaces.Rest.ProblemDetails;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
+using IngesCompanyCCPlatform.API.Iam.Infrastructure.Pipeline.Middleware.Attributes;
 
 namespace IngesCompanyCCPlatform.API.Manufacturing.Interfaces.Rest;
 
@@ -19,6 +20,7 @@ namespace IngesCompanyCCPlatform.API.Manufacturing.Interfaces.Rest;
 ///     REST controller of the lots of raw material: receipt, inspection, release and allocation to a batch.
 /// </summary>
 [ApiController]
+[Authorize]
 [Route("api/v1/material-lots")]
 [Produces(MediaTypeNames.Application.Json)]
 [Tags("Material lots")]
