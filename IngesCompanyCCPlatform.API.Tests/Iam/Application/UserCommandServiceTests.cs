@@ -16,17 +16,29 @@ namespace IngesCompanyCCPlatform.API.Tests.Iam.Application;
 public class UserCommandServiceTests
 {
     private readonly InMemoryUserRepository _users = new();
+    private readonly InMemoryInvitationRepository _invitations = new();
     private readonly UserCommandService _service;
 
     public UserCommandServiceTests()
     {
-        _service = new UserCommandService(_users, new FakeTokenService(), new FakeHashingService(), new FakeUnitOfWork());
+        _service = new UserCommandService(_users, _invitations, new FakeTokenService(), new FakeHashingService(),
+            new FakeUnitOfWork());
     }
 
     private static SignUpCommand SignUp(string email = "elena.paz@andinos.com.pe", string password = "Secret123",
-        string? role = "qa-specialist", string environment = "qa", string? twoFactorCode = null) =>
-        new(email, password, "Elena Paz", role, environment, "Lima", null, null, 1, "Laboratorios Andinos",
-            "Ate plant", twoFactorCode);
+        string? role = "qa-specialist", string environment = "qa", string? twoFactorCode = null,
+        int organizationId = 1, string? privilege = null) =>
+        new(email, password, "Elena Paz", role, environment, "Lima", null, privilege, organizationId,
+            "Laboratorios Andinos", "Ate plant", twoFactorCode);
+
+    private Invitation Invite(string email, string role, int organizationId = 1, string facility = "Ate plant")
+    {
+        Assert.True(RolesExtensions.TryFromKey(role, out var parsed));
+        var invitation = new Invitation(
+            new SendInvitationCommand(organizationId, facility, role, "Luis Rojas", email, null), parsed);
+        _invitations.Items.Add(invitation);
+        return invitation;
+    }
 
     [Fact]
     public async Task SignUpHashesThePasswordAndTheCode()
@@ -38,7 +50,6 @@ public class UserCommandServiceTests
         Assert.Equal("elena.paz@andinos.com.pe", user.Email);
         Assert.Equal("hash:Secret123", user.PasswordHash);
         Assert.Equal("hash:123456", user.TwoFactorCodeHash);
-        Assert.Equal(Roles.RoleQaSpecialist, user.Role);
         Assert.Equal("EP", user.Initials);
         Assert.Equal("active", user.Status);
     }
@@ -63,6 +74,47 @@ public class UserCommandServiceTests
         var result = await _service.Handle(SignUp(email: "ELENA.PAZ@andinos.com.pe"));
 
         Assert.Equal(IamError.EmailAlreadyTaken, result.Error);
+    }
+
+    [Fact]
+    public async Task TheFirstUserOfAnOrganizationIsItsAdministratorWhateverRoleItAsks()
+    {
+        var result = await _service.Handle(SignUp(role: "qa-specialist", environment: "qa"));
+
+        Assert.True(result.IsSuccess);
+        var user = Assert.Single(_users.Items);
+        Assert.Equal(Roles.RoleAdministrator, user.Role);
+        Assert.Equal("administrator", user.Privilege);
+        Assert.Equal("administration", user.Environment);
+    }
+
+    [Fact]
+    public async Task AnotherUserWithoutAnInvitationCannotJoinTheOrganization()
+    {
+        await _service.Handle(SignUp());
+
+        var result = await _service.Handle(SignUp(email: "intruder@mail.com", role: "administrator",
+            environment: "administration", privilege: "administrator"));
+
+        Assert.Equal(IamError.InvitationRequired, result.Error);
+        Assert.Single(_users.Items);
+    }
+
+    [Fact]
+    public async Task AnInvitedUserTakesTheRoleAndTheOrganizationOfTheInvitation()
+    {
+        await _service.Handle(SignUp());
+        var invitation = Invite("luis.rojas@andinos.com.pe", "production-supervisor", facility: "Callao plant");
+
+        var result = await _service.Handle(SignUp(email: "luis.rojas@andinos.com.pe", role: "administrator",
+            environment: "production", organizationId: 2, privilege: "administrator"));
+
+        Assert.True(result.IsSuccess);
+        Assert.Equal(Roles.RoleProductionSupervisor, result.Value!.Role);
+        Assert.Equal(1, result.Value.OrganizationId);
+        Assert.Equal("Callao plant", result.Value.Facility);
+        Assert.Equal("none", result.Value.Privilege);
+        Assert.Equal(EInvitationStatus.Accepted, invitation.Status);
     }
 
     [Fact]
@@ -137,6 +189,50 @@ public class UserCommandServiceTests
 
         public Task<bool> ExistsByEmailAsync(string email, CancellationToken cancellationToken = default) =>
             Task.FromResult(Items.Any(user => user.Email == email.Trim().ToLowerInvariant()));
+
+        public Task<bool> ExistsByOrganizationIdAsync(int organizationId, CancellationToken cancellationToken = default) =>
+            Task.FromResult(Items.Any(user => user.OrganizationId == organizationId));
+    }
+
+    private sealed class InMemoryInvitationRepository : IInvitationRepository
+    {
+        public List<Invitation> Items { get; } = [];
+
+        public Task AddAsync(Invitation entity, CancellationToken cancellationToken = default)
+        {
+            Items.Add(entity);
+            return Task.CompletedTask;
+        }
+
+        public Task<Invitation?> FindByIdAsync(int id, CancellationToken cancellationToken = default) =>
+            Task.FromResult(Items.FirstOrDefault(invitation => invitation.Id == id));
+
+        public Task<Invitation?> FindByIdAsNoTrackingAsync(int id, CancellationToken cancellationToken = default) =>
+            FindByIdAsync(id, cancellationToken);
+
+        public void Update(Invitation entity)
+        {
+        }
+
+        public void Remove(Invitation entity) => Items.Remove(entity);
+
+        public Task<IEnumerable<Invitation>> ListAsync(CancellationToken cancellationToken = default) =>
+            Task.FromResult<IEnumerable<Invitation>>(Items);
+
+        public Task<IEnumerable<Invitation>> ListAsNoTrackingAsync(CancellationToken cancellationToken = default) =>
+            ListAsync(cancellationToken);
+
+        public Task<bool> ExistsPendingByEmailAsync(string email, CancellationToken cancellationToken = default) =>
+            Task.FromResult(Items.Any(invitation =>
+                invitation.Email == email.Trim().ToLowerInvariant() && invitation.Status == EInvitationStatus.Pending));
+
+        public Task<Invitation?> FindPendingByEmailAsync(string email, CancellationToken cancellationToken = default) =>
+            Task.FromResult(Items.FirstOrDefault(invitation =>
+                invitation.Email == email.Trim().ToLowerInvariant() && invitation.Status == EInvitationStatus.Pending));
+
+        public Task<IEnumerable<Invitation>> FindAllByOrganizationIdAsync(int organizationId,
+            CancellationToken cancellationToken = default) =>
+            Task.FromResult<IEnumerable<Invitation>>(Items.Where(invitation => invitation.OrganizationId == organizationId));
     }
 
     /// <summary>The hash of a value is "hash:" + value.</summary>

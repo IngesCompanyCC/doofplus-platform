@@ -19,4 +19,9 @@ public class UserRepository(AppDbContext context) : BaseRepository<User>(context
         var normalized = email.Trim().ToLowerInvariant();
         return await Context.Set<User>().AnyAsync(user => user.Email == normalized, cancellationToken);
     }
+
+    public async Task<bool> ExistsByOrganizationIdAsync(int organizationId, CancellationToken cancellationToken = default)
+    {
+        return await Context.Set<User>().AnyAsync(user => user.OrganizationId == organizationId, cancellationToken);
+    }
 }
