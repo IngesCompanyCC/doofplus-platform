@@ -11,6 +11,7 @@ using IngesCompanyCCPlatform.API.Subscriptions.Interfaces.Rest.Transform;
 using IngesCompanyCCPlatform.API.Subscriptions.Resources;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
+using IngesCompanyCCPlatform.API.Iam.Infrastructure.Pipeline.Middleware.Attributes;
 
 namespace IngesCompanyCCPlatform.API.Subscriptions.Interfaces.Rest;
 
@@ -18,6 +19,7 @@ namespace IngesCompanyCCPlatform.API.Subscriptions.Interfaces.Rest;
 ///     REST controller of the subscriptions of the organizations to the DoofPlus plans.
 /// </summary>
 [ApiController]
+[Authorize]
 [Route("api/v1/[controller]")]
 [Produces(MediaTypeNames.Application.Json)]
 [Tags("Subscriptions")]
@@ -28,6 +30,7 @@ public class SubscriptionsController(
     ProblemDetailsFactory problemDetailsFactory)
     : ControllerBase
 {
+    [AllowAnonymous]
     [HttpPost]
     [EndpointSummary("Create a subscription")]
     [EndpointDescription("Selects a plan for an organization (US51); the subscription starts as Pending.")]

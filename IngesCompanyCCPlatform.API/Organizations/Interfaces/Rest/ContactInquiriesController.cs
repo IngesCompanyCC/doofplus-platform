@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace IngesCompanyCCPlatform.API.Organizations.Interfaces.Rest;
 
 [ApiController]
+[Authorize]
 [Route("api/v1/contact-inquiries")]
 [Produces(MediaTypeNames.Application.Json)]
 [Tags("Contact Inquiries")]
@@ -21,6 +22,7 @@ public class ContactInquiriesController(
     IContactInquiryQueryService queryService,
     ProblemDetailsFactory problemDetailsFactory) : ControllerBase
 {
+    [AllowAnonymous]
     [HttpPost]
     [EndpointSummary("Send contact inquiry")]
     [EndpointDescription("Registers a new contact inquiry submitted from the public Contact us form.")]

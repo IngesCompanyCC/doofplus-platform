@@ -11,6 +11,7 @@ using IngesCompanyCCPlatform.API.Quality.Resources;
 using IngesCompanyCCPlatform.API.Shared.Interfaces.Rest.ProblemDetails;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
+using IngesCompanyCCPlatform.API.Iam.Infrastructure.Pipeline.Middleware.Attributes;
 
 namespace IngesCompanyCCPlatform.API.Quality.Interfaces.Rest;
 
@@ -18,6 +19,7 @@ namespace IngesCompanyCCPlatform.API.Quality.Interfaces.Rest;
 ///     REST controller of the quality documents of Quality &amp; Compliance.
 /// </summary>
 [ApiController]
+[Authorize]
 [Route("api/v1/[controller]")]
 [Produces(MediaTypeNames.Application.Json)]
 [Tags("Quality Documents")]

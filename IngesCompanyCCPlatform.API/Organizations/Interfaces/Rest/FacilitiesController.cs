@@ -9,6 +9,7 @@ using IngesCompanyCCPlatform.API.Organizations.Interfaces.Rest.Resources;
 using IngesCompanyCCPlatform.API.Organizations.Interfaces.Rest.Transform;
 using IngesCompanyCCPlatform.API.Shared.Interfaces.Rest.ProblemDetails;
 using Microsoft.AspNetCore.Mvc;
+using IngesCompanyCCPlatform.API.Iam.Infrastructure.Pipeline.Middleware.Attributes;
 
 namespace IngesCompanyCCPlatform.API.Organizations.Interfaces.Rest;
 
@@ -16,6 +17,7 @@ namespace IngesCompanyCCPlatform.API.Organizations.Interfaces.Rest;
 ///     Facilities (plants) of the organizations, as the Web App reads and creates them.
 /// </summary>
 [ApiController]
+[Authorize]
 [Route("api/v1/facilities")]
 [Produces(MediaTypeNames.Application.Json)]
 [Tags("Facilities")]
@@ -24,15 +26,21 @@ public class FacilitiesController(
     IFacilityQueryService queryService,
     ProblemDetailsFactory problemDetailsFactory) : ControllerBase
 {
+    [AllowAnonymous]
     [HttpPost]
     [EndpointSummary("Add a facility")]
-    [EndpointDescription("Adds a manufacturing plant or a QC laboratory to an organization and records it in the administrative activity.")]
+    [EndpointDescription("Adds a manufacturing plant or a QC laboratory to an organization and records it in the administrative activity. Without a token it only adds the primary plant of a newly registered organization, which has no facilities yet.")]
     [ProducesResponseType(typeof(FacilityResource), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<IActionResult> AddFacility([FromBody] AddFacilityResource resource, CancellationToken cancellationToken)
     {
+        if (HttpContext.Items["User"] is null &&
+            (await queryService.Handle(new GetAllFacilitiesQuery(resource.OrganizationId), cancellationToken)).Any())
+            return Unauthorized();
+
         var type = resource.Type?.Replace("-", string.Empty).Replace("_", string.Empty);
         if (!Enum.TryParse<FacilityType>(type, true, out var facilityType) || !Enum.IsDefined(facilityType))
             return problemDetailsFactory.CreateProblemDetails(this, StatusCodes.Status400BadRequest,

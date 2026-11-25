@@ -4,6 +4,7 @@ using IngesCompanyCCPlatform.API.Organizations.Domain.Model.Queries;
 using IngesCompanyCCPlatform.API.Organizations.Interfaces.Rest.Resources;
 using IngesCompanyCCPlatform.API.Organizations.Interfaces.Rest.Transform;
 using Microsoft.AspNetCore.Mvc;
+using IngesCompanyCCPlatform.API.Iam.Infrastructure.Pipeline.Middleware.Attributes;
 
 namespace IngesCompanyCCPlatform.API.Organizations.Interfaces.Rest;
 
@@ -11,6 +12,7 @@ namespace IngesCompanyCCPlatform.API.Organizations.Interfaces.Rest;
 ///     Recent administrative activity shown in the Administration overview of the Web App.
 /// </summary>
 [ApiController]
+[Authorize]
 [Route("api/v1/administrative-activities")]
 [Produces(MediaTypeNames.Application.Json)]
 [Tags("Administrative Activities")]

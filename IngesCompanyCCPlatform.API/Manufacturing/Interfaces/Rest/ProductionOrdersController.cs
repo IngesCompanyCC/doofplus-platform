@@ -12,6 +12,7 @@ using IngesCompanyCCPlatform.API.Manufacturing.Resources;
 using IngesCompanyCCPlatform.API.Shared.Interfaces.Rest.ProblemDetails;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
+using IngesCompanyCCPlatform.API.Iam.Infrastructure.Pipeline.Middleware.Attributes;
 
 namespace IngesCompanyCCPlatform.API.Manufacturing.Interfaces.Rest;
 
@@ -19,6 +20,7 @@ namespace IngesCompanyCCPlatform.API.Manufacturing.Interfaces.Rest;
 ///     REST controller of the production orders and their operations.
 /// </summary>
 [ApiController]
+[Authorize]
 [Route("api/v1/production-orders")]
 [Produces(MediaTypeNames.Application.Json)]
 [Tags("Production orders")]

@@ -15,6 +15,7 @@ namespace IngesCompanyCCPlatform.API.Iam.Interfaces.Rest;
 ///     Sign-in in the style of the professor's platform: POST /api/v1/tokens.
 /// </summary>
 [ApiController]
+[Authorize]
 [Route("api/v1/tokens")]
 [Produces(MediaTypeNames.Application.Json)]
 [Tags("Tokens")]

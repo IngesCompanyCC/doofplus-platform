@@ -9,6 +9,7 @@ using IngesCompanyCCPlatform.API.Monitoring.Resources;
 using IngesCompanyCCPlatform.API.Shared.Interfaces.Rest.ProblemDetails;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
+using IngesCompanyCCPlatform.API.Iam.Infrastructure.Pipeline.Middleware.Attributes;
 
 namespace IngesCompanyCCPlatform.API.Monitoring.Interfaces.Rest;
 
@@ -21,6 +22,7 @@ namespace IngesCompanyCCPlatform.API.Monitoring.Interfaces.Rest;
 ///     <c>ThingsBoard__ApiKey</c>). Without a configured key every request is rejected.
 /// </remarks>
 [ApiController]
+[Authorize]
 [Route("api/v1/[controller]")]
 [Produces(MediaTypeNames.Application.Json)]
 [Tags("Telemetry")]
@@ -38,6 +40,7 @@ public class TelemetryController(
 
     private const string ApiKeyInvalidMessageKey = "monitoring.telemetry.error.apiKey.invalid";
 
+    [AllowAnonymous]
     [HttpPost]
     [EndpointSummary("Receive a reading from ThingsBoard")]
     [EndpointDescription("Stores the reading of the sensor linked to the device and answers 202 Accepted; without a valid API key in X-Api-Key answers 401 and discards it (TS04).")]

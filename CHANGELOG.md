@@ -5,6 +5,8 @@ Todos los cambios notables de este proyecto se documentan en este archivo.
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/) y el proyecto sigue [Semantic Versioning](https://semver.org/lang/es/).
 
 ## [Unreleased]
+### Security
+- Todos los endpoints exigen el token JWT, salvo los públicos: sign-in, sign-up, `POST /api/v1/tokens`, `POST /api/v1/users`, `POST /api/v1/contact-inquiries`, `POST /api/v1/telemetry` (con la API key de ThingsBoard), `GET /api/v1/plans` y las llamadas del registro de una organización nueva. Sin token, `GET /api/v1/organizations` solo busca por `ruc` y `POST /api/v1/facilities` solo agrega la primera planta de una organización. Una prueba recorre todos los controllers y falla si un endpoint queda sin `[Authorize]` ni `[AllowAnonymous]`.
 
 ## [1.1.1] - 2026-11-25
 ### Security

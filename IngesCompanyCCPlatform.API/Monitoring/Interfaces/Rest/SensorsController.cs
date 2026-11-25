@@ -12,6 +12,7 @@ using IngesCompanyCCPlatform.API.Monitoring.Resources;
 using IngesCompanyCCPlatform.API.Shared.Interfaces.Rest.ProblemDetails;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
+using IngesCompanyCCPlatform.API.Iam.Infrastructure.Pipeline.Middleware.Attributes;
 
 namespace IngesCompanyCCPlatform.API.Monitoring.Interfaces.Rest;
 
@@ -19,6 +20,7 @@ namespace IngesCompanyCCPlatform.API.Monitoring.Interfaces.Rest;
 ///     REST controller of the sensors and their ThingsBoard devices.
 /// </summary>
 [ApiController]
+[Authorize]
 [Route("api/v1/[controller]")]
 [Produces(MediaTypeNames.Application.Json)]
 [Tags("Sensors")]
