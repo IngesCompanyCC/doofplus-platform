@@ -94,6 +94,7 @@ builder.Services.AddCors(options =>
 // OpenAPI / Scalar documentation
 builder.Services.AddOpenApi(options =>
 {
+    options.AddDocumentTransformer<ApiVersionDocumentTransformer>();
     options.AddDocumentTransformer<BearerSecuritySchemeTransformer>();
     options.AddOperationTransformer<IamBearerSecurityOperationTransformer>();
 });
