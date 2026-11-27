@@ -275,12 +275,14 @@ builder.Services.AddCortexMediator([typeof(Program)]);
 
 var app = builder.Build();
 
-// Apply pending migrations on startup (safe to call even when schema is up to date)
+// Apply pending migrations on startup (safe to call even when schema is up to date).
+// The integration tests replace MySQL with an in-memory database, which has no migrations: it is only created.
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     var context = services.GetRequiredService<AppDbContext>();
-    context.Database.Migrate();
+    if (context.Database.IsRelational()) context.Database.Migrate();
+    else context.Database.EnsureCreated();
 }
 
 // Configure the HTTP request pipeline.
