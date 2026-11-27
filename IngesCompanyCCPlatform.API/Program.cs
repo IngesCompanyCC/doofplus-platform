@@ -11,12 +11,14 @@ using IngesCompanyCCPlatform.API.Iam.Infrastructure.Pipeline.Middleware.Extensio
 using IngesCompanyCCPlatform.API.Iam.Infrastructure.Tokens.Jwt.Configuration;
 using IngesCompanyCCPlatform.API.Iam.Infrastructure.Tokens.Jwt.Services;
 using IngesCompanyCCPlatform.API.Iam.Interfaces.Acl;
+using IngesCompanyCCPlatform.API.Manufacturing.Application.Acl;
 using IngesCompanyCCPlatform.API.Manufacturing.Application.CommandServices;
 using IngesCompanyCCPlatform.API.Manufacturing.Application.Internal.CommandServices;
 using IngesCompanyCCPlatform.API.Manufacturing.Application.Internal.QueryServices;
 using IngesCompanyCCPlatform.API.Manufacturing.Application.QueryServices;
 using IngesCompanyCCPlatform.API.Manufacturing.Domain.Repositories;
 using IngesCompanyCCPlatform.API.Manufacturing.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using IngesCompanyCCPlatform.API.Manufacturing.Interfaces.Acl;
 using IngesCompanyCCPlatform.API.Manufacturing.Resources;
 using IngesCompanyCCPlatform.API.Quality.Application.CommandServices;
 using IngesCompanyCCPlatform.API.Quality.Application.Internal.CommandServices;
@@ -245,6 +247,7 @@ builder.Services.AddScoped<IProductionOrderCommandService, ProductionOrderComman
 builder.Services.AddScoped<IProductionOrderQueryService, ProductionOrderQueryService>();
 builder.Services.AddScoped<IRawMaterialLotCommandService, RawMaterialLotCommandService>();
 builder.Services.AddScoped<IRawMaterialLotQueryService, RawMaterialLotQueryService>();
+builder.Services.AddScoped<IManufacturingContextFacade, ManufacturingContextFacade>();
 
 // Monitoring Bounded Context Injection Configuration
 builder.Services.AddScoped<IEquipmentRepository, EquipmentRepository>();
