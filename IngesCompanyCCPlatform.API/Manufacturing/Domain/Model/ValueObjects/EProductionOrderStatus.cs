@@ -17,5 +17,7 @@ public enum EProductionOrderStatus
     /// <summary>Stopped until the issue is resolved.</summary>
     OnHold,
     /// <summary>All operations are complete.</summary>
-    Completed
+    Completed,
+    /// <summary>Rejected with a reason before it was approved (US57).</summary>
+    Rejected
 }

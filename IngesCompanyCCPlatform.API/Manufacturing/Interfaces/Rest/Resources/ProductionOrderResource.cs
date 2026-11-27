@@ -14,4 +14,5 @@ public record ProductionOrderResource(
     string Status,
     DateTime? PlannedStart,
     DateTime? PlannedEnd,
-    IEnumerable<OperationResource> Operations);
+    IEnumerable<OperationResource> Operations,
+    string RejectionReason);

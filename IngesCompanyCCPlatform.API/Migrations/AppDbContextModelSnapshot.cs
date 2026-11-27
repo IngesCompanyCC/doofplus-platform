@@ -394,6 +394,12 @@ namespace IngesCompanyCCPlatform.API.Migrations
                         .HasColumnType("varchar(30)")
                         .HasColumnName("product_code");
 
+                    b.Property<string>("RejectionReason")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)")
+                        .HasColumnName("rejection_reason");
+
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasMaxLength(16)

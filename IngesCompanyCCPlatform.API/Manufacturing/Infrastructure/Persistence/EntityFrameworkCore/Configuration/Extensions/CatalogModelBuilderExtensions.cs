@@ -97,6 +97,7 @@ public static class CatalogModelBuilderExtensions
         builder.Entity<ProductionOrder>().Property(o => o.Status).HasConversion<string>().HasMaxLength(16).IsRequired();
         builder.Entity<ProductionOrder>().Property(o => o.PlannedStart);
         builder.Entity<ProductionOrder>().Property(o => o.PlannedEnd);
+        builder.Entity<ProductionOrder>().Property(o => o.RejectionReason).IsRequired().HasMaxLength(500);
         builder.Entity<ProductionOrder>()
             .HasMany(o => o.Operations)
             .WithOne()

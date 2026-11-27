@@ -64,6 +64,33 @@ public class ProductionOrderCommandService(
     }
 
     /// <inheritdoc />
+    public async Task<Result<ProductionOrder>> Handle(RejectProductionOrderCommand command,
+        CancellationToken cancellationToken)
+    {
+        var order = await productionOrderRepository.FindByIdAsync(command.ProductionOrderId, cancellationToken);
+        if (order is null)
+            return Result<ProductionOrder>.Failure(ProductionOrderErrors.NotFoundById(command.ProductionOrderId),
+                ManufacturingError.ProductionOrderNotFound);
+
+        try
+        {
+            order.Reject(command.Reason);
+        }
+        catch (ArgumentException)
+        {
+            return Result<ProductionOrder>.Failure(ProductionOrderErrors.RejectionReasonRequired,
+                ManufacturingError.InvalidOperation);
+        }
+        catch (InvalidOperationException exception)
+        {
+            return Result<ProductionOrder>.Failure(ProductionOrderErrors.InvalidState(exception.Message),
+                ManufacturingError.InvalidProductionOrderState);
+        }
+
+        await unitOfWork.CompleteAsync(cancellationToken);
+        return Result<ProductionOrder>.Success(order);
+    }
+
     public async Task<Result<ProductionOrder>> Handle(UpdateOperationCommand command,
         CancellationToken cancellationToken)
     {

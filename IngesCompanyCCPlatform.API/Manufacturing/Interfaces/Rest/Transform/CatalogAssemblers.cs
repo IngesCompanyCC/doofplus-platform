@@ -55,6 +55,13 @@ public static class CatalogCommandFromResourceAssembler
             EnumParser.Parse<EProductionOrderStatus>(resource.Status, "manufacturing.order.error.status.invalid"));
     }
 
+    /// <summary>Builds the command to reject a production order with its reason.</summary>
+    public static RejectProductionOrderCommand ToCommandFromResource(int orderId,
+        RejectProductionOrderResource resource)
+    {
+        return new RejectProductionOrderCommand(orderId, resource.Reason ?? string.Empty);
+    }
+
     /// <summary>Builds the command to record the progress of an operation.</summary>
     public static UpdateOperationCommand ToCommandFromResource(int orderId, int sequence,
         UpdateOperationResource resource)
@@ -110,7 +117,8 @@ public static class CatalogResourceFromEntityAssembler
             entity.MasterFormulaId.Value, entity.BatchCode, entity.PlannedQuantity, entity.Line,
             entity.Status.ToString(), AsUtc(entity.PlannedStart), AsUtc(entity.PlannedEnd),
             entity.Operations.Select(operation => new OperationResource(operation.Sequence, operation.Name,
-                operation.Equipment, operation.Progress, operation.Status.ToString(), operation.Reference)));
+                operation.Equipment, operation.Progress, operation.Status.ToString(), operation.Reference)),
+            entity.RejectionReason);
     }
 
     /// <summary>Builds the resource of a lot of raw material.</summary>
