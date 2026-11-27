@@ -53,13 +53,13 @@ public class ProductionBatchesController(
 
     [HttpGet]
     [EndpointSummary("Get all production batches or filter by batch number")]
-    [EndpointDescription("Retrieves all production batches, or the batch with the given batch number (e.g. B-26041).")]
+    [EndpointDescription("Retrieves all production batches, or a list with the batch that has the given batch number (e.g. B-26041); the list is empty when no batch has that number.")]
     [ProducesResponseType(typeof(IEnumerable<ProductionBatchResource>), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetAllBatches([FromQuery] string? batchNumber, CancellationToken cancellationToken)
     {
         if (!string.IsNullOrWhiteSpace(batchNumber))
-            return await GetBatchByNumber(batchNumber, cancellationToken);
+            return await FindBatchesByNumber(batchNumber, cancellationToken);
 
         var batches = await queryService.Handle(new GetAllBatchesQuery(), cancellationToken);
         var resources = batches.Select(ProductionBatchResourceFromEntityAssembler.ToResourceFromEntity);
@@ -85,12 +85,7 @@ public class ProductionBatchesController(
         return Ok(ProductionBatchResourceFromEntityAssembler.ToResourceFromEntity(batch));
     }
 
-    [HttpGet("by-number/{batchNumber}")]
-    [EndpointSummary("Get production batch by batch number")]
-    [EndpointDescription("Retrieves a production batch by its unique business batch number (e.g. B-26041).")]
-    [ProducesResponseType(typeof(ProductionBatchResource), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetBatchByNumber([FromRoute] string batchNumber, CancellationToken cancellationToken)
+    private async Task<IActionResult> FindBatchesByNumber(string batchNumber, CancellationToken cancellationToken)
     {
         BatchNumber numberVo;
         try
@@ -108,14 +103,9 @@ public class ProductionBatchesController(
 
         var batch = await queryService.Handle(new GetBatchByNumberQuery(numberVo), cancellationToken);
 
-        if (batch is null)
-            return problemDetailsFactory.CreateProblemDetails(
-                this,
-                StatusCodes.Status404NotFound,
-                ManufacturingError.BatchNotFound,
-                $"Production batch with number '{batchNumber}' was not found.");
-
-        return Ok(ProductionBatchResourceFromEntityAssembler.ToResourceFromEntity(batch));
+        return batch is null
+            ? Ok(Array.Empty<ProductionBatchResource>())
+            : Ok(new[] { ProductionBatchResourceFromEntityAssembler.ToResourceFromEntity(batch) });
     }
 
     [HttpPatch("{id:int}/progress")]
@@ -138,7 +128,7 @@ public class ProductionBatchesController(
             batch => Ok(ProductionBatchResourceFromEntityAssembler.ToResourceFromEntity(batch)));
     }
 
-    [HttpPost("{id:int}/start")]
+    [HttpPost("{id:int}/executions")]
     [EndpointSummary("Start a production batch")]
     [EndpointDescription("Moves a Planned batch to InProgress.")]
     [ProducesResponseType(typeof(ProductionBatchResource), StatusCodes.Status200OK)]
@@ -157,7 +147,7 @@ public class ProductionBatchesController(
             batch => Ok(ProductionBatchResourceFromEntityAssembler.ToResourceFromEntity(batch)));
     }
 
-    [HttpPost("{id:int}/resume")]
+    [HttpPost("{id:int}/resumptions")]
     [EndpointSummary("Resume a production batch")]
     [EndpointDescription("Moves an OnHold batch back to InProgress.")]
     [ProducesResponseType(typeof(ProductionBatchResource), StatusCodes.Status200OK)]
@@ -176,7 +166,7 @@ public class ProductionBatchesController(
             batch => Ok(ProductionBatchResourceFromEntityAssembler.ToResourceFromEntity(batch)));
     }
 
-    [HttpPost("{id:int}/release")]
+    [HttpPost("{id:int}/distribution-releases")]
     [EndpointSummary("Release a production batch")]
     [EndpointDescription("Releases a ReleaseRequested batch after the QA electronic signature.")]
     [ProducesResponseType(typeof(ProductionBatchResource), StatusCodes.Status200OK)]
@@ -196,7 +186,7 @@ public class ProductionBatchesController(
             batch => Ok(ProductionBatchResourceFromEntityAssembler.ToResourceFromEntity(batch)));
     }
 
-    [HttpPost("{id:int}/close")]
+    [HttpPost("{id:int}/closures")]
     [EndpointSummary("Close a production batch")]
     [EndpointDescription("Finishes the production of an InProgress batch, records the manufactured quantity and requests the QA release.")]
     [ProducesResponseType(typeof(ProductionBatchResource), StatusCodes.Status200OK)]

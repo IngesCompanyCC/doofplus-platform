@@ -46,11 +46,13 @@ public class BatchReleasesController(
     }
     [HttpGet]
     [EndpointSummary("Get the batch releases")]
-    [EndpointDescription("Gets all the batch releases.")]
+    [EndpointDescription("Gets all the batch releases, or only those of a batch when batchId is given.")]
     [ProducesResponseType(typeof(IEnumerable<BatchReleaseResource>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetBatchReleases(CancellationToken cancellationToken)
+    public async Task<IActionResult> GetBatchReleases([FromQuery] int? batchId, CancellationToken cancellationToken)
     {
-        var items = await batchReleaseQueryService.Handle(new GetAllBatchReleasesQuery(), cancellationToken);
+        var items = batchId is { } id
+            ? await batchReleaseQueryService.Handle(new GetAllBatchReleasesByBatchIdQuery(id), cancellationToken)
+            : await batchReleaseQueryService.Handle(new GetAllBatchReleasesQuery(), cancellationToken);
         return Ok(items.Select(BatchReleaseResourceFromEntityAssembler.ToResourceFromEntity));
     }
     [HttpGet("{batchReleaseId:int}")]
@@ -65,16 +67,7 @@ public class BatchReleasesController(
             QualityError.BatchReleaseNotFound, messages, problemDetailsFactory,
             found => Ok(BatchReleaseResourceFromEntityAssembler.ToResourceFromEntity(found)), batchReleaseId);
     }
-    [HttpGet("by-batch/{batchId:int}")]
-    [EndpointSummary("Get the batch releases of a batch")]
-    [EndpointDescription("Gets the batch releases of the batch with the provided id.")]
-    [ProducesResponseType(typeof(IEnumerable<BatchReleaseResource>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetBatchReleasesByBatchId([FromRoute] int batchId, CancellationToken cancellationToken)
-    {
-        var items = await batchReleaseQueryService.Handle(new GetAllBatchReleasesByBatchIdQuery(batchId), cancellationToken);
-        return Ok(items.Select(BatchReleaseResourceFromEntityAssembler.ToResourceFromEntity));
-    }
-    [HttpPut("{batchReleaseId:int}/approve")]
+    [HttpPost("{batchReleaseId:int}/approvals")]
     [EndpointSummary("Approve a batch release")]
     [EndpointDescription("Approves a pending release with the electronic signature of Quality. Answers 409 when the release is not pending.")]
     [ProducesResponseType(typeof(BatchReleaseResource), StatusCodes.Status200OK)]
@@ -89,7 +82,7 @@ public class BatchReleasesController(
         return QualityActionResultAssembler.ToActionResultFromCommandResult(this, result, messages, problemDetailsFactory,
             updated => Ok(BatchReleaseResourceFromEntityAssembler.ToResourceFromEntity(updated)), batchReleaseId);
     }
-    [HttpPut("{batchReleaseId:int}/reject")]
+    [HttpPost("{batchReleaseId:int}/rejections")]
     [EndpointSummary("Reject a batch release")]
     [EndpointDescription("Rejects a pending release with its reason. Answers 409 when the release is not pending.")]
     [ProducesResponseType(typeof(BatchReleaseResource), StatusCodes.Status200OK)]

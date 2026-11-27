@@ -67,7 +67,7 @@ public class RawMaterialLotsController(
             ManufacturingError.RawMaterialLotNotFound, messages, problemDetailsFactory, found => Ok(CatalogResourceFromEntityAssembler.ToResourceFromEntity(found)), rawMaterialLotId);
     }
 
-    [HttpPut("{rawMaterialLotId:int}/inspection")]
+    [HttpPost("{rawMaterialLotId:int}/inspections")]
     [EndpointSummary("Record the inspection of a lot")]
     [EndpointDescription("Records whether the packaging and identity were verified and the samples taken; only while the lot is in Inspection.")]
     [ProducesResponseType(typeof(RawMaterialLotResource), StatusCodes.Status200OK)]
@@ -81,7 +81,7 @@ public class RawMaterialLotsController(
             inspected => Ok(CatalogResourceFromEntityAssembler.ToResourceFromEntity(inspected)));
     }
 
-    [HttpPost("{rawMaterialLotId:int}/approval")]
+    [HttpPost("{rawMaterialLotId:int}/approvals")]
     [EndpointSummary("Release a lot")]
     [EndpointDescription("Releases a lot in Inspection once its packaging and identity are verified and its samples are taken.")]
     [ProducesResponseType(typeof(RawMaterialLotResource), StatusCodes.Status200OK)]
@@ -94,7 +94,7 @@ public class RawMaterialLotsController(
             changed => Ok(CatalogResourceFromEntityAssembler.ToResourceFromEntity(changed)));
     }
 
-    [HttpPost("{rawMaterialLotId:int}/rejection")]
+    [HttpPost("{rawMaterialLotId:int}/rejections")]
     [EndpointSummary("Reject a lot")]
     [EndpointDescription("Rejects a lot in Inspection.")]
     [ProducesResponseType(typeof(RawMaterialLotResource), StatusCodes.Status200OK)]
@@ -107,7 +107,7 @@ public class RawMaterialLotsController(
             changed => Ok(CatalogResourceFromEntityAssembler.ToResourceFromEntity(changed)));
     }
 
-    [HttpPost("{rawMaterialLotId:int}/allocation")]
+    [HttpPost("{rawMaterialLotId:int}/allocations")]
     [EndpointSummary("Allocate a lot to a batch")]
     [EndpointDescription("Allocates an approved lot to a production batch.")]
     [ProducesResponseType(typeof(RawMaterialLotResource), StatusCodes.Status200OK)]

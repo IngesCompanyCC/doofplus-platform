@@ -63,7 +63,7 @@ public class SubscriptionsController(
         }
     }
 
-    [HttpPost("{subscriptionId:int}/activation")]
+    [HttpPost("{subscriptionId:int}/activations")]
     [EndpointSummary("Activate a subscription")]
     [EndpointDescription("Activates a Pending subscription once the payment is authorized (US52).")]
     [ProducesResponseType(typeof(SubscriptionResource), StatusCodes.Status200OK)]
@@ -145,7 +145,7 @@ public class SubscriptionsController(
         }
     }
 
-    [HttpPost("{subscriptionId:int}/renewal")]
+    [HttpPost("{subscriptionId:int}/renewals")]
     [EndpointSummary("Renew a subscription")]
     [EndpointDescription("Extends an Active subscription one more billing period (US53).")]
     [ProducesResponseType(typeof(SubscriptionResource), StatusCodes.Status200OK)]
@@ -165,7 +165,7 @@ public class SubscriptionsController(
                 Ok(SubscriptionResourceFromEntityAssembler.ToResourceFromEntity(renewedSubscription)));
     }
 
-    [HttpPost("{subscriptionId:int}/cancellation")]
+    [HttpPost("{subscriptionId:int}/cancellations")]
     [EndpointSummary("Cancel a subscription")]
     [EndpointDescription("Cancels an Active subscription; the access stays until the end of the paid period (US53).")]
     [ProducesResponseType(typeof(SubscriptionResource), StatusCodes.Status200OK)]
