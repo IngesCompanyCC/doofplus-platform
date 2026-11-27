@@ -10,6 +10,9 @@ El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/
 - **Breaking:** `GET /api/v1/production-batches?batchNumber=` y `GET /api/v1/batch-releases?batchId=` reemplazan a `/by-number/{batchNumber}` y `/by-batch/{batchId}`; las colecciones siempre responden una lista.
 - `GET /api/v1/equipment?code=` responde una lista vacía cuando ningún equipo tiene ese código, en lugar de `404`.
 - `PUT /subscriptions/{id}/plan`, `PUT /production-orders/{id}/status` y `PATCH /production-batches/{id}/progress` siguen en singular: cada recurso tiene un solo plan, estado o avance, que se actualiza.
+### Fixed
+- OpenAPI: el documento publicado (`/openapi/v1.json`) y Scalar muestran la versión del proyecto (`<Version>` del `.csproj`) en lugar de `1.0.0`.
+- OpenAPI y Scalar: detrás del proxy de Render, el servidor del documento usa `https://` y la URL pública, porque el API respeta las cabeceras `X-Forwarded-Proto`, `X-Forwarded-Host` y `X-Forwarded-For`.
 ### Security
 - CORS: solo la Web Application (Firebase), el Website (GitHub Pages) y `http://localhost:5173` pueden llamar al API (`Cors:AllowedOrigins`), en lugar de cualquier origen.
 - IAM: la clave que firma los JWT ya no tiene un valor por defecto fuera de Development; el API no arranca sin `TokenSettings__Secret` (mínimo 32 caracteres).
