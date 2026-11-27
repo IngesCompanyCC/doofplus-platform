@@ -22,6 +22,7 @@ using IngesCompanyCCPlatform.API.Manufacturing.Interfaces.Acl;
 using IngesCompanyCCPlatform.API.Manufacturing.Resources;
 using IngesCompanyCCPlatform.API.Quality.Application.CommandServices;
 using IngesCompanyCCPlatform.API.Quality.Application.Internal.CommandServices;
+using IngesCompanyCCPlatform.API.Quality.Application.Internal.OutboundServices.Acl;
 using IngesCompanyCCPlatform.API.Quality.Application.Internal.QueryServices;
 using IngesCompanyCCPlatform.API.Quality.Application.QueryServices;
 using IngesCompanyCCPlatform.API.Quality.Domain.Repositories;
@@ -189,6 +190,7 @@ builder.Services.AddBoundedContextMessages<QualityMessages>();
 // Quality & Compliance Bounded Context Injection Configuration
 builder.Services.AddScoped<IQualityDocumentRepository, QualityDocumentRepository>();
 builder.Services.AddScoped<IDeviationRepository, DeviationRepository>();
+builder.Services.AddScoped<ExternalManufacturingService>();
 builder.Services.AddScoped<IEvidenceRepository, EvidenceRepository>();
 builder.Services.AddScoped<ICapaPlanRepository, CapaPlanRepository>();
 builder.Services.AddScoped<ICapaActionRepository, CapaActionRepository>();

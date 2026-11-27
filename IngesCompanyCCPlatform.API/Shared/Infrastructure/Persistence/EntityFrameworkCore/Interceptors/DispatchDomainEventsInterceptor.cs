@@ -46,7 +46,9 @@ public sealed class DispatchDomainEventsInterceptor(IMediator mediator) : SaveCh
         foreach (var aggregateRoot in aggregateRoots)
             aggregateRoot.ClearDomainEvents();
 
+        // The mediator looks the handlers up by the generic type, so each event is published with its
+        // own type (for example IncidentRegisteredEvent); published as IEvent, no handler would run.
         foreach (var domainEvent in domainEvents)
-            await mediator.PublishAsync(domainEvent, cancellationToken);
+            await mediator.PublishAsync((dynamic)domainEvent, cancellationToken);
     }
 }

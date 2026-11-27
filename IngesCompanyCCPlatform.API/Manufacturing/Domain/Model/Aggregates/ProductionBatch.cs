@@ -1,5 +1,6 @@
 ﻿using IngesCompanyCCPlatform.API.Manufacturing.Domain.Model.Commands;
 using IngesCompanyCCPlatform.API.Manufacturing.Domain.Model.Entities;
+using IngesCompanyCCPlatform.API.Manufacturing.Domain.Model.Events;
 using IngesCompanyCCPlatform.API.Manufacturing.Domain.Model.ValueObjects;
 using IngesCompanyCCPlatform.API.Shared.Domain.Model.Aggregates.Internal;
 using IngesCompanyCCPlatform.API.Shared.Domain.Model.Entities;
@@ -124,6 +125,8 @@ public class ProductionBatch : AggregateRoot, IAuditableEntity
             _ => EventTone.Normal
         };
         RecordEvent("INCIDENT_REGISTERED", $"Incident registered ({command.Severity}): {command.Description}", tone);
+        AddDomainEvent(new IncidentRegisteredEvent(
+            Id, BatchNumber.Value, Line, incident.Description, incident.Severity.ToString(), incident.RecordedAt));
         return incident;
     }
 
