@@ -57,6 +57,7 @@ using IngesCompanyCCPlatform.API.Subscriptions.Infrastructure.Persistence.Entity
 using IngesCompanyCCPlatform.API.Subscriptions.Resources;
 using Cortex.Mediator.Commands;
 using Cortex.Mediator.DependencyInjection;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Scalar.AspNetCore;
@@ -278,6 +279,16 @@ using (var scope = app.Services.CreateScope())
 }
 
 // Configure the HTTP request pipeline.
+
+// Render serves the API behind a proxy that terminates HTTPS; the forwarded headers restore the original scheme,
+// so the OpenAPI servers and the Scalar requests use https and the HTTPS redirection does not loop.
+var forwardedHeadersOptions = new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedHost
+};
+forwardedHeadersOptions.KnownIPNetworks.Clear();
+forwardedHeadersOptions.KnownProxies.Clear();
+app.UseForwardedHeaders(forwardedHeadersOptions);
 
 // Request localization goes first, so the global exception handler answers in the request language.
 var supportedCultures = new[] { "en", "es" };
