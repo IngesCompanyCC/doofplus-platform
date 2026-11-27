@@ -81,10 +81,12 @@ builder.Services.AddProblemDetails();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 
 // Add CORS Policy
+// Only the Web Application and the Website of the product may call the API (Cors:AllowedOrigins, or Cors__AllowedOrigins__0, __1… as environment variables)
+var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? [];
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAllPolicy",
-        policy => policy.AllowAnyOrigin()
+    options.AddPolicy("ProductOriginsPolicy",
+        policy => policy.WithOrigins(allowedOrigins)
             .AllowAnyMethod()
             .AllowAnyHeader());
 });
@@ -145,6 +147,10 @@ builder.Services.AddScoped<IAdministrativeActivityQueryService, AdministrativeAc
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 // IAM Bounded Context (JWT secret in TokenSettings:Secret; in production set TokenSettings__Secret)
+var tokenSecret = builder.Configuration["TokenSettings:Secret"];
+if (string.IsNullOrWhiteSpace(tokenSecret) || tokenSecret.Length < 32)
+    throw new InvalidOperationException(
+        "TokenSettings:Secret is missing or shorter than 32 characters. Set the TokenSettings__Secret environment variable.");
 builder.Services.Configure<TokenSettings>(builder.Configuration.GetSection("TokenSettings"));
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserCommandService, UserCommandService>();
@@ -287,7 +293,7 @@ app.UseExceptionHandler();
 app.MapOpenApi();
 
 // Apply CORS Policy
-app.UseCors("AllowAllPolicy");
+app.UseCors("ProductOriginsPolicy");
 
 // Reads the Bearer token; the IAM [Authorize] attribute answers 401 or 403
 app.UseRequestAuthorization();

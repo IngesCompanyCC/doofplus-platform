@@ -62,7 +62,8 @@ Every setting can be given in `appsettings*.json` or as an environment variable,
 | Setting | Purpose |
 |---------|---------|
 | `ConnectionStrings:DefaultConnection` | MySQL connection string. In Production it is a template whose `%VARIABLE%` parts are read from the environment (see the Deployment section). |
-| `TokenSettings:Secret` | Key that signs the JSON Web Tokens. **Set your own value in every deployed environment**: the one in `appsettings.json` is only for development. |
+| `TokenSettings:Secret` | Key that signs the JSON Web Tokens (at least 32 characters). Only `appsettings.Development.json` has a value; **any other environment does not start without `TokenSettings__Secret`**. |
+| `Cors:AllowedOrigins` | Origins allowed to call the API: the Web Application on Firebase, the Website on GitHub Pages and `http://localhost:5173`. To change them, set `Cors__AllowedOrigins__0`, `Cors__AllowedOrigins__1`… |
 | `TokenSettings:ExpirationDays` | Days a token stays valid (7 by default). |
 | `ThingsBoard:ApiKey` | Key that ThingsBoard must send in the `X-Api-Key` header of `POST /api/v1/telemetry`. Without a key every reading is rejected. |
 | `Niubiz:BaseUrl`, `Niubiz:MerchantId`, `Niubiz:Username`, `Niubiz:Password` | Niubiz payment gateway (sandbox by default), used by `POST /api/v1/subscriptions/{subscriptionId}/payments`. |
@@ -144,7 +145,7 @@ The API is published as a **Docker** container on **Render**, and the database i
    | `DATABASE_NAME` | Name of the database |
    | `DATABASE_USER` | User of the database |
    | `DATABASE_PASSWORD` | Password of the database |
-   | `TokenSettings__Secret` | A long random value |
+   | `TokenSettings__Secret` | A long random value (at least 32 characters; **required**: the API does not start without it) |
    | `ThingsBoard__ApiKey` | The key configured in the ThingsBoard rule chain |
    | `Niubiz__MerchantId`, `Niubiz__Username`, `Niubiz__Password` | Credentials of Niubiz |
 
