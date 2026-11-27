@@ -21,6 +21,11 @@ public interface IProductionOrderCommandService
     Task<Result<ProductionOrder>> Handle(ChangeProductionOrderStatusCommand command, CancellationToken cancellationToken);
 
     /// <summary>
+    ///     Rejects a planned production order with its reason (US57).
+    /// </summary>
+    Task<Result<ProductionOrder>> Handle(RejectProductionOrderCommand command, CancellationToken cancellationToken);
+
+    /// <summary>
     ///     Records the progress of an operation of an order.
     /// </summary>
     Task<Result<ProductionOrder>> Handle(UpdateOperationCommand command, CancellationToken cancellationToken);

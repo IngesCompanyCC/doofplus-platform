@@ -82,6 +82,20 @@ public class ProductionOrdersController(
             changed => Ok(CatalogResourceFromEntityAssembler.ToResourceFromEntity(changed)));
     }
 
+    [HttpPost("{productionOrderId:int}/rejections")]
+    [EndpointSummary("Reject a production order")]
+    [EndpointDescription("Rejects a Planned order with its reason (US57). Without a reason answers 400; when the order is no longer Planned answers 409.")]
+    [ProducesResponseType(typeof(ProductionOrderResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    public async Task<IActionResult> RejectProductionOrder([FromRoute] int productionOrderId, [FromBody] RejectProductionOrderResource resource, CancellationToken cancellationToken)
+    {
+        var result = await productionOrderCommandService.Handle(CatalogCommandFromResourceAssembler.ToCommandFromResource(productionOrderId, resource), cancellationToken);
+        return ManufacturingActionResultAssembler.ToActionResultFromCommandResult(this, result, messages, problemDetailsFactory,
+            rejected => Ok(CatalogResourceFromEntityAssembler.ToResourceFromEntity(rejected)));
+    }
+
     [HttpPut("{productionOrderId:int}/operations/{sequence:int}")]
     [EndpointSummary("Record the progress of an operation")]
     [EndpointDescription("Records the progress (0 to 100), status and reference of an operation of the order.")]

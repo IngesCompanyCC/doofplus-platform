@@ -30,6 +30,8 @@ public static class ProductionOrderErrors
     ///     The change is not allowed from the current status.
     /// </summary>
     /// <param name="messageKey">The key thrown by the aggregate.</param>
+    public static readonly Error RejectionReasonRequired = Error.Validation("manufacturing.order.error.rejectionReason.notBlank", "The reason of the rejection is required.");
+
     public static Error InvalidState(string messageKey) =>
         Error.Conflict(messageKey, "The change is not allowed from the current status.");
 }

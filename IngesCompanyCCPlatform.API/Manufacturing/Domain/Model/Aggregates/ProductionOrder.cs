@@ -16,6 +16,7 @@ public partial class ProductionOrder : AggregateRoot
     private const string SequenceDuplicateMessageKey = "manufacturing.order.error.sequence.duplicate";
     private const string PlannedDatesInvalidMessageKey = "manufacturing.order.error.plannedDates.invalid";
     private const string TransitionInvalidMessageKey = "manufacturing.order.error.transition.invalid";
+    private const string RejectionReasonNotBlankMessageKey = "manufacturing.order.error.rejectionReason.notBlank";
 
     private readonly List<Operation> _operations = [];
 
@@ -28,6 +29,7 @@ public partial class ProductionOrder : AggregateRoot
         ProductCode = null!;
         BatchCode = string.Empty;
         Line = string.Empty;
+        RejectionReason = string.Empty;
     }
 
     /// <summary>
@@ -92,6 +94,9 @@ public partial class ProductionOrder : AggregateRoot
     /// <summary>When it is planned to end (UTC).</summary>
     public DateTime? PlannedEnd { get; private set; }
 
+    /// <summary>Why the order was rejected; empty unless its status is Rejected.</summary>
+    public string RejectionReason { get; private set; }
+
     /// <summary>The operations, in order.</summary>
     public IReadOnlyCollection<Operation> Operations => _operations.OrderBy(o => o.Sequence).ToList().AsReadOnly();
 
@@ -121,6 +126,20 @@ public partial class ProductionOrder : AggregateRoot
     /// </summary>
     /// <param name="sequence">The position of the operation.</param>
     /// <returns>The operation, or null.</returns>
+    /// <summary>
+    ///     Rejects a planned order with its reason (US57), so no batch is made from it.
+    /// </summary>
+    /// <param name="reason">Why the order is rejected.</param>
+    /// <exception cref="ArgumentException">Thrown when the reason is blank.</exception>
+    /// <exception cref="InvalidOperationException">Thrown when the order is no longer Planned.</exception>
+    public void Reject(string reason)
+    {
+        if (string.IsNullOrWhiteSpace(reason)) throw new ArgumentException(RejectionReasonNotBlankMessageKey);
+        if (Status != EProductionOrderStatus.Planned) throw new InvalidOperationException(TransitionInvalidMessageKey);
+        Status = EProductionOrderStatus.Rejected;
+        RejectionReason = reason.Trim();
+    }
+
     public Operation? FindOperation(int sequence)
     {
         return _operations.FirstOrDefault(o => o.Sequence == sequence);

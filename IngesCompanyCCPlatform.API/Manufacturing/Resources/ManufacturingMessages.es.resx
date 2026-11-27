@@ -84,6 +84,9 @@
   <data name="manufacturing.order.error.operationStatus.invalid" xml:space="preserve">
     <value>status debe ser NotStarted, InProgress, OnHold o Complete.</value>
   </data>
+  <data name="manufacturing.order.error.rejectionReason.notBlank" xml:space="preserve">
+    <value>El motivo del rechazo es obligatorio.</value>
+  </data>
   <data name="manufacturing.order.error.transition.invalid" xml:space="preserve">
     <value>La orden de producción no puede pasar a ese estado desde el actual.</value>
   </data>
