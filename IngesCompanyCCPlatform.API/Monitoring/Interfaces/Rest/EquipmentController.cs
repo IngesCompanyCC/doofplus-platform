@@ -50,10 +50,9 @@ public class EquipmentController(
 
     [HttpGet]
     [EndpointSummary("Get the equipment")]
-    [EndpointDescription("Gets all the equipment, or the one with the given code.")]
+    [EndpointDescription("Gets all the equipment, or a list with the one that has the given code; the list is empty when no equipment has that code.")]
     [ProducesResponseType(typeof(IEnumerable<EquipmentResource>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetEquipment([FromQuery] string? code, CancellationToken cancellationToken)
     {
         if (string.IsNullOrWhiteSpace(code))
@@ -64,9 +63,9 @@ public class EquipmentController(
 
         var found = await equipmentQueryService.Handle(new GetEquipmentByCodeQuery(new EquipmentCode(code)),
             cancellationToken);
-        return MonitoringActionResultAssembler.ToActionResultFromQueryResult(this, found,
-            EquipmentErrors.NotFoundByCode(code), MonitoringError.EquipmentNotFound, messages, problemDetailsFactory,
-            equipment => Ok(new[] { EquipmentResourceFromEntityAssembler.ToResourceFromEntity(equipment) }), code);
+        return found is null
+            ? Ok(Array.Empty<EquipmentResource>())
+            : Ok(new[] { EquipmentResourceFromEntityAssembler.ToResourceFromEntity(found) });
     }
 
     [HttpGet("{equipmentId:int}")]

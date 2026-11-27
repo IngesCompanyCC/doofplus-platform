@@ -8,8 +8,11 @@ El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/
 ### Changed
 - **Breaking:** las rutas ya no usan verbos y los sub-recursos que registran un evento van en sustantivo plural: lotes de producción `POST /executions`, `/resumptions`, `/closures` y `/distribution-releases` (antes `/start`, `/resume`, `/close` y `/release`); liberaciones de lote `POST /approvals` y `/rejections` (antes `PUT /approve` y `/reject`); lotes de materia prima `POST /inspections` (antes `PUT /inspection`), `/approvals`, `/rejections` y `/allocations`; fórmulas maestras `POST /approvals`; suscripciones `POST /activations`, `/renewals` y `/cancellations`.
 - **Breaking:** `GET /api/v1/production-batches?batchNumber=` y `GET /api/v1/batch-releases?batchId=` reemplazan a `/by-number/{batchNumber}` y `/by-batch/{batchId}`; las colecciones siempre responden una lista.
+- `GET /api/v1/equipment?code=` responde una lista vacía cuando ningún equipo tiene ese código, en lugar de `404`.
 - `PUT /subscriptions/{id}/plan`, `PUT /production-orders/{id}/status` y `PATCH /production-batches/{id}/progress` siguen en singular: cada recurso tiene un solo plan, estado o avance, que se actualiza.
 ### Security
+- CORS: solo la Web Application (Firebase), el Website (GitHub Pages) y `http://localhost:5173` pueden llamar al API (`Cors:AllowedOrigins`), en lugar de cualquier origen.
+- IAM: la clave que firma los JWT ya no tiene un valor por defecto fuera de Development; el API no arranca sin `TokenSettings__Secret` (mínimo 32 caracteres).
 - Todos los endpoints exigen el token JWT, salvo los públicos: sign-in, sign-up, `POST /api/v1/tokens`, `POST /api/v1/users`, `POST /api/v1/contact-inquiries`, `POST /api/v1/telemetry` (con la API key de ThingsBoard), `GET /api/v1/plans` y las llamadas del registro de una organización nueva. Sin token, `GET /api/v1/organizations` solo busca por `ruc` y `POST /api/v1/facilities` solo agrega la primera planta de una organización. Una prueba recorre todos los controllers y falla si un endpoint queda sin `[Authorize]` ni `[AllowAnonymous]`.
 
 ## [1.1.1] - 2026-11-25
