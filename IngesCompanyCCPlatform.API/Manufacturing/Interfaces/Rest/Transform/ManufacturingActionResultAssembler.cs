@@ -55,13 +55,21 @@ public static class ManufacturingActionResultAssembler
     }
 
     /// <summary>
-    ///     Gets the localized text of a message key, or the fallback when the key has no translation.
+    ///     Gets the localized text of a message key, or the fallback when the key has no translation or its text needs
+    ///     values that were not given (for example the id of a "not found" message), instead of failing with a 500.
     /// </summary>
     private static string Localize(IStringLocalizer<ManufacturingMessages> messages, string key, string fallback,
         params object[] args)
     {
-        var message = messages[key, args];
-        return message.ResourceNotFound ? fallback : message.Value;
+        try
+        {
+            var message = messages[key, args];
+            return message.ResourceNotFound ? fallback : message.Value;
+        }
+        catch (FormatException)
+        {
+            return fallback;
+        }
     }
 
     /// <summary>
