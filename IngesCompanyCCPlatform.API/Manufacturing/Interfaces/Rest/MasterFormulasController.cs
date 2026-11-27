@@ -71,7 +71,7 @@ public class MasterFormulasController(
             ManufacturingError.MasterFormulaNotFound, messages, problemDetailsFactory, found => Ok(CatalogResourceFromEntityAssembler.ToResourceFromEntity(found)), masterFormulaId);
     }
 
-    [HttpPost("{masterFormulaId:int}/approval")]
+    [HttpPost("{masterFormulaId:int}/approvals")]
     [EndpointSummary("Approve a master formula")]
     [EndpointDescription("Approves a formula in Draft; the version approved before becomes Locked.")]
     [ProducesResponseType(typeof(MasterFormulaResource), StatusCodes.Status200OK)]
