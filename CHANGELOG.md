@@ -7,6 +7,7 @@ El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/
 ## [Unreleased]
 ### Added
 - Manufacturing: `POST /api/v1/production-orders/{productionOrderId}/rejections` rechaza una orden `Planned` con su motivo (US57): sin motivo responde `400` y si la orden ya no está `Planned`, `409`. La orden queda en el estado nuevo `Rejected` y su recurso incluye `rejectionReason`; una orden rechazada ya no se puede aprobar ni iniciar.
+- Organizations: fachada ACL (IOrganizationsContextFacade). Subscriptions la usa para comprobar que la organización existe: POST /api/v1/subscriptions responde 404 si no existe.
 ### Changed
 - **Breaking:** las rutas ya no usan verbos y los sub-recursos que registran un evento van en sustantivo plural: lotes de producción `POST /executions`, `/resumptions`, `/closures` y `/distribution-releases` (antes `/start`, `/resume`, `/close` y `/release`); liberaciones de lote `POST /approvals` y `/rejections` (antes `PUT /approve` y `/reject`); lotes de materia prima `POST /inspections` (antes `PUT /inspection`), `/approvals`, `/rejections` y `/allocations`; fórmulas maestras `POST /approvals`; suscripciones `POST /activations`, `/renewals` y `/cancellations`.
 - **Breaking:** `GET /api/v1/production-batches?batchNumber=` y `GET /api/v1/batch-releases?batchId=` reemplazan a `/by-number/{batchNumber}` y `/by-batch/{batchId}`; las colecciones siempre responden una lista.
