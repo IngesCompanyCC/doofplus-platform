@@ -102,4 +102,7 @@
   <data name="subscription.error.state.notCurrent" xml:space="preserve">
     <value>Solo se puede pagar una suscripción pendiente o activa.</value>
   </data>
+  <data name="subscription.error.organizationNotFound" xml:space="preserve">
+    <value>La organización no existe.</value>
+  </data>
 </root>

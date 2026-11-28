@@ -2,6 +2,7 @@
 using IngesCompanyCCPlatform.API.Shared.Domain.Repositories;
 using IngesCompanyCCPlatform.API.Subscriptions.Application.CommandServices;
 using IngesCompanyCCPlatform.API.Subscriptions.Application.OutboundServices.PaymentGateway;
+using IngesCompanyCCPlatform.API.Subscriptions.Application.OutboundServices.Acl;
 using IngesCompanyCCPlatform.API.Subscriptions.Domain.Model;
 using IngesCompanyCCPlatform.API.Subscriptions.Domain.Model.Aggregates;
 using IngesCompanyCCPlatform.API.Subscriptions.Domain.Model.Commands;
@@ -19,7 +20,8 @@ public class SubscriptionCommandService(
     ISubscriptionRepository subscriptionRepository,
     IPlanRepository planRepository,
     IPaymentGateway paymentGateway,
-    IUnitOfWork unitOfWork)
+    IUnitOfWork unitOfWork,
+    IExternalOrganizationService externalOrganizationService)
     : ISubscriptionCommandService
 {
     private static readonly ESubscriptionStatus[] CurrentStatuses =
@@ -29,6 +31,10 @@ public class SubscriptionCommandService(
     public async Task<Result<Subscription>> Handle(CreateSubscriptionCommand command,
         CancellationToken cancellationToken)
     {
+        if (!await externalOrganizationService.ExistsOrganization(command.OrganizationId.Value, cancellationToken))
+            return Result<Subscription>.Failure(SubscriptionErrors.OrganizationNotFound,
+                SubscriptionsError.OrganizationNotFound);
+
         if (await planRepository.FindByIdAsNoTrackingAsync(command.PlanId, cancellationToken) is null)
             return Result<Subscription>.Failure(SubscriptionErrors.PlanNotFound, SubscriptionsError.PlanNotFound);
 
