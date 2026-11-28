@@ -32,6 +32,7 @@ public static class SubscriptionsActionResultAssembler
             SubscriptionsError.InvalidSubscriptionState => StatusCodes.Status409Conflict,
             SubscriptionsError.PaymentRejected => StatusCodes.Status422UnprocessableEntity,
             SubscriptionsError.PaymentGatewayUnavailable => StatusCodes.Status503ServiceUnavailable,
+            SubscriptionsError.OrganizationNotFound => StatusCodes.Status404NotFound,
             _ => StatusCodes.Status400BadRequest
         };
     }

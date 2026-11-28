@@ -6,6 +6,7 @@ using IngesCompanyCCPlatform.API.Subscriptions.Domain.Model.Aggregates;
 using IngesCompanyCCPlatform.API.Subscriptions.Domain.Model.Commands;
 using IngesCompanyCCPlatform.API.Subscriptions.Domain.Model.ValueObjects;
 using IngesCompanyCCPlatform.API.Subscriptions.Domain.Repositories;
+using IngesCompanyCCPlatform.API.Subscriptions.Application.OutboundServices.Acl;
 
 namespace IngesCompanyCCPlatform.API.Tests.Subscriptions.Application;
 
@@ -18,8 +19,9 @@ public class PaySubscriptionCommandServiceTests
     private readonly FakePlanRepository _plans = new();
     private readonly FakeUnitOfWork _unitOfWork = new();
     private readonly FakePaymentGateway _gateway = new();
-
-    private SubscriptionCommandService Service => new(_subscriptions, _plans, _gateway, _unitOfWork);
+    private readonly FakeExternalOrganizationService _organizations = new();
+    
+    private SubscriptionCommandService Service => new(_subscriptions, _plans, _gateway, _unitOfWork, _organizations);
 
     private static PaySubscriptionCommand Pay => new(new SubscriptionId(0), "7B4E2A1C9D8F4A6B");
 
@@ -279,5 +281,33 @@ public class PaySubscriptionCommandServiceTests
             ChargedAmount = amount;
             return Task.FromResult(Result);
         }
+    }
+    
+    private sealed class FakeExternalOrganizationService : IExternalOrganizationService
+    {
+        public bool Exists { get; set; } = true;
+
+        public Task<bool> ExistsOrganization(int organizationId, CancellationToken cancellationToken = default)
+        {
+            return Task.FromResult(Exists);
+        }
+    }
+    [Fact]
+    public async Task ASubscriptionOfAnOrganizationThatDoesNotExistShouldBeRejected()
+    {
+        _plans.Stored = SubscriptionTestData.StandardLabPlan();
+        _organizations.Exists = false;
+
+        var command = new CreateSubscriptionCommand(
+            new OrganizationId(99),
+            new PlanId(1),
+            EBillingCycle.Monthly,
+            new PaymentCard("Visa", "4242", "08/2028"),
+            new BillingEmail("billing@andinos.com.pe"));
+
+        var result = await Service.Handle(command, CancellationToken.None);
+
+        Assert.Equal(SubscriptionsError.OrganizationNotFound, result.Error);
+        Assert.Equal(0, _unitOfWork.Completed);
     }
 }

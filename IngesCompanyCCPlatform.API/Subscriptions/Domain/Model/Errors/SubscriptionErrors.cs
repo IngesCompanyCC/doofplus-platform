@@ -37,4 +37,7 @@ public static class SubscriptionErrors
 
     public static Error InvalidState(string messageKey) =>
         Error.Validation(messageKey, "The subscription does not allow this change of state.");
+    
+    public static readonly Error OrganizationNotFound =
+        Error.NotFound("subscription.error.organizationNotFound", "The organization does not exist.");
 }

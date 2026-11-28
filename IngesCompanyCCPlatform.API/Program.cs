@@ -49,6 +49,8 @@ using IngesCompanyCCPlatform.API.Organizations.Application.Internal.QueryService
 using IngesCompanyCCPlatform.API.Organizations.Application.QueryServices;
 using IngesCompanyCCPlatform.API.Organizations.Domain.Repositories;
 using IngesCompanyCCPlatform.API.Organizations.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using IngesCompanyCCPlatform.API.Organizations.Application.Acl;
+using IngesCompanyCCPlatform.API.Organizations.Interfaces.Acl;
 using IngesCompanyCCPlatform.API.Shared.Infrastructure.Pipeline.Middleware.Components;
 using IngesCompanyCCPlatform.API.Shared.Resources;
 using IngesCompanyCCPlatform.API.Subscriptions.Application.CommandServices;
@@ -58,6 +60,8 @@ using IngesCompanyCCPlatform.API.Subscriptions.Application.QueryServices;
 using IngesCompanyCCPlatform.API.Subscriptions.Domain.Repositories;
 using IngesCompanyCCPlatform.API.Subscriptions.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using IngesCompanyCCPlatform.API.Subscriptions.Resources;
+using IngesCompanyCCPlatform.API.Subscriptions.Application.Internal.OutboundServices.Acl;
+using IngesCompanyCCPlatform.API.Subscriptions.Application.OutboundServices.Acl;
 using Cortex.Mediator.Commands;
 using Cortex.Mediator.DependencyInjection;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -167,6 +171,7 @@ builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IHashingService, HashingService>();
 builder.Services.AddScoped<IIamContextFacade, IamContextFacade>();
 builder.Services.AddScoped<DispatchDomainEventsInterceptor>();
+builder.Services.AddScoped<IOrganizationsContextFacade, OrganizationsContextFacade>();
 
 // Subscriptions Bounded Context Injection Configuration
 builder.Services.AddScoped<IPlanRepository, PlanRepository>();
@@ -178,6 +183,7 @@ builder.Services.Configure<NiubizSettings>(builder.Configuration.GetSection("Niu
 builder.Services.AddHttpClient<IPaymentGateway, NiubizPaymentGateway>(client => client.Timeout = TimeSpan.FromSeconds(30));
 builder.Services.AddScoped<ISubscriptionQueryService, SubscriptionQueryService>();
 builder.Services.AddSingleton<IStringLocalizer<SubscriptionsMessages>, StringLocalizer<SubscriptionsMessages>>();
+builder.Services.AddScoped<IExternalOrganizationService, ExternalOrganizationService>();
 
 // Localized messages of the bounded contexts. Each bounded context adds one line with its marker class;
 // the global exception handler uses them to translate the message keys of the value objects.

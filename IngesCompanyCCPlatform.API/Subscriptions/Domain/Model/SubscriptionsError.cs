@@ -13,5 +13,6 @@ public enum SubscriptionsError
     InvalidSubscriptionState,
     InvalidArgument,
     PaymentRejected,
+    OrganizationNotFound,
     PaymentGatewayUnavailable
 }
